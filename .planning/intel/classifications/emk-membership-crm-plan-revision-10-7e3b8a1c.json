@@ -1,0 +1,24 @@
+{
+  "source_path": "d:/EMK_Protal/Docs/emk-membership-crm-plan-revision-10.md",
+  "type": "SPEC",
+  "confidence": "medium",
+  "manifest_override": false,
+  "title": "EMK Membership CRM & Member Portal — Phase-by-phase implementation plan",
+  "summary": "Twelve-phase implementation plan and technical specification for replacing Zoho with a modular Laravel-based membership CRM and member portal.",
+  "scope": [
+    "EMK Membership CRM",
+    "Member Portal",
+    "Forms",
+    "Leads",
+    "Members",
+    "American Spaces",
+    "Invoices",
+    "ID Cards",
+    "Zoho Migration",
+    "Audit Logging"
+  ],
+  "cross_refs": [],
+  "locked": false,
+  "precedence": null,
+  "notes": "Phase-by-phase implementation plan containing product requirements, technical architecture, and data contracts. Resolved competing PRD vs SPEC signals using the precedence rule (SPEC > PRD)."
+}

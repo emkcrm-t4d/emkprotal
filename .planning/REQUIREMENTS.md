@@ -1,0 +1,219 @@
+# Requirements: EMK Membership CRM & Member Portal
+
+**Defined:** 2026-11-03
+**Core Value:** Replace Zoho Forms and Zoho CRM with a modular membership CRM and read-only member portal inside the existing Hub, using separate workspaces for offices (launching with EMK Center Dhaka).
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Discovery & Acceptance
+
+- [ ] **DISC-01**: Publish approved MVP boundaries and decision/deferral register with owners and due dates for Priority 1 gaps.
+- [ ] **DISC-02**: Define workspace-to-Space mapping baseline launching with EMK Center Dhaka workspace.
+- [ ] **DISC-03**: Establish complete field and status dictionary covering form fields, verification states, and lead/member statuses.
+- [ ] **DISC-04**: Define role/module/action/workspace matrix establishing Manager delegation boundaries and Superadmin cross-workspace authority.
+- [ ] **DISC-05**: Document scenario-based acceptance criteria and recovery/rollback targets for release sign-off.
+
+### Architecture & Security Design
+
+- [ ] **ARCH-01**: Define modular architecture registry with stable module keys and declared actions (avoiding runtime code loading).
+- [ ] **ARCH-02**: Design database schema for Spaces, staff users, forms, leads, members, verification states, invoices, ID cards, and audit logs.
+- [ ] **ARCH-03**: Define atomic conversion transaction invariant requiring complete Payment, Document, and Photo verification.
+- [ ] **ARCH-04**: Specify conversion reversal workflow with mandatory reason capture and immutable audit logging.
+- [ ] **ARCH-05**: Design replaceable payment adapter boundary supporting initial manual bKash verification and future payment gateways.
+- [ ] **ARCH-06**: Establish threat model, least-privilege security controls, and encrypted private document storage design.
+
+### Application Foundation
+
+- [ ] **FOUN-01**: Set up Laravel 12 application skeleton with Livewire, Spatie Permission, Horizon, Tailwind CSS, and Alpine.js.
+- [ ] **FOUN-02**: Configure database, cache, queue workers, scheduled tasks, and logging infrastructure.
+- [ ] **FOUN-03**: Implement private file storage driver for applicant documents with safe system-generated filenames.
+- [ ] **FOUN-04**: Create central module registration foundation, initial migration baseline, and authenticated admin shell.
+- [ ] **FOUN-05**: Establish automated CI/deployment pipeline, health check endpoints, and environment runbook.
+
+### Identity, Access & Audit
+
+- [ ] **AUTH-01**: Implement staff user management with global Admin/Superadmin, workspace Manager, and delegated staff roles.
+- [ ] **AUTH-02**: Enforce server-side workspace isolation on all routes, Livewire components, and queries for workspace staff.
+- [ ] **AUTH-03**: Enable workspace Managers to delegate specific module/actions to staff within their assigned workspace only.
+- [ ] **AUTH-04**: Implement append-only immutable audit log recording actor, timestamp, target entity, and old/new values (excluding secrets).
+- [ ] **AUTH-05**: Provide an audit log viewer for authorized staff and ensure permission cache invalidation upon access changes.
+
+### Form Builder & Application Form
+
+- [ ] **FORM-01**: Build dynamic form builder supporting all required field types, instructions, rules, conditional formulas, and embed options.
+- [ ] **FORM-02**: Implement public 31-field Membership Application Form matching official specification and validation rules.
+- [ ] **FORM-03**: Enforce conditional parent/guardian consent form upload for applicants under 18 years of age.
+- [ ] **FORM-04**: Validate and enforce mandatory 10-character uppercase bKash Transaction ID on submission.
+- [ ] **FORM-05**: Enforce duplicate submission prevention and unique email validation across the platform.
+- [ ] **FORM-06**: Automatically create Lead record with securely stored private attachments and applicant confirmation email upon valid submission.
+
+### Lead Management & Conversion
+
+- [ ] **LEAD-01**: Provide Lead management list and profile view with workspace scoping, filtering, and full activity timeline.
+- [ ] **LEAD-02**: Implement independent tri-state verification workflows for Payment, Documents, and Photo with notes and evidence logging.
+- [ ] **LEAD-03**: Provide manual bKash transaction verification with duplicate transaction ID detection and rejection reason recording.
+- [ ] **LEAD-04**: Support communication of missing or invalid application items via official email directly from the Lead profile.
+- [ ] **LEAD-05**: Execute atomic Lead-to-Member conversion only when Payment, Document, and Photo verifications are all Complete.
+- [ ] **LEAD-06**: Support controlled conversion reversal with required reason entry, permission verification, and immutable audit event.
+- [ ] **LEAD-07**: Preserve previous application rejection history on reapplication and allow Managers to block abusive emails.
+
+### Member Profiles, Invoices & ID Cards
+
+- [ ] **MEMB-01**: Implement Member master profile displaying personal details, documents, payment history, notes, and activity timeline.
+- [ ] **MEMB-02**: Support database-configurable membership terms and fee structures with dynamic start and expiry date calculation.
+- [ ] **MEMB-03**: Manage Member statuses (Active, Inactive, Restricted, Revoked) with Admin-only restriction/revocation authority.
+- [ ] **MEMB-04**: Automatically generate post-conversion invoices and renewal payment records verified by workspace staff.
+- [ ] **MEMB-05**: Implement ID card issuance lifecycle tracking (Provided for Printing → Card Printed & Ready → Delivered) with pickup notification.
+- [ ] **MEMB-06**: Provide ID card replacement workflow recording replacement reason and restarting issuance cycle.
+
+### Official Mailbox & Notifications
+
+- [ ] **MAIL-01**: Integrate Information Desk official mailbox via IMAP/SMTP with bi-directional message synchronization.
+- [ ] **MAIL-02**: Display threaded email history on Lead and Member profiles for all official correspondence.
+- [ ] **MAIL-03**: Provide email template manager for lifecycle notifications (receipt, missing items, rejection, approval, card ready, renewal).
+- [ ] **MAIL-04**: Queue email delivery via Laravel Horizon with automatic retries, deduplication safeguards, and failure monitoring.
+- [ ] **MAIL-05**: Support configurable automated workflow triggers based on status changes and membership expiry milestones.
+
+### Member Portal & Requests
+
+- [ ] **PORT-01**: Provide secure Member authentication via email or Member ID with forced password reset on first login.
+- [ ] **PORT-02**: Display read-only profile information, uploaded documents, and communication history (hiding internal staff notes and audit logs).
+- [ ] **PORT-03**: Implement member profile change-request submission queue for staff review and approval (preventing direct member edits).
+- [ ] **PORT-04**: Provide dedicated Email Change request workflow notifying workspace Manager via email and requiring Manager approval.
+- [ ] **PORT-05**: Provide membership renewal request workflow opening 1 month prior to expiry with payment submission and staff verification.
+
+### Dashboards, Reporting & Administration
+
+- [ ] **DASH-01**: Build workspace-scoped operational dashboards for membership counts, lead pipeline, card issuance, and revenue metrics.
+- [ ] **DASH-02**: Enforce cross-workspace dashboard view restrictions (Managers see own Space; only Admin/Superadmin view global data).
+- [ ] **DASH-03**: Provide authorized CSV/Excel export tools scoped to workspace data with full audit event logging.
+- [ ] **DASH-04**: Provide administrative configuration screens for user management, role assignments, email templates, and system parameters.
+- [ ] **DASH-05**: Implement automated and manual database/file backup procedures with encryption and restore verification runbook.
+
+### Zoho Migration & Cutover
+
+- [ ] **MIGR-01**: Implement repeatable data import pipeline for Zoho Leads, Contacts/Members, form entries, documents, and photos.
+- [ ] **MIGR-02**: Map legacy fields, terms, and statuses while preserving Zoho record IDs for audit traceability.
+- [ ] **MIGR-03**: Safely associate legacy documents and photos with imported member profiles under secure naming conventions.
+- [ ] **MIGR-04**: Generate reconciliation reports verifying record counts, active/inactive statuses, unique emails, and dates against Zoho source data.
+- [ ] **MIGR-05**: Execute dry-run verification, import portal accounts in inactive state, and establish cutover/rollback procedures.
+
+### Release Verification & Payment Gateway
+
+- [ ] **RELS-01**: Conduct end-to-end UAT verification of multi-workspace isolation, conversion invariants, and permission boundaries.
+- [ ] **RELS-02**: Perform security review addressing Livewire authorization tampering, route security, file upload security, and audit immutability.
+- [ ] **RELS-03**: Execute accessibility, responsive layout, and cross-browser validation across public forms and member portal.
+- [ ] **RELS-04**: Implement production deployment runbook, database migration verification, Horizon worker checks, and named admin provisioning.
+- [ ] **RELS-05**: Implement payment gateway adapter interface preparing for seamless future SSLCommerz or bKash direct online payments.
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Automated Payment Gateway
+
+- **GATE-01**: SSLCommerz automated checkout redirect and IPN webhook callback processing.
+- **GATE-02**: bKash direct merchant payment gateway integration for automated instant payment verification.
+
+### Multi-Office Onboarding
+
+- **OFFC-01**: Superadmin workspace provisioning wizard for American Center, Barishal, Chattogram, Rajshahi, and Sylhet Corners.
+- **OFFC-02**: Inter-workspace reporting rollup for country-wide diplomatic and cultural mission analytics.
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Direct member self-editing of profile | Violates data integrity; updates require staff-reviewed change requests |
+| In-portal self-service cancellation | Membership restriction/revocation requires Admin authority and EMK management instruction |
+| Member portal attendance tracking | Attendance is out of scope for membership CRM v1 release |
+| Hard-coded two-year membership terms | Terms and fees must be configurable database records |
+| Runtime arbitrary code/plugin execution | Security boundary violation; modules must declare actions statically |
+| Database storage of payment gateway secrets | Deployment-managed secret environment variables required |
+| Cross-workspace discovery for workspace staff | Strict isolation invariant across physical office workspaces |
+| Direct online payment checkout in initial release | Initial launch relies on manual bKash TxID verification; gateway adapter in v2 |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| DISC-01 | Phase 1 | Pending |
+| DISC-02 | Phase 1 | Pending |
+| DISC-03 | Phase 1 | Pending |
+| DISC-04 | Phase 1 | Pending |
+| DISC-05 | Phase 1 | Pending |
+| ARCH-01 | Phase 2 | Pending |
+| ARCH-02 | Phase 2 | Pending |
+| ARCH-03 | Phase 2 | Pending |
+| ARCH-04 | Phase 2 | Pending |
+| ARCH-05 | Phase 2 | Pending |
+| ARCH-06 | Phase 2 | Pending |
+| FOUN-01 | Phase 3 | Pending |
+| FOUN-02 | Phase 3 | Pending |
+| FOUN-03 | Phase 3 | Pending |
+| FOUN-04 | Phase 3 | Pending |
+| FOUN-05 | Phase 3 | Pending |
+| AUTH-01 | Phase 4 | Pending |
+| AUTH-02 | Phase 4 | Pending |
+| AUTH-03 | Phase 4 | Pending |
+| AUTH-04 | Phase 4 | Pending |
+| AUTH-05 | Phase 4 | Pending |
+| FORM-01 | Phase 5 | Pending |
+| FORM-02 | Phase 5 | Pending |
+| FORM-03 | Phase 5 | Pending |
+| FORM-04 | Phase 5 | Pending |
+| FORM-05 | Phase 5 | Pending |
+| FORM-06 | Phase 5 | Pending |
+| LEAD-01 | Phase 6 | Pending |
+| LEAD-02 | Phase 6 | Pending |
+| LEAD-03 | Phase 6 | Pending |
+| LEAD-04 | Phase 6 | Pending |
+| LEAD-05 | Phase 6 | Pending |
+| LEAD-06 | Phase 6 | Pending |
+| LEAD-07 | Phase 6 | Pending |
+| MEMB-01 | Phase 7 | Pending |
+| MEMB-02 | Phase 7 | Pending |
+| MEMB-03 | Phase 7 | Pending |
+| MEMB-04 | Phase 7 | Pending |
+| MEMB-05 | Phase 7 | Pending |
+| MEMB-06 | Phase 7 | Pending |
+| MAIL-01 | Phase 8 | Pending |
+| MAIL-02 | Phase 8 | Pending |
+| MAIL-03 | Phase 8 | Pending |
+| MAIL-04 | Phase 8 | Pending |
+| MAIL-05 | Phase 8 | Pending |
+| PORT-01 | Phase 9 | Pending |
+| PORT-02 | Phase 9 | Pending |
+| PORT-03 | Phase 9 | Pending |
+| PORT-04 | Phase 9 | Pending |
+| PORT-05 | Phase 9 | Pending |
+| DASH-01 | Phase 10 | Pending |
+| DASH-02 | Phase 10 | Pending |
+| DASH-03 | Phase 10 | Pending |
+| DASH-04 | Phase 10 | Pending |
+| DASH-05 | Phase 10 | Pending |
+| MIGR-01 | Phase 11 | Pending |
+| MIGR-02 | Phase 11 | Pending |
+| MIGR-03 | Phase 11 | Pending |
+| MIGR-04 | Phase 11 | Pending |
+| MIGR-05 | Phase 11 | Pending |
+| RELS-01 | Phase 12 | Pending |
+| RELS-02 | Phase 12 | Pending |
+| RELS-03 | Phase 12 | Pending |
+| RELS-04 | Phase 12 | Pending |
+| RELS-05 | Phase 12 | Pending |
+
+**Coverage:**
+- v1 requirements: 65 total
+- Mapped to phases: 65
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-11-03*
+*Last updated: 2026-11-03 after initial definition*
