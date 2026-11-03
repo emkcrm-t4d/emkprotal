@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Architecture, Data Model, and Security Design
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-11-03T17:07:00.000Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-11-03T17:15:00.000Z"
 last_activity: 2026-11-03
-last_activity_desc: Completed 02-01-PLAN.md (Module Registry and Schema Spec)
-state_head: 2be9c8e
+last_activity_desc: Completed 02-02-PLAN.md (Tenancy Defense & Atomic Conversion Invariant)
+state_head: 5121fc1
 progress:
   total_phases: 12
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
-  percent: 11
+  completed_plans: 5
+  percent: 14
 ---
 
 # Project State
@@ -28,28 +28,28 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 2 (Architecture, Data Model, and Security Design) — EXECUTING
-Next Plan: 02-02-PLAN.md (Multi-Workspace Tenancy & Conversion Lifecycle)
+Next Plan: 02-03-PLAN.md (Security Controls, Threat Modeling, and Replaceable Payment Adapter Boundary)
 Status: Executing Phase 2
-Last activity: 2026-11-03 — Completed 02-01-PLAN.md (Module Registry and Schema Spec)
+Last activity: 2026-11-03 — Completed 02-02-PLAN.md (Tenancy Defense & Atomic Conversion Invariant)
 
-Progress: [█░░░░░░░░░] 11% (Phase 2 in progress)
+Progress: [█░░░░░░░░░] 14% (Phase 2 in progress)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 12.5 min
-- Total execution time: 0.83 hours
+- Total plans completed: 5
+- Average duration: 11.2 min
+- Total execution time: 0.93 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | Phase 1 | 3 | 42 min | 14 min |
-| Phase 2 | 1 | 8 min | 8 min |
+| Phase 2 | 2 | 14 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 12m, 15m, 15m, 8m
+- Last 5 plans: 12m, 15m, 15m, 8m, 6m
 - Trend: Consistent delivery velocity
 
 *Updated after each plan completion*
@@ -61,6 +61,7 @@ Progress: [█░░░░░░░░░] 11% (Phase 2 in progress)
 | Phase 1 P02 | 15min | 3 tasks | 3 files |
 | Phase 1 P03 | 15min | 3 tasks | 3 files |
 | Phase 2 P01 | 8min | 2 tasks | 2 files |
+| Phase 2 P02 | 6min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -92,14 +93,20 @@ Recent decisions affecting current work:
 - [Phase 2 P01]: Enforce uq_leads_bkash_txid unique constraint on 10-char uppercase bKash TxID per DEC-05 (D-05)
 - [Phase 2 P01]: Configure dynamic terms schema in membership_terms without hardcoded durations per DEC-08 (D-08)
 - [Phase 2 P01]: Preserve zoho_id unique indexed columns across users, leads, members, and invoices for legacy migration reconciliation
+- [Phase 2 P02]: Enforce multi-workspace tenancy across four server layers (Route Middleware, Livewire Hydration Guard, Eloquent TenantScope, and Private Storage Streaming) launching with ws-emk-dhaka per DEC-01 (D-01)
+- [Phase 2 P02]: Strictly ban withoutGlobalScope() across all controllers, Livewire components, and reports via automated Pest Architecture tests
+- [Phase 2 P02]: Require all three verification streams (Payment, Document, Photo) to be verified and lead approved before conversion is permitted per DEC-03 (D-03)
+- [Phase 2 P02]: Acquire pessimistic row-level lock on member_id_sequences before leads to guarantee deadlock-free, monotonic Member ID allocation
+- [Phase 2 P02]: Compute dynamic membership dates from membership_terms with start_date defaulting to Manager approval date per DEC-08 (D-08)
+- [Phase 2 P02]: Permit conversion reversals strictly within 30 calendar days to Workspace Managers with minimum 20-character justification and cascading entity rollback per DEC-04 (D-04)
 
 ### Pending Todos
 
-None - Plan 02-01 complete; Wave 1 Plan 02-02 next.
+None - Plan 02-02 complete; Wave 2 Plan 02-03 next.
 
 ### Blockers/Concerns
 
-None - Plan 02-02 unblocked.
+None - Plan 02-03 unblocked.
 
 ## Deferred Items
 
@@ -112,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-03T17:07:00.000Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-11-03T17:15:00.000Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
