@@ -55,7 +55,15 @@ Plans:
   2. Conversion invariant contract guarantees zero lead-to-member conversion without completed payment, document, and photo verifications.
   3. Conversion reversal specification enforces mandatory reason capture and immutable audit logging.
   4. Replaceable payment adapter interface decouples payment provider implementations from core domain models.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+**Wave 1**
+- [ ] 02-01-PLAN.md — Central Module Registry Contract, Zero-Eval Architecture, and Relational Database Schema Baseline
+- [ ] 02-02-PLAN.md — Multi-Workspace Tenancy Defense-in-Depth and Atomic Conversion Lifecycle Invariants
+
+**Wave 2**
+- [ ] 02-03-PLAN.md — Security Controls, Threat Modeling, and Replaceable Payment Adapter Boundary
 
 ### Phase 3: Application Foundation and Deployment Baseline
 **Goal**: Deployable Laravel 12 application foundation, queue infrastructure, and automated deployment pipeline are operational.
@@ -186,7 +194,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Discovery, Decisions, and Acceptance Criteria | 3/3 | Complete | 2026-11-03 |
-| 2. Architecture, Data Model, and Security Design | 0/0 | Ready to plan | - |
+| 2. Architecture, Data Model, and Security Design | 0/3 | Planned | - |
 | 3. Application Foundation and Deployment Baseline | 0/0 | Not started | - |
 | 4. Identity, Access Control, Space Scope, and Audit Core | 0/0 | Not started | - |
 | 5. Form Builder and Public Membership Form | 0/0 | Not started | - |
