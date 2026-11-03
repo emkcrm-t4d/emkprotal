@@ -39,8 +39,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
+**Wave 1**
 - [ ] 01-01-PLAN.md — MVP Boundaries, Decision/Deferral Register, and Workspace-to-Space Mapping Baseline
 - [ ] 01-02-PLAN.md — Form Field, Status, and Tri-State Verification Dictionaries
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-03-PLAN.md — Role/Module/Action Delegation Matrix, Scenario Acceptance Criteria, and Operational Recovery Targets
 
 ### Phase 2: Architecture, Data Model, and Security Design
