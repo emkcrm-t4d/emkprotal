@@ -74,7 +74,20 @@ Plans:
   2. Laravel Horizon runs background queue workers with active health monitoring.
   3. Private file storage driver safely saves and retrieves uploaded documents using system-generated filenames.
   4. Baseline authenticated admin shell renders successfully and passes automated health checks.
-**Plans**: TBD
+**Plans:** 4 plans
+
+Plans:
+**Wave 1**
+- [ ] 03-01-PLAN.md — Laravel 12 Application Skeleton, Horizon Queues, Health Tracer, and CI Pipeline
+
+**Wave 2**
+- [ ] 03-02-PLAN.md — Relational Database Schema Baseline, 13 Tables, Seeders, and MySQL Append-Only Audit Triggers
+
+**Wave 3**
+- [ ] 03-03-PLAN.md — Central Module Registry, Zero-Eval Architecture Invariants, and Authenticated Admin Shell
+
+**Wave 4**
+- [ ] 03-04-PLAN.md — Encrypted Private File Storage Driver, UUID Cryptographic Masking, and Authenticated Streaming Controller
 
 ### Phase 4: Identity, Access Control, Space Scope, and Audit Core
 **Goal**: Multi-workspace role-based access control, scoped delegation, and append-only audit logging are enforced.
