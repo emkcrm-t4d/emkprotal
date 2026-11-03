@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Discovery & Acceptance
 
-- [ ] **DISC-01**: Publish approved MVP boundaries and decision/deferral register with owners and due dates for Priority 1 gaps.
-- [ ] **DISC-02**: Define workspace-to-Space mapping baseline launching with EMK Center Dhaka workspace.
+- [x] **DISC-01**: Publish approved MVP boundaries and decision/deferral register with owners and due dates for Priority 1 gaps.
+- [x] **DISC-02**: Define workspace-to-Space mapping baseline launching with EMK Center Dhaka workspace.
 - [ ] **DISC-03**: Establish complete field and status dictionary covering form fields, verification states, and lead/member statuses.
 - [ ] **DISC-04**: Define role/module/action/workspace matrix establishing Manager delegation boundaries and Superadmin cross-workspace authority.
 - [ ] **DISC-05**: Document scenario-based acceptance criteria and recovery/rollback targets for release sign-off.
@@ -143,8 +143,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DISC-01 | Phase 1 | Pending |
-| DISC-02 | Phase 1 | Pending |
+| DISC-01 | Phase 1 | Complete |
+| DISC-02 | Phase 1 | Complete |
 | DISC-03 | Phase 1 | Pending |
 | DISC-04 | Phase 1 | Pending |
 | DISC-05 | Phase 1 | Pending |
