@@ -1,8 +1,8 @@
 ---
 phase: "02"
 slug: "architecture-data-model-and-security-design"
-status: draft
-nyquist_compliant: false
+status: active
+nyquist_compliant: true
 wave_0_complete: false
 created: "2026-11-03"
 ---

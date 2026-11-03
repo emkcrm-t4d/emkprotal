@@ -1160,12 +1160,11 @@ interface PaymentAdapterInterface
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Staging Pool Allocation for Non-EMK Submissions:**
    - What we know: Applicants selecting American Center, Barishal, Chattogram, Rajshahi, or Sylhet route to the Superadmin staging pool (`workspace_id = NULL`).
-   - What's unclear: Should the staging pool allow preliminary document verification by global staff, or remain frozen until individual workspaces are provisioned in Phase 4?
-   - Recommendation: Plan Phase 2 schema with `workspace_id NULL` support on `leads` and allow `superadmin` / `global_admin` to view and filter staging records.
+   - Resolution (RESOLVED): Plan Phase 2 schema with `workspace_id NULL` support on `leads` and allow `superadmin` / `global_admin` to view and filter staging records; staging pool allows preliminary verification while full workspace conversion awaits workspace provisioning.
 
 ---
 
