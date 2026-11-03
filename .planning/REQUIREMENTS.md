@@ -17,8 +17,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Architecture & Security Design
 
-- [ ] **ARCH-01**: Define modular architecture registry with stable module keys and declared actions (avoiding runtime code loading).
-- [ ] **ARCH-02**: Design database schema for Spaces, staff users, forms, leads, members, verification states, invoices, ID cards, and audit logs.
+- [x] **ARCH-01**: Define modular architecture registry with stable module keys and declared actions (avoiding runtime code loading).
+- [x] **ARCH-02**: Design database schema for Spaces, staff users, forms, leads, members, verification states, invoices, ID cards, and audit logs.
 - [ ] **ARCH-03**: Define atomic conversion transaction invariant requiring complete Payment, Document, and Photo verification.
 - [ ] **ARCH-04**: Specify conversion reversal workflow with mandatory reason capture and immutable audit logging.
 - [ ] **ARCH-05**: Design replaceable payment adapter boundary supporting initial manual bKash verification and future payment gateways.
@@ -148,8 +148,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DISC-03 | Phase 1 | Complete |
 | DISC-04 | Phase 1 | Complete |
 | DISC-05 | Phase 1 | Complete |
-| ARCH-01 | Phase 2 | Pending |
-| ARCH-02 | Phase 2 | Pending |
+| ARCH-01 | Phase 2 | Complete |
+| ARCH-02 | Phase 2 | Complete |
 | ARCH-03 | Phase 2 | Pending |
 | ARCH-04 | Phase 2 | Pending |
 | ARCH-05 | Phase 2 | Pending |
