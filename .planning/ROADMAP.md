@@ -36,7 +36,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Role/module/action matrix formalizes workspace isolation rules and staff delegation boundaries.
   3. Form field and status dictionary establishes exact validation rules for all 31 fields and lifecycle transitions.
   4. Measurable acceptance criteria and operational recovery targets are baselined for release sign-off.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — MVP Boundaries, Decision/Deferral Register, and Workspace-to-Space Mapping Baseline
+- [ ] 01-02-PLAN.md — Form Field, Status, and Tri-State Verification Dictionaries
+- [ ] 01-03-PLAN.md — Role/Module/Action Delegation Matrix, Scenario Acceptance Criteria, and Operational Recovery Targets
 
 ### Phase 2: Architecture, Data Model, and Security Design
 **Goal**: Relational schemas, module registry boundaries, and security invariants are fully designed.
@@ -177,7 +182,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Discovery, Decisions, and Acceptance Criteria | 0/0 | Not started | - |
+| 1. Discovery, Decisions, and Acceptance Criteria | 0/3 | Ready to execute | - |
 | 2. Architecture, Data Model, and Security Design | 0/0 | Not started | - |
 | 3. Application Foundation and Deployment Baseline | 0/0 | Not started | - |
 | 4. Identity, Access Control, Space Scope, and Audit Core | 0/0 | Not started | - |
