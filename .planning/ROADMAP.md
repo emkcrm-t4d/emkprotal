@@ -13,7 +13,7 @@ This roadmap defines the 12-phase journey to replace legacy Zoho Forms and Zoho 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Discovery, Decisions, and Acceptance Criteria** - Baseline MVP boundaries, workspace mappings, dictionaries, delegation matrix, and acceptance criteria
-- [ ] **Phase 2: Architecture, Data Model, and Security Design** - Relational schema, module registry contracts, conversion invariants, reversal protocols, and payment adapter boundary
+- [x] **Phase 2: Architecture, Data Model, and Security Design** - Relational schema, module registry contracts, conversion invariants, reversal protocols, and payment adapter boundary
 - [ ] **Phase 3: Application Foundation and Deployment Baseline** - Laravel 12 / Livewire skeleton, Horizon queues, scheduler, private file storage, and CI/CD pipeline
 - [ ] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail
 - [ ] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules
@@ -55,7 +55,7 @@ Plans:
   2. Conversion invariant contract guarantees zero lead-to-member conversion without completed payment, document, and photo verifications.
   3. Conversion reversal specification enforces mandatory reason capture and immutable audit logging.
   4. Replaceable payment adapter interface decouples payment provider implementations from core domain models.
-**Plans**: 2/3 plans complete
+**Plans**: 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -63,7 +63,7 @@ Plans:
 - [x] 02-02-PLAN.md — Multi-Workspace Tenancy Defense-in-Depth and Atomic Conversion Lifecycle Invariants
 
 **Wave 2**
-- [ ] 02-03-PLAN.md — Security Controls, Threat Modeling, and Replaceable Payment Adapter Boundary
+- [x] 02-03-PLAN.md — Security Controls, Threat Modeling, and Replaceable Payment Adapter Boundary
 
 ### Phase 3: Application Foundation and Deployment Baseline
 **Goal**: Deployable Laravel 12 application foundation, queue infrastructure, and automated deployment pipeline are operational.
