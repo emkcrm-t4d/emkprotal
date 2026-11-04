@@ -1,0 +1,73 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Discovery, Decisions, and Acceptance Criteria",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Architecture, Data Model, and Security Design",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Application Foundation and Deployment Baseline",
+      "status": "complete"
+    },
+    {
+      "number": "4",
+      "name": "Identity, Access Control, Space Scope, and Audit Core",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Form Builder and Public Membership Form",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Leads, Verification, and Controlled Conversion",
+      "status": "pending"
+    },
+    {
+      "number": "7",
+      "name": "Member Profiles, Invoices, and ID Cards",
+      "status": "pending"
+    },
+    {
+      "number": "8",
+      "name": "Official Email, IMAP, Templates, and Workflow Rules",
+      "status": "pending"
+    },
+    {
+      "number": "9",
+      "name": "Read-Only Member Portal, Change Requests, and Renewals",
+      "status": "pending"
+    },
+    {
+      "number": "10",
+      "name": "Dashboard, Reports, Data Tools, and Platform Settings",
+      "status": "pending"
+    },
+    {
+      "number": "11",
+      "name": "Zoho Migration and Reconciliation",
+      "status": "pending"
+    },
+    {
+      "number": "12",
+      "name": "Verification, Security Review, Release, and Later Payment Gateway",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 4 of 12 · 25% · executing"
+  },
+  "updated_at": "2026-11-04T05:08:01.242Z"
+}

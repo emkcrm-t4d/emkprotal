@@ -98,11 +98,11 @@ Plans:
   2. Workspace Manager can delegate authorized module actions to staff within their own workspace.
   3. Global Admin / Superadmin can navigate across workspaces.
   4. Every state transition, login event, and permission update records an immutable, read-only audit log entry excluding secrets.
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
 **Wave 1**
-- [ ] 04-01-PLAN.md — Multi-Guard Authentication Baseline, Spatie RBAC Foundation, and End-to-End Tenancy Tracer
+- [x] 04-01-PLAN.md — Multi-Guard Authentication Baseline, Spatie RBAC Foundation, and End-to-End Tenancy Tracer
 
 **Wave 2**
 - [ ] 04-02-PLAN.md — Four-Layer Tenancy Defense Model & Automated Invariant Architecture Tests
@@ -223,7 +223,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Discovery, Decisions, and Acceptance Criteria | 3/3 | Complete | 2026-11-03 |
 | 2. Architecture, Data Model, and Security Design | 3/3 | Complete    | 2026-11-03 |
 | 3. Application Foundation and Deployment Baseline | 4/4 | Complete    | 2026-11-04 |
-| 4. Identity, Access Control, Space Scope, and Audit Core | 0/0 | Not started | - |
+| 4. Identity, Access Control, Space Scope, and Audit Core | 1/5 | In Progress | - |
 | 5. Form Builder and Public Membership Form | 0/0 | Not started | - |
 | 6. Leads, Verification, and Controlled Conversion | 0/0 | Not started | - |
 | 7. Member Profiles, Invoices, and ID Cards | 0/0 | Not started | - |
