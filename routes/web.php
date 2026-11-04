@@ -73,17 +73,9 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.members.show')
             ->middleware(['can:members.view']);
 
-        Route::get('/invoices', function ($workspace) {
-            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
-                ? $workspace->id
-                : (string) $workspace;
-
-            return response()->json([
-                'status' => 'ok',
-                'workspace' => $workspaceId,
-                'module' => 'invoices',
-            ]);
-        })->name('crm.invoices');
+        Route::get('/invoices', \App\Livewire\Invoices\InvoiceDirectory::class)
+            ->name('crm.invoices')
+            ->middleware(['can:invoices.view']);
 
         Route::get('/reports', function ($workspace) {
             $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
