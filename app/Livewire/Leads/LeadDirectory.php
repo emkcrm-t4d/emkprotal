@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,14 +23,31 @@ class LeadDirectory extends Component
     public string $workspace = '';
 
     // Reactive Filter & Search Parameters
+    #[Url(as: 'q', except: '')]
     public string $search = '';
+
+    #[Url(as: 'status', except: '')]
     public string $statusFilter = '';
+
+    #[Url(as: 'payment', except: '')]
     public string $paymentFilter = '';
+
+    #[Url(as: 'document', except: '')]
     public string $documentFilter = '';
+
+    #[Url(as: 'photo', except: '')]
     public string $photoFilter = '';
+
+    #[Url(as: 'from', except: '')]
     public string $dateFrom = '';
+
+    #[Url(as: 'to', except: '')]
     public string $dateTo = '';
+
+    #[Url(as: 'sort', except: 'submitted_at')]
     public string $sortField = 'submitted_at';
+
+    #[Url(as: 'dir', except: 'desc')]
     public string $sortDirection = 'desc';
 
     /**
