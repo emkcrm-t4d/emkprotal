@@ -11,6 +11,7 @@ arch('enforce domain registry encapsulation')
     ->toOnlyUse([
         'Illuminate',
         'App\Domain',
+        'App\Models',
         'Spatie\Permission',
         'Carbon\Carbon',
         'Ramsey\Uuid',
