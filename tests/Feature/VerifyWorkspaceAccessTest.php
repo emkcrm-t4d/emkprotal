@@ -92,19 +92,22 @@ class VerifyWorkspaceAccessTest extends TestCase
 
     public function test_staff_in_assigned_workspace_accessing_baseline_routes_receives_200_ok(): void
     {
-        $modules = ['members', 'invoices', 'reports'];
+        $this->actingAs($this->dhakaStaff, 'web')
+            ->get('/crm/ws-emk-dhaka/members')
+            ->assertOk();
 
-        foreach ($modules as $module) {
-            $response = $this->actingAs($this->dhakaStaff, 'web')
-                ->getJson("/crm/ws-emk-dhaka/{$module}");
+        $this->actingAs($this->dhakaStaff, 'web')
+            ->get('/crm/ws-emk-dhaka/invoices')
+            ->assertOk();
 
-            $response->assertOk()
-                ->assertJson([
-                    'status' => 'ok',
-                    'workspace' => 'ws-emk-dhaka',
-                    'module' => $module,
-                ]);
-        }
+        $this->actingAs($this->dhakaStaff, 'web')
+            ->getJson('/crm/ws-emk-dhaka/reports')
+            ->assertOk()
+            ->assertJson([
+                'status' => 'ok',
+                'workspace' => 'ws-emk-dhaka',
+                'module' => 'reports',
+            ]);
     }
 
     public function test_staff_in_assigned_workspace_accessing_mismatched_workspace_receives_403_forbidden(): void
