@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 5
 current_phase_name: Form Builder and Public Membership Form
-current_plan: 4
+current_plan: 5
 status: in_progress
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-11-04T08:05:00.000Z"
+stopped_at: Completed 05-04-PLAN.md
+last_updated: "2026-11-04T08:30:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Phase 5 Plan 03 complete (PublicMembershipForm Livewire component, clean public layout, Bangladesh division/district cascades, DEC-09 minor consent trigger, DEC-05 bKash 10-char uppercase formatting)
-state_head: 468702c
+last_activity_desc: Phase 5 Plan 04 complete (DuplicateSubmissionGuard, LeadIngestionService, encrypted private file storage, ApplicationConfirmationMail, StoreMembershipApplicationRequest)
+state_head: a945d03
 progress:
   total_phases: 12
   completed_phases: 4
   total_plans: 20
-  completed_plans: 18
-  percent: 50
+  completed_plans: 19
+  percent: 55
 ---
 
 # Project State
@@ -29,13 +29,13 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 5 — Form Builder and Public Membership Form
-Current Plan: 05-04-PLAN.md (Wave 4)
+Current Plan: 05-05-PLAN.md (Wave 5)
 Total Plans in Phase: 5
 Next Phase: 6 (Leads, Verification, and Controlled Conversion)
 Status: In progress
-Last activity: 2026-11-04 — 05-03-PLAN.md executed and verified
+Last activity: 2026-11-04 — 05-04-PLAN.md executed and verified
 
-Progress: [█████░░░░░] 50% (Phase 5 in progress)
+Progress: [██████░░░░] 55% (Phase 5 in progress)
 
 ## Performance Metrics
 
@@ -80,6 +80,7 @@ Progress: [█████░░░░░] 50% (Phase 5 in progress)
 | Phase 05 P01 | 12min | 3 tasks | 9 files |
 | Phase 05 P02 | 15min | 2 tasks | 7 files |
 | Phase 05 P03 | 15min | 2 tasks | 7 files |
+| Phase 05 P04 | 20min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -167,10 +168,15 @@ Recent decisions affecting current work:
 - [Phase 05 P03]: Isolated public application shell in resources/views/forms/public-layout.blade.php completely decoupled from CRM admin shell
 - [Phase 05 P03]: Enforced DEC-09 minor consent logic dynamically with Field 7 upload and amber warning banner if age < 18
 - [Phase 05 P03]: Enforced DEC-05 bKash Transaction ID dual-layer validation and 8-division 64-district cascade
+- [Phase 05 P04]: Enforced bKash TxID 10-char uppercase regex and uniqueness across leads and invoices per DEC-05
+- [Phase 05 P04]: Enforced email duplicate prevention for pending/approved applicants while permitting reapplication for rejected applicants per LEAD-07 / FORM-05
+- [Phase 05 P04]: Implemented Space mapping routing emk_center to ws-emk-dhaka (EMK-DHK) and remaining 5 Spaces to Superadmin staging pool (workspace_id = null) per DEC-01
+- [Phase 05 P04]: Enforced under-18 parental consent and auto-flagged youth_protection = true on minor attachments in private encrypted storage per DEC-09
+- [Phase 05 P04]: Implemented queued ApplicationConfirmationMail dispatch upon successful public application submission
 
 ### Pending Todos
 
-None - Phase 5 Plan 03 complete. Ready for Phase 5 Plan 04 (Secure Submission Processing, Private Document Storage, Lead Ingestion, and Confirmation Notifications).
+None - Phase 5 Plan 04 complete. Ready for Phase 5 Plan 05 (Submissions Viewer, CSV Export, and Holistic Phase 5 Integration & Verification Test Suite).
 
 ### Blockers/Concerns
 

@@ -46,8 +46,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **FORM-02**: Implement public 31-field Membership Application Form matching official specification and validation rules.
 - [x] **FORM-03**: Enforce conditional parent/guardian consent form upload for applicants under 18 years of age.
 - [x] **FORM-04**: Validate and enforce mandatory 10-character uppercase bKash Transaction ID on submission.
-- [ ] **FORM-05**: Enforce duplicate submission prevention and unique email validation across the platform.
-- [ ] **FORM-06**: Automatically create Lead record with securely stored private attachments and applicant confirmation email upon valid submission.
+- [x] **FORM-05**: Enforce duplicate submission prevention and unique email validation across the platform.
+- [x] **FORM-06**: Automatically create Lead record with securely stored private attachments and applicant confirmation email upon valid submission.
 
 ### Lead Management & Conversion
 
@@ -168,8 +168,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-02 | Phase 5 | Complete |
 | FORM-03 | Phase 5 | Complete |
 | FORM-04 | Phase 5 | Complete |
-| FORM-05 | Phase 5 | Pending |
-| FORM-06 | Phase 5 | Pending |
+| FORM-05 | Phase 5 | Complete |
+| FORM-06 | Phase 5 | Complete |
 | LEAD-01 | Phase 6 | Pending |
 | LEAD-02 | Phase 6 | Pending |
 | LEAD-03 | Phase 6 | Pending |
