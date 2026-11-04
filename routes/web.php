@@ -144,35 +144,14 @@ Route::prefix('/crm/{workspace}')
     });
 
 /**
- * Public Form Tracer Routes per FORM-01, DEC-01, and DEC-02
+ * Public Membership Application Routes per FORM-02, FORM-03, and Task 1
  */
-Route::get('/apply/{slug}', function (string $slug, \Illuminate\Http\Request $request) {
-    $form = \App\Domain\Forms\Models\Form::withoutGlobalScopes()
-        ->where('slug', $slug)
-        ->where('is_published', true)
-        ->first();
+Route::get('/apply', function () {
+    return redirect()->route('public.forms.show', 'membership-application');
+});
 
-    if (!$form) {
-        abort(404, 'Form not found or unpublished.');
-    }
-
-    if ($request->wantsJson()) {
-        return response()->json([
-            'status' => 'ok',
-            'form' => [
-                'uuid' => $form->uuid,
-                'slug' => $form->slug,
-                'title' => $form->title,
-                'description' => $form->description,
-                'schema' => $form->schema,
-                'settings' => $form->settings,
-            ],
-        ]);
-    }
-
-    return response('<!DOCTYPE html><html><head><title>' . e($form->title) . '</title></head><body><h1>' . e($form->title) . '</h1><p>' . e($form->description ?? '') . '</p></body></html>', 200)
-        ->header('Content-Type', 'text/html');
-})->name('public.forms.show');
+Route::get('/apply/{slug}', \App\Livewire\Forms\PublicMembershipForm::class)
+    ->name('public.forms.show');
 
 Route::post('/apply/{slug}/submit', function (string $slug, \Illuminate\Http\Request $request) {
     $form = \App\Domain\Forms\Models\Form::withoutGlobalScopes()
