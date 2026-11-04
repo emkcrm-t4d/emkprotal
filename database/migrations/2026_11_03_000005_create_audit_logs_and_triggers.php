@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('actor_id')->nullable();
             $table->string('actor_guard', 20)->default('web');
             $table->string('event_type', 100);
-            $table->string('auditable_type', 100);
-            $table->unsignedBigInteger('auditable_id');
+            $table->string('auditable_type', 100)->nullable();
+            $table->unsignedBigInteger('auditable_id')->nullable();
             $table->json('old_values')->nullable();
             $table->json('new_values')->nullable();
             $table->text('reason')->nullable();
