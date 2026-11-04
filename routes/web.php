@@ -139,6 +139,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.terms.index')
             ->middleware(['can:platform_services.manage_settings']);
 
+        Route::get('/settings/email-templates', \App\Livewire\Mail\EmailTemplateManager::class)
+            ->name('crm.email_templates.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
