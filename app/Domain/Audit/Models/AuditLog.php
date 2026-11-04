@@ -45,6 +45,8 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_ID_CARDS_BATCH_EXPORTED = 'id_cards_batch_exported';
     public const EVENT_ID_CARD_REPLACED = 'id_card_replaced';
     public const EVENT_MEMBER_STATUS_CHANGED = 'member_status_changed';
+    public const EVENT_MAILBOX_MESSAGE_SYNCED = 'mailbox_message_synced';
+    public const EVENT_OFFICIAL_EMAIL_REPLY_SENT = 'official_email_reply_sent';
 
     protected $table = 'audit_logs';
 

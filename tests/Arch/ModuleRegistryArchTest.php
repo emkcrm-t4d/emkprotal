@@ -12,9 +12,19 @@ arch('enforce domain registry encapsulation')
         'Illuminate',
         'App\Domain',
         'App\Models',
+        'App\Mail',
+        'App\Jobs',
         'Spatie\Permission',
-        'Carbon\Carbon',
+        'Carbon',
         'Ramsey\Uuid',
+        'Symfony\Component\HttpFoundation\StreamedResponse',
+        'app',
+        'auth',
+        'config',
+        'e',
+        'event',
+        'now',
+        'request',
     ]);
 
 arch('controllers and livewire do not use dynamic evaluation')

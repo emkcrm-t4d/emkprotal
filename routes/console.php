@@ -25,3 +25,7 @@ Schedule::command('queue:prune-failed --hours=48')->daily();
 
 // Prune job batches older than 48 hours daily
 Schedule::command('queue:prune-batches --hours=48')->daily();
+
+// Synchronize official Information Desk IMAP mailbox every five minutes
+Schedule::command('crm:mailbox-sync')->everyFiveMinutes();
+

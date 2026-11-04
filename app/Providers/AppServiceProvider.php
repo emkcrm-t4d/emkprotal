@@ -18,6 +18,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Domain\Payments\Contracts\PaymentAdapterInterface::class, function ($app) {
             return $app->make(\App\Domain\Payments\Services\PaymentManager::class)->driver();
         });
+
+        $this->app->bind(
+            \App\Domain\Mail\Contracts\ImapClientInterface::class,
+            \App\Domain\Mail\Services\ImapMailboxAdapter::class
+        );
     }
 
     /**

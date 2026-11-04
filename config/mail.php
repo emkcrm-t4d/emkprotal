@@ -115,4 +115,20 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Official Information Desk IMAP Configuration
+    |--------------------------------------------------------------------------
+    */
+
+    'imap' => [
+        'host' => env('IMAP_HOST', '127.0.0.1'),
+        'port' => (int) env('IMAP_PORT', 993),
+        'encryption' => env('IMAP_ENCRYPTION', 'ssl'),
+        'username' => env('IMAP_USERNAME'),
+        'password' => env('IMAP_PASSWORD'),
+        'official_address' => env('IMAP_OFFICIAL_ADDRESS', env('MAIL_FROM_ADDRESS', 'infodesk@emkcenter.org')),
+    ],
+
 ];
+
