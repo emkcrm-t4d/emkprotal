@@ -1,19 +1,19 @@
 ---
 gsd_state_version: "1.0"
-current_phase: 8
+current_phase: 08
 current_phase_name: Official Email, IMAP, Templates, and Workflow Rules
-current_plan: Not started
+current_plan: 2
 status: executing
-stopped_at: Phase 07 complete, ready to plan Phase 8
-last_updated: "2026-11-04T15:59:35.962Z"
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-11-04T16:47:54.264Z"
 last_activity: 2026-11-04
-last_activity_desc: Phase 07 complete, transitioned to Phase 8
-state_head: e2078b8deb8dde3a46551fdd776013f6447f3d60
+last_activity_desc: Phase 08 execution started
+state_head: e5f0dd1f0675220dd33f9a6e82503b97aef1d986
 progress:
   total_phases: 12
   completed_phases: 7
   total_plans: 36
-  completed_plans: 31
+  completed_plans: 32
   percent: 58
 ---
 
@@ -24,17 +24,17 @@ progress:
 See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated 2026-11-03)
 
 **Core value:** Replace Zoho Forms and Zoho CRM with a modular membership CRM and read-only member portal inside the existing Hub, using separate workspaces for offices (launching with EMK Center Dhaka).
-**Current focus:** Phase 06 — Leads, Verification, and Controlled Conversion (COMPLETED)
+**Current focus:** Phase 08 — Official Email, IMAP, Templates, and Workflow Rules
 
 ## Current Position
 
-Phase: 8 (Official Email, IMAP, Templates, and Workflow Rules) — READY TO EXECUTE
-Current Plan: Not started
+Phase: 08 (Official Email, IMAP, Templates, and Workflow Rules) — EXECUTING
+Current Plan: 2
 Total Plans in Phase: 5
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
 Next Phase: 7 — Member Profiles, Invoices, and ID Cards
 Status: Ready to execute
-Last activity: 2026-11-04 — Phase 07 complete, transitioned to Phase 8
+Last activity: 2026-11-04 — Phase 08 execution started
 Progress: [██████░░░░] 58% (Phase 06 complete, Phase 07 next)
 
 ## Performance Metrics
@@ -92,6 +92,7 @@ Progress: [██████░░░░] 58% (Phase 06 complete, Phase 07 next
 | Phase 06 P04 | 12min | 2 tasks | 13 files |
 | Phase 06 P05 | 8min | 1 tasks | 6 files |
 | Phase 06 P06 | 25min | 3 tasks | 9 files |
+| Phase 08 P01 | 14min | 2 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -210,6 +211,8 @@ Recent decisions affecting current work:
 - [Phase 06 P06]: Restricted conversion reversal authorization strictly to Workspace Managers (leads.reverse_conversion); non-delegable to delegated staff per DELEGATION-MATRIX.md
 - [Phase 06 P06]: Emitted immutable conversion_reversed audit event in audit_logs capturing manager ID, justification reason, and state snapshots per DEC-11
 - [Phase 06 Complete]: All 7 lead lifecycle requirements (LEAD-01 through LEAD-07) fully verified across 5 holistic operational scenarios; Phase 6 complete and ready for Phase 7 (Member Profiles, Invoices, and ID Cards)
+- [Phase 08]: Enforced workspace-scoped message_id_header uniqueness and RFC-5322 In-Reply-To/References threading in MailboxSyncService
+- [Phase 08]: Linked synced Member email threads to both member_id and originating lead_id so pre-conversion correspondence appears on Member profiles per MAIL-02
 
 ### Pending Todos
 
@@ -230,6 +233,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T18:10:00Z
-Stopped at: Phase 07 complete, ready to plan Phase 8
-Resume file: .planning/phases/07-member-profiles-invoices-and-id-cards/07-01-PLAN.md
+Last session: 2026-11-04T16:47:52.296Z
+Stopped at: Completed 08-01-PLAN.md
+Resume file: None
