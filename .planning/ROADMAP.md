@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Discovery, Decisions, and Acceptance Criteria** - Baseline MVP boundaries, workspace mappings, dictionaries, delegation matrix, and acceptance criteria
 - [x] **Phase 2: Architecture, Data Model, and Security Design** - Relational schema, module registry contracts, conversion invariants, reversal protocols, and payment adapter boundary
 - [x] **Phase 3: Application Foundation and Deployment Baseline** - Laravel 12 / Livewire skeleton, Horizon queues, scheduler, private file storage, and CI/CD pipeline
-- [ ] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail
+- [x] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail (completed 2026-11-04)
 - [ ] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules
 - [ ] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals
 - [ ] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle
@@ -98,7 +98,7 @@ Plans:
   2. Workspace Manager can delegate authorized module actions to staff within their own workspace.
   3. Global Admin / Superadmin can navigate across workspaces.
   4. Every state transition, login event, and permission update records an immutable, read-only audit log entry excluding secrets.
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 **Wave 1**
@@ -112,7 +112,7 @@ Plans:
 - [x] 04-04-PLAN.md — Append-Only Immutable Audit Logging Core and Sensitive Secret Redaction
 
 **Wave 4**
-- [ ] 04-05-PLAN.md — Audit Log Viewer, Permission Cache Invalidation, and End-to-End Verification
+- [x] 04-05-PLAN.md — Audit Log Viewer, Permission Cache Invalidation, and End-to-End Verification
 **UI hint**: yes
 
 ### Phase 5: Form Builder and Public Membership Form
@@ -223,7 +223,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Discovery, Decisions, and Acceptance Criteria | 3/3 | Complete | 2026-11-03 |
 | 2. Architecture, Data Model, and Security Design | 3/3 | Complete    | 2026-11-03 |
 | 3. Application Foundation and Deployment Baseline | 4/4 | Complete    | 2026-11-04 |
-| 4. Identity, Access Control, Space Scope, and Audit Core | 1/5 | In Progress | - |
+| 4. Identity, Access Control, Space Scope, and Audit Core | 5/5 | Complete    | 2026-11-04 |
 | 5. Form Builder and Public Membership Form | 0/0 | Not started | - |
 | 6. Leads, Verification, and Controlled Conversion | 0/0 | Not started | - |
 | 7. Member Profiles, Invoices, and ID Cards | 0/0 | Not started | - |
