@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentDownloadController;
+use App\Http\Controllers\Invoices\InvoiceReceiptController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,6 +76,10 @@ Route::prefix('/crm/{workspace}')
 
         Route::get('/invoices', \App\Livewire\Invoices\InvoiceDirectory::class)
             ->name('crm.invoices')
+            ->middleware(['can:invoices.view']);
+
+        Route::get('/invoices/{invoice}/receipt', [InvoiceReceiptController::class, 'show'])
+            ->name('crm.invoices.receipt')
             ->middleware(['can:invoices.view']);
 
         Route::get('/reports', function ($workspace) {
