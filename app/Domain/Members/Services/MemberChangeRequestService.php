@@ -9,10 +9,12 @@ use App\Domain\Mail\Models\WorkflowRule;
 use App\Domain\Mail\Services\WorkflowRuleEngine;
 use App\Domain\Members\Models\Member;
 use App\Domain\Members\Models\MemberChangeRequest;
+use App\Domain\Members\Mail\ManagerEmailChangeAlertMail;
 use App\Models\User;
 use DomainException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class MemberChangeRequestService
 {
@@ -119,6 +121,98 @@ class MemberChangeRequestService
 
             return $changeRequest;
         });
+    }
+
+    /**
+     * Submit an email change request for a member with strict system-wide uniqueness check.
+     * Queues an alert notification to the Workspace Manager.
+     *
+     * @throws DomainException
+     */
+    public function submitEmailChangeRequest(
+        Member $member,
+        string $newEmail,
+        string $justification
+    ): MemberChangeRequest {
+        $normalizedNewEmail = strtolower(trim($newEmail));
+        $currentEmail = strtolower(trim((string) $member->email));
+
+        // Format validation
+        if (! filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+            throw new DomainException('The proposed email address format is invalid.');
+        }
+
+        // Must differ from current email
+        if ($normalizedNewEmail === $currentEmail) {
+            throw new DomainException('The new email address must differ from your current registered email.');
+        }
+
+        // Justification length check
+        $trimmedJustification = trim($justification);
+        if (mb_strlen($trimmedJustification) < 10) {
+            throw new DomainException('A valid justification of at least 10 characters is required.');
+        }
+
+        // Concurrency guard: Ensure no pending email change request exists
+        $hasPending = MemberChangeRequest::withoutGlobalScopes()
+            ->where('member_id', $member->id)
+            ->where('request_type', MemberChangeRequest::TYPE_EMAIL_CHANGE)
+            ->where('status', MemberChangeRequest::STATUS_PENDING)
+            ->exists();
+
+        if ($hasPending) {
+            throw new DomainException('An email change request is already pending review for this member.');
+        }
+
+        // System-wide uniqueness check against members.email and users.email
+        $existsInMembers = Member::withoutGlobalScopes()
+            ->whereRaw('LOWER(email) = ?', [$normalizedNewEmail])
+            ->exists();
+
+        $existsInUsers = User::withoutGlobalScopes()
+            ->whereRaw('LOWER(email) = ?', [$normalizedNewEmail])
+            ->exists();
+
+        if ($existsInMembers || $existsInUsers) {
+            throw new DomainException('The requested email address is already in use by another account.');
+        }
+
+        $changeRequest = DB::transaction(function () use ($member, $normalizedNewEmail, $trimmedJustification): MemberChangeRequest {
+            $request = MemberChangeRequest::create([
+                'workspace_id' => $member->workspace_id,
+                'member_id' => $member->id,
+                'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+                'status' => MemberChangeRequest::STATUS_PENDING,
+                'old_payload' => ['email' => $member->email],
+                'new_payload' => ['email' => $normalizedNewEmail],
+                'justification' => $trimmedJustification,
+            ]);
+
+            $actorId = auth('member')->id() ?? auth()->id() ?? $member->user_id;
+            $actorGuard = auth('member')->check() ? 'member' : (auth()->check() ? 'web' : 'system');
+
+            AuditLog::create([
+                'workspace_id' => $member->workspace_id,
+                'actor_id' => $actorId,
+                'actor_guard' => $actorGuard,
+                'event_type' => AuditLog::EVENT_MEMBER_EMAIL_CHANGE_REQUESTED,
+                'auditable_type' => MemberChangeRequest::class,
+                'auditable_id' => $request->id,
+                'old_values' => ['email' => $member->email],
+                'new_values' => ['email' => $normalizedNewEmail],
+                'reason' => $trimmedJustification,
+                'ip_address' => request()->ip() ?? '127.0.0.1',
+                'user_agent' => request()->userAgent() ?? 'MemberPortal',
+                'created_at' => now(),
+            ]);
+
+            return $request;
+        });
+
+        // Dispatch alert email to Workspace Manager
+        $this->alertWorkspaceManagers($member, $normalizedNewEmail, $trimmedJustification);
+
+        return $changeRequest;
     }
 
     /**
@@ -299,5 +393,35 @@ class MemberChangeRequestService
         } catch (\Throwable $e) {
             // Workflow rule might not be configured; do not fail transaction
         }
+    }
+
+    /**
+     * Alert Workspace Managers of a new email change request.
+     */
+    protected function alertWorkspaceManagers(Member $member, string $newEmail, string $justification): void
+    {
+        $managers = User::where('workspace_id', $member->workspace_id)
+            ->where(function ($q) {
+                $q->whereHas('roles', function ($rq) {
+                    $rq->whereIn('name', ['workspace_manager', 'superadmin', 'global_admin']);
+                });
+            })
+            ->get();
+
+        if ($managers->isEmpty()) {
+            $managers = User::whereHas('roles', function ($rq) {
+                $rq->whereIn('name', ['workspace_manager', 'superadmin', 'global_admin']);
+            })->get();
+        }
+
+        if ($managers->isEmpty()) {
+            $managers = User::where('workspace_id', $member->workspace_id)
+                ->where('guard', 'web')
+                ->get();
+        }
+
+        $recipients = $managers->isNotEmpty() ? $managers : 'manager@emk.test';
+
+        Mail::to($recipients)->queue(new ManagerEmailChangeAlertMail($member, $newEmail, $justification));
     }
 }

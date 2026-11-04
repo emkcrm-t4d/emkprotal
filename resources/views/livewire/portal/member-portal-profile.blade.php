@@ -247,7 +247,20 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div>
-                        <span class="text-xs font-medium text-slate-500 block">Email Address</span>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-slate-500 block">Email Address</span>
+                            <button
+                                type="button"
+                                wire:click="$dispatch('openSubmitEmailChangeModal')"
+                                class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 transition cursor-pointer flex items-center gap-1"
+                                title="Request Email Address Change"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                                <span>Change Email</span>
+                            </button>
+                        </div>
                         <span class="text-sm font-semibold text-slate-900 mt-1 block">{{ $member->email }}</span>
                     </div>
 
@@ -452,6 +465,7 @@
         </div>
     @endif
 
-    {{-- Change Request Modal --}}
+    {{-- Change Request Modals --}}
     <livewire:portal.modals.submit-profile-change-request-modal :member="$member" />
+    <livewire:portal.modals.submit-email-change-modal :member="$member" />
 </div>
