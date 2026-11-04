@@ -34,9 +34,27 @@ final class VerifyWorkspaceAccess
 
         // Normalise string parameter if Route-Model binding resolved a Workspace instance
         if ($routeWorkspace instanceof Workspace) {
-            $routeWorkspaceId = $routeWorkspace->id;
+            $routeWorkspaceId = (string) $routeWorkspace->id;
         } else {
             $routeWorkspaceId = (string) $routeWorkspace;
+        }
+
+        // Validate slug regex (^[a-z0-9-]+$)
+        if ($routeWorkspaceId === '' || !preg_match('/^[a-z0-9-]+$/', $routeWorkspaceId)) {
+            Log::warning('Malformed workspace identifier blocked', [
+                'user_id' => $user->id,
+                'user_workspace' => $user->workspace_id,
+                'attempted_workspace' => $routeWorkspaceId,
+                'ip' => $request->ip(),
+                'url' => $request->fullUrl(),
+            ]);
+
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized workspace access.');
+        }
+
+        // Superadmin and Global Admin hold cross-workspace access
+        if (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin'])) {
+            return $next($request);
         }
 
         if (empty($user->workspace_id) || $routeWorkspaceId !== (string) $user->workspace_id) {

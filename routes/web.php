@@ -52,27 +52,78 @@ Route::post('/password/reset-required', function (\Illuminate\Http\Request $requ
 })->name('password.update-required');
 
 /**
- * Phase 4 Identity, Workspace Tenancy, and Authorization Tracer Slice per AUTH-01, AUTH-02, DEC-01, DEC-06
+ * Phase 4 Canonical Workspace CRM Route Group per AUTH-02, DEC-01, and TENANCY-SPEC.md
  */
-Route::middleware(['auth:web', \App\Http\Middleware\VerifyWorkspaceAccess::class, 'password.reset'])
-    ->get('/crm/{workspace}/tracer-check', function ($workspace) {
-        $user = auth()->user();
+Route::prefix('/crm/{workspace}')
+    ->middleware(['auth:web', 'workspace.access', 'password.reset'])
+    ->group(function () {
+        Route::get('/leads', function ($workspace) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
 
-        $hasAccess = ($user && method_exists($user, 'can') && $user->can('forms.view'))
-            || ($user && method_exists($user, 'hasRole') && $user->hasRole(['workspace_manager', 'superadmin', 'global_admin']));
+            return response()->json([
+                'status' => 'ok',
+                'workspace' => $workspaceId,
+                'module' => 'leads',
+            ]);
+        })->name('crm.leads');
 
-        if (!$hasAccess) {
-            abort(403, 'Forbidden: Insufficient permissions.');
-        }
+        Route::get('/members', function ($workspace) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
 
-        $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
-            ? $workspace->id
-            : (string) $workspace;
+            return response()->json([
+                'status' => 'ok',
+                'workspace' => $workspaceId,
+                'module' => 'members',
+            ]);
+        })->name('crm.members');
 
-        return response()->json([
-            'status' => 'ok',
-            'workspace_id' => $workspaceId,
-            'records_count' => \App\Domain\Leads\Models\Lead::count(),
-        ]);
-    })->name('crm.tracer-check');
+        Route::get('/invoices', function ($workspace) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
+
+            return response()->json([
+                'status' => 'ok',
+                'workspace' => $workspaceId,
+                'module' => 'invoices',
+            ]);
+        })->name('crm.invoices');
+
+        Route::get('/reports', function ($workspace) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
+
+            return response()->json([
+                'status' => 'ok',
+                'workspace' => $workspaceId,
+                'module' => 'reports',
+            ]);
+        })->name('crm.reports');
+
+        Route::get('/tracer-check', function ($workspace) {
+            $user = auth()->user();
+
+            $hasAccess = ($user && method_exists($user, 'can') && $user->can('forms.view'))
+                || ($user && method_exists($user, 'hasRole') && $user->hasRole(['workspace_manager', 'superadmin', 'global_admin']));
+
+            if (!$hasAccess) {
+                abort(403, 'Forbidden: Insufficient permissions.');
+            }
+
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
+
+            return response()->json([
+                'status' => 'ok',
+                'workspace_id' => $workspaceId,
+                'records_count' => \App\Domain\Leads\Models\Lead::count(),
+            ]);
+        })->name('crm.tracer-check');
+    });
 
