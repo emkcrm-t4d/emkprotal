@@ -213,8 +213,24 @@ Plans:
   2. Staff can manage and preview email templates for all application and membership milestones.
   3. System queues lifecycle email dispatches via Horizon with deduplication protection on retries.
   4. Automated workflow triggers dispatch notifications for status transitions and upcoming membership expirations.
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 08-01-PLAN.md — Official Mailbox Schema, IMAP/SMTP Bi-Directional Sync & Threaded Correspondence Panel
+
+**Wave 2**
+- [ ] 08-02-PLAN.md — Bilingual Lifecycle Email Template Manager & Safe Variable Interpolation Engine
+
+**Wave 3**
+- [ ] 08-03-PLAN.md — Horizon Queued Dispatch Pipeline, Idempotent Deduplication Guard & Delivery Monitor
+
+**Wave 4**
+- [ ] 08-04-PLAN.md — Configurable Automated Workflow Rules & Membership Expiry/Renewal Scheduler
+
+**Wave 5**
+- [ ] 08-05-PLAN.md — Profile Thread Integration, Email Operations Runbook & Holistic Phase 8 E2E Suite
 
 ### Phase 9: Read-Only Member Portal, Change Requests, and Renewals
 **Goal**: Members can securely log into a read-only portal to view profile status and submit change or renewal requests.
