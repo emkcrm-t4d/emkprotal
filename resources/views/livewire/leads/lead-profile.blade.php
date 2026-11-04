@@ -51,6 +51,34 @@
             </div>
 
             <div class="mt-4 sm:mt-0 flex items-center gap-2">
+                @if(auth()->user()?->can('leads.communicate') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager', 'delegated_staff']))
+                    <button
+                        type="button"
+                        wire:click="openMissingItemsModal"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 transition-colors shadow-xs"
+                        id="btn-open-missing-items"
+                    >
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span>Request Missing Items</span>
+                    </button>
+                @endif
+
+                @if(auth()->user()?->can('leads.reject') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager']))
+                    <button
+                        type="button"
+                        wire:click="openRejectModal"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 transition-colors shadow-xs"
+                        id="btn-open-reject-lead"
+                    >
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        <span>Reject Application</span>
+                    </button>
+                @endif
+
                 @if(auth()->user()?->can('leads.edit') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager']))
                     <button
                         type="button"
@@ -843,4 +871,8 @@
             </div>
         </div>
     @endif
+
+    <!-- Missing Items & Rejection Modals -->
+    @livewire('leads.modals.missing-items-modal', ['lead' => $lead, 'workspace' => $workspace], key('missing-items-modal-'.$lead->id))
+    @livewire('leads.modals.reject-lead-modal', ['lead' => $lead, 'workspace' => $workspace], key('reject-lead-modal-'.$lead->id))
 </div>

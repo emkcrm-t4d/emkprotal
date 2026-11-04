@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.admin')]
@@ -142,6 +143,35 @@ class LeadProfile extends Component
     public function setTab(string $tab): void
     {
         $this->activeTab = $tab;
+    }
+
+    /**
+     * Refresh lead entity upon verification or lifecycle mutations.
+     */
+    #[On('leadUpdated')]
+    #[On('lead-updated')]
+    public function refreshLead(): void
+    {
+        $this->lead->refresh();
+        $this->lead->loadMissing(['attachments', 'verifications.verifiedBy']);
+        $this->syncEditableProperties();
+        $this->checkReapplicationHistory();
+    }
+
+    /**
+     * Open missing items modal.
+     */
+    public function openMissingItemsModal(): void
+    {
+        $this->dispatch('openMissingItemsModal');
+    }
+
+    /**
+     * Open standardized rejection modal.
+     */
+    public function openRejectModal(): void
+    {
+        $this->dispatch('openRejectLeadModal');
     }
 
     /**
