@@ -748,52 +748,7 @@
 
     <!-- Tab 3: Verification Streams (Tri-State) -->
     @if($activeTab === 'streams')
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Payment Stream -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 class="text-sm font-bold text-slate-900">1. Payment Stream</h2>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
-                        {{ $lead->payment_verification_status }}
-                    </span>
-                </div>
-                <div class="text-xs space-y-2 text-slate-600">
-                    <p>Method: <strong class="text-slate-900">bKash Manual (DEC-05)</strong></p>
-                    <p>TxID: <strong class="font-mono text-pink-700 text-sm">{{ $lead->bkash_txid }}</strong></p>
-                    <p class="text-slate-500">Workspace Managers must reconcile TxID in the bKash merchant statement before verifying.</p>
-                </div>
-            </div>
-
-            <!-- Document Stream -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 class="text-sm font-bold text-slate-900">2. Document Stream</h2>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
-                        {{ $lead->document_verification_status }}
-                    </span>
-                </div>
-                <div class="text-xs space-y-2 text-slate-600">
-                    <p>National ID / Passport: <strong>{{ $lead->attachments->where('document_type', 'identity_document')->count() }} file(s)</strong></p>
-                    <p>Parental Consent: <strong>{{ $lead->has_parental_consent ? 'Verified' : ($lead->age_at_submission < 18 ? 'Missing' : 'N/A') }}</strong></p>
-                    <p class="text-slate-500">Staff review legitimacy, valid dates, and guardian signatures for minor applicants.</p>
-                </div>
-            </div>
-
-            <!-- Photo Stream -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 class="text-sm font-bold text-slate-900">3. Photo Stream</h2>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
-                        {{ $lead->photo_verification_status }}
-                    </span>
-                </div>
-                <div class="text-xs space-y-2 text-slate-600">
-                    <p>Studio Photo: <strong>{{ $lead->attachments->where('document_type', 'studio_photo')->count() > 0 ? 'Uploaded' : 'Pending' }}</strong></p>
-                    <p>ID Badge Printing Checklist: <strong>5-point compliance required</strong></p>
-                    <p class="text-slate-500">Plain white background, no eyewear, both ears visible, no selfies or filters.</p>
-                </div>
-            </div>
-        </div>
+        @livewire('leads.partials.verification-panel', ['lead' => $lead, 'workspace' => $workspace], key('verification-panel-'.$lead->id))
     @endif
 
     <!-- Tab 4: Audit & Verification Timeline -->
