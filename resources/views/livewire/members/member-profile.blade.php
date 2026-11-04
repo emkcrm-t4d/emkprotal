@@ -97,6 +97,16 @@
                     </svg>
                     Edit Contact Details
                 </button>
+                @if ($this->canChangeStatus())
+                    <button
+                        type="button"
+                        wire:click="openStatusModal"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-rose-600 text-white rounded-lg text-xs font-medium hover:bg-rose-700 shadow-xs transition-colors"
+                        id="btn-change-status"
+                    >
+                        Change Status
+                    </button>
+                @endif
             </div>
         </div>
     </div>
@@ -536,5 +546,9 @@
     <!-- Inline Contact Edit Modal Component Slot (Task 3) -->
     @if (class_exists(\App\Livewire\Members\EditMemberContactModal::class))
         <livewire:members.edit-member-contact-modal :member="$member" :workspace="$workspace" wire:key="'edit-modal-'.$member->id" />
+    @endif
+
+    @if ($this->canChangeStatus())
+        <livewire:members.member-status-modal :member="$member" :workspace="$workspace" wire:key="'status-modal-'.$member->id" />
     @endif
 </div>

@@ -98,6 +98,7 @@ class MemberProfile extends Component
      */
     #[On('member-contact-updated')]
     #[On('memberContactUpdated')]
+    #[On('member-status-updated')]
     public function refreshMember(): void
     {
         $this->member->refresh();
@@ -122,6 +123,29 @@ class MemberProfile extends Component
         }
 
         $this->dispatch('openEditMemberContactModal');
+    }
+
+    /**
+     * Whether the current user may change member status (restrict/revoke authority).
+     */
+    public function canChangeStatus(): bool
+    {
+        $user = Auth::user();
+
+        return $user && ($user->can('members.restrict') || $user->can('members.revoke')
+            || $user->hasRole(['superadmin', 'global_admin']));
+    }
+
+    /**
+     * Open member status governance modal.
+     */
+    public function openStatusModal(): void
+    {
+        if (!$this->canChangeStatus()) {
+            App::abort(403, 'Unauthorized: members.restrict or members.revoke permission required.');
+        }
+
+        $this->dispatch('openMemberStatusModal');
     }
 
     /**
