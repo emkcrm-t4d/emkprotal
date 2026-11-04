@@ -46,4 +46,22 @@ class Lead extends Model implements TenantEntityInterface
     {
         return $this->hasMany(LeadAttachment::class, 'lead_id');
     }
+
+    /**
+     * Relationship: lead has many verification records.
+     */
+    public function verifications(): HasMany
+    {
+        return $this->hasMany(LeadVerification::class, 'lead_id');
+    }
+
+    /**
+     * Accessor: formatted full applicant name.
+     */
+    public function getFullNameAttribute(): string
+    {
+        $middle = !empty($this->middle_name) ? $this->middle_name . ' ' : '';
+
+        return trim($this->first_name . ' ' . $middle . $this->last_name);
+    }
 }

@@ -16,6 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
             'workspace.access' => \App\Http\Middleware\VerifyWorkspaceAccess::class,
             'password.reset' => \App\Http\Middleware\EnsurePasswordReset::class,
         ]);
+
+        $middleware->priority([
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \Illuminate\Auth\Middleware\Authenticate::class,
+            \App\Http\Middleware\VerifyWorkspaceAccess::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Auth\Middleware\Authorize::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -57,17 +57,13 @@ Route::post('/password/reset-required', function (\Illuminate\Http\Request $requ
 Route::prefix('/crm/{workspace}')
     ->middleware(['auth:web', 'workspace.access', 'password.reset'])
     ->group(function () {
-        Route::get('/leads', function ($workspace) {
-            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
-                ? $workspace->id
-                : (string) $workspace;
+        Route::get('/leads', \App\Livewire\Leads\LeadDirectory::class)
+            ->name('crm.leads')
+            ->middleware(['can:leads.view']);
 
-            return response()->json([
-                'status' => 'ok',
-                'workspace' => $workspaceId,
-                'module' => 'leads',
-            ]);
-        })->name('crm.leads');
+        Route::get('/leads/{lead}', \App\Livewire\Leads\LeadProfile::class)
+            ->name('crm.leads.show')
+            ->middleware(['can:leads.view']);
 
         Route::get('/members', function ($workspace) {
             $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
