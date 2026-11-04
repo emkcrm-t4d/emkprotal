@@ -69,6 +69,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.members')
             ->middleware(['can:members.view']);
 
+        Route::get('/members/{member:uuid}', \App\Livewire\Members\MemberProfile::class)
+            ->name('crm.members.show')
+            ->middleware(['can:members.view']);
+
         Route::get('/invoices', function ($workspace) {
             $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
                 ? $workspace->id

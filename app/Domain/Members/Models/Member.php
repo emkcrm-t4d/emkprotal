@@ -33,6 +33,14 @@ class Member extends Model implements TenantEntityInterface
     }
 
     /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+    /**
      * Get the workspace identifier for the tenant entity.
      */
     public function getWorkspaceId(): ?string
