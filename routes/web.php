@@ -105,6 +105,12 @@ Route::prefix('/crm/{workspace}')
             ]);
         })->name('crm.reports');
 
+        Route::get('/staff', \App\Livewire\Staff\StaffDirectory::class)
+            ->name('crm.staff.index');
+
+        Route::get('/staff/{staff}/delegation', \App\Livewire\Staff\RoleDelegation::class)
+            ->name('crm.staff.delegation');
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
