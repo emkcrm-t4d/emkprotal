@@ -13,6 +13,7 @@ use App\Domain\Mail\Services\ImapMailboxAdapter;
 use App\Domain\Mail\Services\MailboxSyncService;
 use App\Domain\Members\Models\Member;
 use App\Domain\Workspaces\Models\Workspace;
+use App\Livewire\Mail\EmailThreadPanel;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class MailboxSyncAndThreadTracerTest extends TestCase
@@ -333,5 +335,93 @@ class MailboxSyncAndThreadTracerTest extends TestCase
             'event_type' => AuditLog::EVENT_OFFICIAL_EMAIL_REPLY_SENT,
             'auditable_id' => $replyMessage->id,
         ]);
+    }
+
+    public function test_email_thread_panel_renders_pre_conversion_lead_history_on_member_profile_and_sends_reply(): void
+    {
+        Mail::fake();
+
+        // Create a pre-conversion thread originally linked ONLY to the member's originating lead_id
+        $preConversionThread = EmailThread::create([
+            'uuid' => (string) Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'lead_id' => $this->member->lead_id,
+            'member_id' => null,
+            'participant_email' => $this->member->email,
+            'subject' => 'Pre-conversion Application Inquiry',
+            'thread_reference' => '<pre-conv-001@applicant.test>',
+            'last_message_at' => now()->subDays(2),
+            'message_count' => 1,
+        ]);
+
+        EmailMessage::create([
+            'uuid' => (string) Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'email_thread_id' => $preConversionThread->id,
+            'lead_id' => $this->member->lead_id,
+            'member_id' => null,
+            'direction' => 'inbound',
+            'status' => 'received',
+            'from_email' => $this->member->email,
+            'to_email' => 'infodesk@emkcenter.org',
+            'subject' => 'Pre-conversion Application Inquiry',
+            'body_text' => 'When will my membership application be approved?',
+            'message_id_header' => '<pre-conv-001@applicant.test>',
+            'received_at' => now()->subDays(2),
+        ]);
+
+        $this->actingAs($this->staff);
+
+        Livewire::test(EmailThreadPanel::class, [
+            'workspace' => 'ws-emk-dhaka',
+            'memberId' => $this->member->id,
+        ])
+            ->assertSee('Official Information Desk Correspondence')
+            ->assertSee('Pre-conversion Application Inquiry')
+            ->assertSee('When will my membership application be approved?')
+            ->set('replyBody', 'Your membership is now active and your ID card is being printed.')
+            ->call('sendReply')
+            ->assertHasNoErrors()
+            ->assertDispatched('email-reply-sent')
+            ->assertSee('Your membership is now active and your ID card is being printed.');
+
+        $this->assertSame(2, $preConversionThread->fresh()->message_count);
+    }
+
+    public function test_email_thread_panel_can_start_new_thread_and_sync_now(): void
+    {
+        Mail::fake();
+
+        $this->actingAs($this->staff);
+
+        Livewire::test(EmailThreadPanel::class, [
+            'workspace' => 'ws-emk-dhaka',
+            'leadId' => $this->lead->id,
+        ])
+            ->call('toggleNewThreadForm')
+            ->assertSet('showNewThreadForm', true)
+            ->set('newThreadSubject', 'Official Welcome & Orientation')
+            ->set('newThreadBody', 'Welcome to EMK Center Dhaka. Here are your orientation details.')
+            ->call('startNewThread')
+            ->assertHasNoErrors()
+            ->assertDispatched('email-thread-started')
+            ->assertSee('Official Welcome & Orientation')
+            ->assertSee('Welcome to EMK Center Dhaka. Here are your orientation details.');
+
+        $this->assertDatabaseHas('email_threads', [
+            'workspace_id' => 'ws-emk-dhaka',
+            'lead_id' => $this->lead->id,
+            'subject' => 'Official Welcome & Orientation',
+        ]);
+    }
+
+    public function test_cross_workspace_access_to_email_thread_panel_is_rejected_with_403(): void
+    {
+        $this->actingAs($this->otherWorkspaceStaff);
+
+        Livewire::test(EmailThreadPanel::class, [
+            'workspace' => 'ws-emk-dhaka',
+            'leadId' => $this->lead->id,
+        ])->assertForbidden();
     }
 }
