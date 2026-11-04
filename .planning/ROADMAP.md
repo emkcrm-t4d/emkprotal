@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules (completed 2026-11-04)
 - [x] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals (completed 2026-11-04)
 - [x] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle (completed 2026-11-04)
-- [ ] **Phase 8: Official Email, IMAP, Templates, and Workflow Rules** - Information Desk mailbox integration, threaded profile communications, Horizon email queue, and lifecycle triggers
+- [x] **Phase 8: Official Email, IMAP, Templates, and Workflow Rules** - Information Desk mailbox integration, threaded profile communications, Horizon email queue, and lifecycle triggers (completed 2026-11-04)
 - [ ] **Phase 9: Read-Only Member Portal, Change Requests, and Renewals** - Member authentication, read-only profile views, staff-reviewed change requests, email changes, and renewals
 - [ ] **Phase 10: Dashboard, Reports, Data Tools, and Platform Settings** - Workspace-scoped operational dashboards, CSV/Excel export tools, admin controls, and encrypted backup routines
 - [ ] **Phase 11: Zoho Migration and Reconciliation** - Legacy Zoho data/attachment migration, Zoho ID mapping, inactive portal account staging, reconciliation reports, and cutover
@@ -213,7 +213,7 @@ Plans:
   2. Staff can manage and preview email templates for all application and membership milestones.
   3. System queues lifecycle email dispatches via Horizon with deduplication protection on retries.
   4. Automated workflow triggers dispatch notifications for status transitions and upcoming membership expirations.
-**Plans**: 5/5 plans executed
+**Plans**: 5/5 plans complete
 **UI hint**: yes
 
 Plans:
@@ -294,7 +294,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Form Builder and Public Membership Form | 5/5 | Complete    | 2026-11-04 |
 | 6. Leads, Verification, and Controlled Conversion | 6/6 | Complete    | 2026-11-04 |
 | 7. Member Profiles, Invoices, and ID Cards | 5/5 | Complete    | 2026-11-04 |
-| 8. Official Email, IMAP, Templates, and Workflow Rules | 5/5 | In Progress | - |
+| 8. Official Email, IMAP, Templates, and Workflow Rules | 5/5 | Complete    | 2026-11-04 |
 | 9. Read-Only Member Portal, Change Requests, and Renewals | 0/0 | Not started | - |
 | 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/0 | Not started | - |
 | 11. Zoho Migration and Reconciliation | 0/0 | Not started | - |

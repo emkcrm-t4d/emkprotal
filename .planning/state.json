@@ -41,7 +41,7 @@
     {
       "number": "8",
       "name": "Official Email, IMAP, Templates, and Workflow Rules",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "9",
@@ -66,8 +66,8 @@
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 8 of 12 · 58% · executing"
+    "label": "Advance to the next step (plan phase 9)",
+    "reason": "Phase 9 of 12 — needs a plan"
   },
-  "updated_at": "2026-11-04T16:47:40.374Z"
+  "updated_at": "2026-11-04T17:44:54.297Z"
 }
