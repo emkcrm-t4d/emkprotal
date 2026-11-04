@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 5
 current_phase_name: Form Builder and Public Membership Form
-current_plan: 1
-status: planned
-stopped_at: Phase 5 plans created and verified (5 plans across 5 waves)
-last_updated: "2026-11-04T07:05:00.000Z"
+current_plan: 2
+status: in_progress
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-11-04T07:30:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Phase 5 planning complete (5 plans verified)
-state_head: 8abed5a
+last_activity_desc: Phase 5 Plan 01 complete (Domain model, FormSchemaEngine, FormValidationCompiler, tracer slice)
+state_head: 6ca7a45
 progress:
   total_phases: 12
   completed_phases: 4
   total_plans: 20
-  completed_plans: 15
-  percent: 38
+  completed_plans: 16
+  percent: 42
 ---
 
 # Project State
@@ -29,13 +29,13 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 5 — Form Builder and Public Membership Form
-Current Plan: 05-01-PLAN.md (Wave 1)
+Current Plan: 05-02-PLAN.md (Wave 2)
 Total Plans in Phase: 5
 Next Phase: 6 (Leads, Verification, and Controlled Conversion)
-Status: Ready for execution
-Last activity: 2026-11-04 — Phase 5 plans verified (0 blockers, 0 warnings)
+Status: In progress
+Last activity: 2026-11-04 — 05-01-PLAN.md executed and verified
 
-Progress: [████░░░░░░] 38% (Phase 5 planned)
+Progress: [████░░░░░░] 42% (Phase 5 in progress)
 
 ## Performance Metrics
 
@@ -76,6 +76,8 @@ Progress: [████░░░░░░] 38% (Phase 5 planned)
 | Phase 04 P02 | 15m | 3 tasks | 13 files |
 | Phase 04 P03 | 25m | 3 tasks | 13 files |
 | Phase 04 P04 | 15m | 3 tasks | 11 files |
+| Phase 04 P05 | 15m | 3 tasks | 13 files |
+| Phase 05 P01 | 12min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -154,10 +156,15 @@ Recent decisions affecting current work:
 - [Phase 04 P04]: Configured auditable_type and auditable_id as nullable in audit_logs to support unauthenticated security events (failed logins with non-existent accounts)
 - [Phase 04 P04]: Implemented AuditableObserver scrubbing 13 credential tokens to [REDACTED] in old_values and new_values per DEC-11 and ASVS V8.2
 - [Phase 04 P04]: Bound AuditableObserver to User and Lead models and subscribed AuditAuthenticationEvents for login, failed login, logout, and password reset
+- [Phase 05 P01]: Dropped composite unique uq_leads_email_workspace in favor of non-unique index idx_leads_email_workspace to support legitimate reapplicant submissions per FORM-05 and LEAD-07
+- [Phase 05 P01]: Implemented zero-eval condition evaluator in FormSchemaEngine supporting all 13 field types and declarative comparison operators per DEC-02
+- [Phase 05 P01]: Enforced 100-field DoS ceiling per form definition in FormSchemaEngine per T-05-02
+- [Phase 05 P01]: Enforced exact 10-character uppercase alphanumeric bKash Transaction ID validation rule in FormValidationCompiler per DEC-05
+- [Phase 05 P01]: Enforced conditional youth consent upload rule when applicant age derived from date_of_birth is under 18 per DEC-09
 
 ### Pending Todos
 
-None - Phase 4 Plan 04 complete. Ready for Phase 4 Plan 05 (Audit Log Viewer, Permission Cache Invalidation, and End-to-End Verification).
+None - Phase 5 Plan 01 complete. Ready for Phase 5 Plan 02 (Form Builder Admin Interface & Seeded 31-Field Default Membership Form).
 
 ### Blockers/Concerns
 
@@ -174,6 +181,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T06:04:00Z
-Stopped at: Phase 4 complete, ready to plan Phase 5
+Last session: 2026-11-04T07:30:00Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
