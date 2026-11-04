@@ -65,3 +65,4 @@ None.
 
 ## Self-Check: PASSED
 All created/modified files exist on disk; commits `b9b6b96`, `858d6f7`, and `0124d05` verified on `main`; 20 plan tests (104 assertions) and 420 total suite tests (2337 assertions) pass with 0 failures.
+
