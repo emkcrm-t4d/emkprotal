@@ -159,3 +159,4 @@ Guard isolation verification (`MultiGuardAuthTest`):
 - `resources/views/layouts/portal.blade.php` exists
 - `tests/Feature/PortalAuthenticationAndTracerTest.php` exists
 - Commits `5fc6be1` and `5ad9085` verified in git history
+
