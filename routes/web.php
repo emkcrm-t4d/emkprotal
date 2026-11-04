@@ -115,6 +115,23 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.forms.submissions')
             ->middleware(['can:forms.view_entries']);
 
+        Route::get('/forms/{form}/submissions/export', function (
+            $workspace,
+            $form,
+            \Illuminate\Http\Request $request,
+            \App\Domain\Forms\Services\FormSubmissionExportService $exportService
+        ) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
+
+            if (!($form instanceof \App\Domain\Forms\Models\Form)) {
+                $form = \App\Domain\Forms\Models\Form::withoutGlobalScopes()->findOrFail($form);
+            }
+
+            return $exportService->export($form, $workspaceId, $request->all());
+        })->name('crm.forms.submissions.export')->middleware(['can:forms.view_entries']);
+
         Route::get('/staff', \App\Livewire\Staff\StaffDirectory::class)
             ->name('crm.staff.index');
 

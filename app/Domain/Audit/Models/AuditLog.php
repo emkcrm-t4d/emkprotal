@@ -28,6 +28,7 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_PERMISSION_DELEGATED = 'access.permission_delegated';
     public const EVENT_PERMISSION_REVOKED = 'access.permission_revoked';
     public const EVENT_DOCUMENT_ACCESSED = 'document.accessed';
+    public const EVENT_FORM_SUBMISSIONS_EXPORTED = 'form_submissions_exported';
 
     protected $table = 'audit_logs';
 
