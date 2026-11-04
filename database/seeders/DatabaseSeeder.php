@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SpaceAndWorkspaceSeeder::class,
             MembershipTermSeeder::class,
             RolesAndPermissionsSeeder::class,
+            DefaultMembershipFormSeeder::class,
         ]);
     }
 }
