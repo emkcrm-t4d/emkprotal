@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 4
 current_phase_name: Identity, Access Control, Space Scope, and Audit Core
-current_plan: 4
-status: executing
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-11-04T05:48:00.000Z"
+current_plan: 5
+status: ready
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-11-04T06:04:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Completed 04-03-PLAN.md (Scoped RBAC Delegation & Staff Management)
-state_head: 80467dbd932d9360570053baa4a5c91c5472c048
+last_activity_desc: Completed 04-04-PLAN.md (Append-Only Immutable Audit Logging Core)
+state_head: 7d8fed14d4d4e60518f9d2cc5a56f81e1f8d95f6
 progress:
   total_phases: 12
   completed_phases: 3
   total_plans: 15
-  completed_plans: 13
-  percent: 30
+  completed_plans: 14
+  percent: 33
 ---
 
 # Project State
@@ -29,13 +29,13 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 4 (Identity, Access Control, Space Scope, and Audit Core) — EXECUTING
-Current Plan: 4
+Current Plan: 5
 Total Plans in Phase: 5
 Next Phase: 4 (Identity, Access Control, Space Scope, and Audit Core)
-Status: Ready to execute 04-04-PLAN.md
-Last activity: 2026-11-04 — Completed 04-03-PLAN.md (Scoped RBAC Delegation & Staff Management)
+Status: Ready to execute 04-05-PLAN.md
+Last activity: 2026-11-04 — Completed 04-04-PLAN.md (Append-Only Immutable Audit Logging Core)
 
-Progress: [███░░░░░░░] 30% (Phase 4 Plan 03 complete)
+Progress: [███░░░░░░░] 33% (Phase 4 Plan 04 complete)
 
 ## Performance Metrics
 
@@ -51,10 +51,10 @@ Progress: [███░░░░░░░] 30% (Phase 4 Plan 03 complete)
 | Phase 1 | 3 | 42 min | 14 min |
 | Phase 2 | 3 | 21 min | 7 min |
 | Phase 3 | 4 | 51 min | 12.8 min |
-| 4 | 3 | 58 min | 19.3 min |
+| 4 | 4 | 73 min | 18.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 12m, 14m, 18m, 15m, 25m
+- Last 5 plans: 14m, 18m, 15m, 25m, 15m
 - Trend: Consistent delivery velocity
 
 *Updated after each plan completion*
@@ -75,6 +75,7 @@ Progress: [███░░░░░░░] 30% (Phase 4 Plan 03 complete)
 | Phase 04 P01 | 18m | 3 tasks | 18 files |
 | Phase 04 P02 | 15m | 3 tasks | 13 files |
 | Phase 04 P03 | 25m | 3 tasks | 13 files |
+| Phase 04 P04 | 15m | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -150,10 +151,13 @@ Recent decisions affecting current work:
 - [Phase 04 P03]: Enforced TenancyBoundaryException on cross-workspace staff delegation, revocation, and deactivation attempts per DEC-01
 - [Phase 04 P03]: Automated Spatie permission cache purging via PermissionRegistrar::forgetCachedPermissions() on every staff role and permission mutation per AUTH-05
 - [Phase 04 P03]: Deployed Livewire StaffDirectory and RoleDelegation components under /crm/{workspace}/staff guarded by platform_services.delegate_roles and workspace tenancy
+- [Phase 04 P04]: Configured auditable_type and auditable_id as nullable in audit_logs to support unauthenticated security events (failed logins with non-existent accounts)
+- [Phase 04 P04]: Implemented AuditableObserver scrubbing 13 credential tokens to [REDACTED] in old_values and new_values per DEC-11 and ASVS V8.2
+- [Phase 04 P04]: Bound AuditableObserver to User and Lead models and subscribed AuditAuthenticationEvents for login, failed login, logout, and password reset
 
 ### Pending Todos
 
-None - Phase 4 Plan 03 complete. Ready for Phase 4 Plan 04 (Immutable Audit Logging Core).
+None - Phase 4 Plan 04 complete. Ready for Phase 4 Plan 05 (Audit Log Viewer, Permission Cache Invalidation, and End-to-End Verification).
 
 ### Blockers/Concerns
 
@@ -170,6 +174,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T05:48:00Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-11-04T06:04:00Z
+Stopped at: Completed 04-04-PLAN.md
 Resume file: None
