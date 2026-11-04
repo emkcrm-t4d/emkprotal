@@ -134,6 +134,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.audit_logs.index')
             ->middleware(['can:platform_services.view_audit_logs']);
 
+        Route::get('/settings/terms', \App\Livewire\Members\ManageTerms::class)
+            ->name('crm.terms.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
