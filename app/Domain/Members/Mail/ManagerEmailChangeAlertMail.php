@@ -47,7 +47,7 @@ class ManagerEmailChangeAlertMail extends Mailable implements ShouldQueue
                 'newEmail' => $this->newEmail,
                 'justification' => $this->justification,
                 'timestamp' => now()->format('F d, Y H:i:s T'),
-                'actionUrl' => route('crm.members.change_requests', ['workspace' => $this->member->workspace_id]),
+                'actionUrl' => \Illuminate\Support\Facades\URL::route('crm.members.change_requests', ['workspace' => $this->member->workspace_id]),
             ],
         );
     }
