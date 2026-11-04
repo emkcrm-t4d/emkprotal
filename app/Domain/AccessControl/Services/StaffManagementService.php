@@ -17,7 +17,7 @@ class StaffManagementService
         protected DelegationPolicyService $delegationPolicy,
         protected ?PermissionRegistrar $permissionRegistrar = null
     ) {
-        $this->permissionRegistrar ??= app(PermissionRegistrar::class);
+        $this->permissionRegistrar ??= \Illuminate\Support\Facades\App::make(PermissionRegistrar::class);
     }
 
     /**
