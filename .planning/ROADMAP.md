@@ -153,12 +153,12 @@ Plans:
   3. Workspace Manager can execute atomic Lead-to-Member conversion, safely re-associating documents with the new Member ID.
   4. Workspace Manager can reverse an erroneous conversion with a mandatory reason, reverting state and recording an immutable audit event.
   5. Reapplicants can reapply after rejection with historical rejection reasons visible to reviewing staff.
-**Plans**: 6 plans
+**Plans**: 1/6 plans complete
 **UI hint**: yes
 
 Plans:
 **Wave 1**
-- [ ] 06-01-PLAN.md — Lead Management Directory, Profile Inspector, and End-to-End Lead Tracer Slice
+- [x] 06-01-PLAN.md — Lead Management Directory, Profile Inspector, and End-to-End Lead Tracer Slice
 
 **Wave 2**
 - [ ] 06-02-PLAN.md — Tri-State Independent Verification Engine & Evidence Logging

@@ -51,13 +51,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Lead Management & Conversion
 
-- [ ] **LEAD-01**: Provide Lead management list and profile view with workspace scoping, filtering, and full activity timeline.
+- [x] **LEAD-01**: Provide Lead management list and profile view with workspace scoping, filtering, and full activity timeline.
 - [ ] **LEAD-02**: Implement independent tri-state verification workflows for Payment, Documents, and Photo with notes and evidence logging.
 - [ ] **LEAD-03**: Provide manual bKash transaction verification with duplicate transaction ID detection and rejection reason recording.
 - [ ] **LEAD-04**: Support communication of missing or invalid application items via official email directly from the Lead profile.
 - [ ] **LEAD-05**: Execute atomic Lead-to-Member conversion only when Payment, Document, and Photo verifications are all Complete.
 - [ ] **LEAD-06**: Support controlled conversion reversal with required reason entry, permission verification, and immutable audit event.
-- [ ] **LEAD-07**: Preserve previous application rejection history on reapplication and allow Managers to block abusive emails.
+- [x] **LEAD-07**: Preserve previous application rejection history on reapplication and allow Managers to block abusive emails.
 
 ### Member Profiles, Invoices & ID Cards
 
@@ -170,13 +170,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-04 | Phase 5 | Complete |
 | FORM-05 | Phase 5 | Complete |
 | FORM-06 | Phase 5 | Complete |
-| LEAD-01 | Phase 6 | Pending |
+| LEAD-01 | Phase 6 | Complete |
 | LEAD-02 | Phase 6 | Pending |
 | LEAD-03 | Phase 6 | Pending |
 | LEAD-04 | Phase 6 | Pending |
 | LEAD-05 | Phase 6 | Pending |
 | LEAD-06 | Phase 6 | Pending |
-| LEAD-07 | Phase 6 | Pending |
+| LEAD-07 | Phase 6 | Complete |
 | MEMB-01 | Phase 7 | Pending |
 | MEMB-02 | Phase 7 | Pending |
 | MEMB-03 | Phase 7 | Pending |
