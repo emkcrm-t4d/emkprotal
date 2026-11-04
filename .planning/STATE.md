@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 06
 current_phase_name: Leads, Verification, and Controlled Conversion
-current_plan: 5
+current_plan: 6
 status: ready_to_execute
-stopped_at: "Completed 06-04-PLAN.md"
-last_updated: "2026-11-04T17:27:00.000Z"
+stopped_at: "Completed 06-05-PLAN.md"
+last_updated: "2026-11-04T17:45:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: "Plan 06-04 completed: atomic 10-step lead-to-member conversion transaction engine and invariant gate"
-state_head: 29cef245a28c0dbf8e8b4502ccad7399571db27c
+last_activity_desc: "Plan 06-05 completed: manager conversion modal invariant gate ui and term selection"
+state_head: ebaa287986d19653322e9bfd1844405b14c29c71
 progress:
   total_phases: 12
   completed_phases: 5
   total_plans: 26
-  completed_plans: 24
-  percent: 54
+  completed_plans: 25
+  percent: 58
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 06 (Leads, Verification, and Controlled Conversion) — EXECUTING
-Current Plan: 5
+Current Plan: 6
 Total Plans in Phase: 6
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
-Status: Ready for Plan 06-05 execution (Wave 5)
-Last activity: 2026-11-04 — Plan 06-04 completed: Atomic 10-Step Conversion Engine & Monotonic Sequence Generator
-Progress: [█████░░░░░] 54% (Plan 06-04 complete, Plan 06-05 next)
+Status: Ready for Plan 06-06 execution (Wave 6)
+Last activity: 2026-11-04 — Plan 06-05 completed: Manager Conversion Modal & UI Invariant Gate
+Progress: [██████░░░░] 58% (Plan 06-05 complete, Plan 06-06 next)
 
 ## Performance Metrics
 
@@ -85,6 +85,7 @@ Progress: [█████░░░░░] 54% (Plan 06-04 complete, Plan 06-05 
 | Phase 06 P02 | 20min | 3 tasks | 19 files |
 | Phase 06 P03 | 16min | 3 tasks | 16 files |
 | Phase 06 P04 | 12min | 2 tasks | 13 files |
+| Phase 06 P05 | 8min | 1 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -196,6 +197,7 @@ Recent decisions affecting current work:
 - [Phase 06 P04]: Computed dynamic start and expiry dates from membership_terms.duration_months added to manager approval date per DEC-08
 - [Phase 06 P04]: Provisioned member portal account with guard 'member' and must_reset_password = true per DEC-06
 - [Phase 06 P04]: Generated post-conversion paid invoice referencing verified bKash TxID per DEC-03 and enqueued ID card in provided_for_printing state
+- [Phase 06 P05]: Enforced multi-layer conversion invariant defense coupling presentation-layer tooltips and Livewire action guards (leads.convert) with dynamic term fee and duration options per DEC-03/06/08
 
 ### Pending Todos
 
@@ -216,6 +218,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T17:27:00Z
-Stopped at: Completed 06-04-PLAN.md
-Resume file: .planning/phases/06-leads-verification-and-controlled-conversion/06-05-PLAN.md
+Last session: 2026-11-04T17:45:00Z
+Stopped at: Completed 06-05-PLAN.md
+Resume file: .planning/phases/06-leads-verification-and-controlled-conversion/06-06-PLAN.md
