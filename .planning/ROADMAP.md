@@ -213,7 +213,7 @@ Plans:
   2. Staff can manage and preview email templates for all application and membership milestones.
   3. System queues lifecycle email dispatches via Horizon with deduplication protection on retries.
   4. Automated workflow triggers dispatch notifications for status transitions and upcoming membership expirations.
-**Plans**: 2/5 plans executed
+**Plans**: 3/5 plans executed
 **UI hint**: yes
 
 Plans:
@@ -224,7 +224,7 @@ Plans:
 - [x] 08-02-PLAN.md — Bilingual Lifecycle Email Template Manager & Safe Variable Interpolation Engine
 
 **Wave 3**
-- [ ] 08-03-PLAN.md — Horizon Queued Dispatch Pipeline, Idempotent Deduplication Guard & Delivery Monitor
+- [x] 08-03-PLAN.md — Horizon Queued Dispatch Pipeline, Idempotent Deduplication Guard & Delivery Monitor
 
 **Wave 4**
 - [ ] 08-04-PLAN.md — Configurable Automated Workflow Rules & Membership Expiry/Renewal Scheduler
@@ -294,7 +294,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Form Builder and Public Membership Form | 5/5 | Complete    | 2026-11-04 |
 | 6. Leads, Verification, and Controlled Conversion | 6/6 | Complete    | 2026-11-04 |
 | 7. Member Profiles, Invoices, and ID Cards | 5/5 | Complete    | 2026-11-04 |
-| 8. Official Email, IMAP, Templates, and Workflow Rules | 2/5 | In Progress | - |
+| 8. Official Email, IMAP, Templates, and Workflow Rules | 3/5 | In Progress | - |
 | 9. Read-Only Member Portal, Change Requests, and Renewals | 0/0 | Not started | - |
 | 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/0 | Not started | - |
 | 11. Zoho Migration and Reconciliation | 0/0 | Not started | - |

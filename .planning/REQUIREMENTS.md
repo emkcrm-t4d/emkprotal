@@ -73,7 +73,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MAIL-01**: Integrate Information Desk official mailbox via IMAP/SMTP with bi-directional message synchronization.
 - [x] **MAIL-02**: Display threaded email history on Lead and Member profiles for all official correspondence.
 - [x] **MAIL-03**: Provide email template manager for lifecycle notifications (receipt, missing items, rejection, approval, card ready, renewal).
-- [ ] **MAIL-04**: Queue email delivery via Laravel Horizon with automatic retries, deduplication safeguards, and failure monitoring.
+- [x] **MAIL-04**: Queue email delivery via Laravel Horizon with automatic retries, deduplication safeguards, and failure monitoring.
 - [ ] **MAIL-05**: Support configurable automated workflow triggers based on status changes and membership expiry milestones.
 
 ### Member Portal & Requests
@@ -186,7 +186,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MAIL-01 | Phase 8 | Complete |
 | MAIL-02 | Phase 8 | Complete |
 | MAIL-03 | Phase 8 | Complete |
-| MAIL-04 | Phase 8 | Pending |
+| MAIL-04 | Phase 8 | Complete |
 | MAIL-05 | Phase 8 | Pending |
 | PORT-01 | Phase 9 | Pending |
 | PORT-02 | Phase 9 | Pending |
