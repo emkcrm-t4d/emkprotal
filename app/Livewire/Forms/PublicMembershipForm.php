@@ -38,7 +38,7 @@ class PublicMembershipForm extends Component
     public string $address_area = '';
     public string $address_zip_code = '';
     public string $address_division = '';
-    public string $address_district = '';
+    public ?string $address_district = null;
 
     // 4. Contact & Online Presence (Fields 14-16)
     public string $contact_number = '';
@@ -125,25 +125,85 @@ class PublicMembershipForm extends Component
             $this->updateDistrictsForDivision();
         }
 
-        if ($propertyName === 'occupation' && $this->occupation !== 'other') {
-            $this->occupation_other = '';
+        if ($propertyName === 'occupation') {
+            if ($this->occupation !== 'other') {
+                $this->occupation_other = '';
+                $this->resetErrorBag('occupation_other');
+            } else {
+                $this->validateOnly('occupation_other');
+            }
         }
 
-        if ($propertyName === 'highest_certification' && $this->highest_certification !== 'other') {
-            $this->highest_certification_other = '';
+        if ($propertyName === 'highest_certification') {
+            if ($this->highest_certification !== 'other') {
+                $this->highest_certification_other = '';
+                $this->resetErrorBag('highest_certification_other');
+            } else {
+                $this->validateOnly('highest_certification_other');
+            }
         }
 
-        if ($propertyName === 'has_us_experience' && !in_array((string) $this->has_us_experience, ['1', 'true'], true)) {
-            $this->us_experience_location = '';
+        if ($propertyName === 'has_us_experience') {
+            if (!in_array((string) $this->has_us_experience, ['1', 'true'], true)) {
+                $this->us_experience_location = '';
+                $this->resetErrorBag('us_experience_location');
+            } else {
+                $this->validateOnly('us_experience_location');
+            }
         }
 
-        if ($propertyName === 'is_american_alumni' && !in_array((string) $this->is_american_alumni, ['1', 'true'], true)) {
-            $this->american_institution_name = '';
+        if ($propertyName === 'is_american_alumni') {
+            if (!in_array((string) $this->is_american_alumni, ['1', 'true'], true)) {
+                $this->american_institution_name = '';
+                $this->resetErrorBag('american_institution_name');
+            } else {
+                $this->validateOnly('american_institution_name');
+            }
         }
 
         $rules = $this->rules();
         if (array_key_exists($propertyName, $rules)) {
             $this->validateOnly($propertyName);
+        }
+    }
+
+    public function updatedOccupation($value): void
+    {
+        if ($this->occupation !== 'other') {
+            $this->occupation_other = '';
+            $this->resetErrorBag('occupation_other');
+        } else {
+            $this->validateOnly('occupation_other');
+        }
+    }
+
+    public function updatedHighestCertification($value): void
+    {
+        if ($this->highest_certification !== 'other') {
+            $this->highest_certification_other = '';
+            $this->resetErrorBag('highest_certification_other');
+        } else {
+            $this->validateOnly('highest_certification_other');
+        }
+    }
+
+    public function updatedHasUsExperience($value): void
+    {
+        if (!in_array((string) $this->has_us_experience, ['1', 'true'], true)) {
+            $this->us_experience_location = '';
+            $this->resetErrorBag('us_experience_location');
+        } else {
+            $this->validateOnly('us_experience_location');
+        }
+    }
+
+    public function updatedIsAmericanAlumni($value): void
+    {
+        if (!in_array((string) $this->is_american_alumni, ['1', 'true'], true)) {
+            $this->american_institution_name = '';
+            $this->resetErrorBag('american_institution_name');
+        } else {
+            $this->validateOnly('american_institution_name');
         }
     }
 
@@ -166,7 +226,16 @@ class PublicMembershipForm extends Component
         $this->available_districts = $schemaEngine->getDataset('districts', $normalized);
 
         if (!empty($this->address_district) && !in_array($this->address_district, $this->available_districts, true)) {
-            $this->address_district = '';
+            $this->address_district = null;
+        }
+    }
+
+    public function validateProperty(?string $name = null): void
+    {
+        if ($name) {
+            $this->validateOnly($name);
+        } else {
+            $this->validate();
         }
     }
 
