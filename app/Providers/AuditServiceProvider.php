@@ -29,7 +29,10 @@ class AuditServiceProvider extends ServiceProvider
         // 1. Subscribe authentication audit event listener
         Event::subscribe(AuditAuthenticationEvents::class);
 
-        // 2. Attach AuditableObserver to primary auditable models
+        // 2. Subscribe permission cache invalidation listener
+        Event::subscribe(\App\Domain\AccessControl\Listeners\InvalidatePermissionCacheListener::class);
+
+        // 3. Attach AuditableObserver to primary auditable models
         User::observe(AuditableObserver::class);
         Lead::observe(AuditableObserver::class);
     }

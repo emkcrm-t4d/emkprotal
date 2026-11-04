@@ -92,6 +92,8 @@ class StaffManagementService
         $targetStaff->givePermissionTo($permission);
 
         $this->permissionRegistrar->forgetCachedPermissions();
+
+        event(new \App\Domain\AccessControl\Events\StaffPermissionDelegated($manager, $targetStaff, $permission));
     }
 
     /**
@@ -117,6 +119,8 @@ class StaffManagementService
         $targetStaff->revokePermissionTo($permission);
 
         $this->permissionRegistrar->forgetCachedPermissions();
+
+        event(new \App\Domain\AccessControl\Events\StaffPermissionRevoked($manager, $targetStaff, $permission));
     }
 
     /**
