@@ -162,6 +162,11 @@ class MemberChangeRequestDirectory extends Component
 
                 $this->closeDiffModal();
                 session()->flash('status', 'Member email successfully updated across portal credentials and member profile.');
+            } elseif ($changeRequest->request_type === MemberChangeRequest::TYPE_RENEWAL) {
+                app(\App\Domain\Members\Services\MemberRenewalService::class)->approveRenewal($changeRequest, $user);
+
+                $this->closeDiffModal();
+                session()->flash('status', 'Membership renewal approved, validity extended, and paid invoice generated.');
             } else {
                 $service->approveRequest($changeRequest, $user);
 
@@ -274,7 +279,7 @@ class MemberChangeRequestDirectory extends Component
         );
 
         $canApproveOrReject = $user && (
-            $isElevatedOrManager || $user->can('members.edit')
+            $isElevatedOrManager || $user->can('members.edit') || $user->can('invoices.verify_payment')
         );
 
         $canApproveSelected = $selectedRequest && $selectedRequest->request_type === MemberChangeRequest::TYPE_EMAIL_CHANGE

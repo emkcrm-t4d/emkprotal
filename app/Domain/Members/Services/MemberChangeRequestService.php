@@ -335,6 +335,10 @@ class MemberChangeRequestService
             return Member::withoutGlobalScopes()->findOrFail($request->member_id);
         }
 
+        if ($request->request_type === MemberChangeRequest::TYPE_RENEWAL) {
+            return app(MemberRenewalService::class)->approveRenewal($request, $reviewerUser);
+        }
+
         $this->assertReviewerAuthorized($reviewerUser, $request);
 
         return DB::transaction(function () use ($request, $reviewerUser): Member {

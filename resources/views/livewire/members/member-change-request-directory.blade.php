@@ -159,8 +159,8 @@
                                         Email Address Change (Requires Manager Approval)
                                     </span>
                                 @elseif ($requestItem->request_type === 'renewal')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                                        Renewal
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                        Membership Renewal
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700">
@@ -355,6 +355,52 @@
                             </div>
                         @endif
 
+                        {{-- Membership Renewal Verification Card --}}
+                        @if ($selectedRequest->request_type === 'renewal')
+                            @php
+                                $today = \Carbon\Carbon::today();
+                                $currExp = $selectedRequest->member?->expiry_date ? \Carbon\Carbon::parse($selectedRequest->member->expiry_date)->startOfDay() : null;
+                                $durMonths = (int) ($selectedRequest->new_payload['duration_months'] ?? 12);
+                                $isEarly = $currExp && $currExp->greaterThanOrEqualTo($today) && $selectedRequest->member?->status === 'active';
+                                if ($isEarly) {
+                                    $projectedNewExpiry = $currExp->copy()->addMonths($durMonths);
+                                    $mathDesc = 'Early Renewal: Current expiry (' . $currExp->format('M d, Y') . ') + ' . $durMonths . ' months = ' . $projectedNewExpiry->format('M d, Y') . ' (0 days lost)';
+                                } else {
+                                    $projectedNewExpiry = $today->copy()->addMonths($durMonths);
+                                    $mathDesc = 'Late Renewal: Today (' . $today->format('M d, Y') . ') + ' . $durMonths . ' months = ' . $projectedNewExpiry->format('M d, Y');
+                                }
+                            @endphp
+                            <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 space-y-2">
+                                <div class="flex items-center gap-1.5 font-bold text-blue-950">
+                                    <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    <span>Membership Renewal Payment Verification</span>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+                                    <div>
+                                        <span class="text-slate-500 text-[10px] uppercase font-semibold block">Selected Term</span>
+                                        <span class="font-bold text-slate-800">{{ $selectedRequest->new_payload['term_name'] ?? '—' }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500 text-[10px] uppercase font-semibold block">Renewal Fee</span>
+                                        <span class="font-bold text-slate-800 font-mono">৳{{ number_format((float) ($selectedRequest->new_payload['fee_bdt'] ?? 0), 2) }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500 text-[10px] uppercase font-semibold block">bKash TxID</span>
+                                        <span class="font-bold text-indigo-700 font-mono">{{ $selectedRequest->new_payload['bkash_txid'] ?? '—' }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-blue-700 text-[10px] uppercase font-semibold block">Projected Expiry</span>
+                                        <span class="font-bold text-blue-950 font-mono">{{ $projectedNewExpiry->format('M d, Y') }}</span>
+                                    </div>
+                                </div>
+                                <p class="text-[11px] text-blue-700 font-medium">
+                                    {{ $mathDesc }}. Approving will update validity, reset status to Active, and issue a paid Invoice.
+                                </p>
+                            </div>
+                        @endif
+
                         {{-- Side-by-Side Diff Table --}}
                         <div>
                             <div class="flex items-center justify-between mb-2">
@@ -390,6 +436,11 @@
                                                 'institution_study' => 'Institution / Organization',
                                                 'highest_certification' => 'Highest Certification',
                                                 'area_of_subject' => 'Area of Subject',
+                                                'term_id' => 'Membership Term ID',
+                                                'term_name' => 'Selected Membership Term',
+                                                'duration_months' => 'Term Duration (Months)',
+                                                'fee_bdt' => 'Membership Fee (BDT)',
+                                                'bkash_txid' => 'bKash Transaction ID',
                                             ];
                                         @endphp
 

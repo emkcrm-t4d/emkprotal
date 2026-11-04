@@ -11,6 +11,7 @@ use App\Domain\Leads\Models\Lead;
 use App\Domain\Members\Models\Member;
 use App\Domain\Members\Models\MemberChangeRequest;
 use App\Domain\Members\Services\MemberRenewalService;
+use App\Livewire\Members\MemberChangeRequestDirectory;
 use App\Livewire\Portal\Modals\SubmitRenewalModal;
 use App\Models\MemberUser;
 use App\Models\User;
@@ -18,6 +19,7 @@ use Carbon\Carbon;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SpaceAndWorkspaceSeeder;
 use DomainException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -34,6 +36,12 @@ class MemberRenewalWorkflowTest extends TestCase
 
         $this->seed(SpaceAndWorkspaceSeeder::class);
         $this->seed(RolesAndPermissionsSeeder::class);
+    }
+
+    protected function tearDown(): void
+    {
+        Carbon::setTestNow();
+        parent::tearDown();
     }
 
     protected function createMemberFixture(
@@ -348,5 +356,171 @@ class MemberRenewalWorkflowTest extends TestCase
             ->call('submit')
             ->assertSet('isOpen', true)
             ->assertSee('Renewal window is not open');
+    }
+
+    protected function createStaffUser(
+        string $role = 'workspace_manager',
+        string $workspaceId = 'ws-emk-dhaka',
+        string $email = 'staff.manager@example.com'
+    ): User {
+        $user = User::create([
+            'workspace_id' => $workspaceId,
+            'name' => 'Staff User',
+            'email' => $email,
+            'password' => bcrypt('Password123!'),
+            'guard' => 'web',
+            'is_active' => true,
+            'must_reset_password' => false,
+        ]);
+        $user->assignRole($role);
+
+        return $user;
+    }
+
+    public function test_early_renewal_preserves_remaining_validity_without_lost_days(): void
+    {
+        // Today is Dec 5, 2026. Member expires on Dec 31, 2026 (26 days remaining).
+        Carbon::setTestNow(Carbon::parse('2026-12-05'));
+
+        $fixture = $this->createMemberFixture(
+            'active',
+            Carbon::parse('2026-12-31'),
+            'early.member@emk.test',
+            'MEM-DHK-2026-0005'
+        );
+        $member = $fixture['member'];
+        $originalStartDate = $member->start_date->toDateString();
+
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($member, $fixture['term']->id, 'EARLY12345');
+
+        $manager = $this->createStaffUser('workspace_manager');
+        $updatedMember = $service->approveRenewal($request, $manager);
+
+        // Early Renewal Math Assertion:
+        // New Expiry must equal current expiration (2026-12-31) + 12 months = 2027-12-31!
+        // ZERO days of remaining validity are lost!
+        $this->assertEquals('2027-12-31', $updatedMember->expiry_date->toDateString());
+        $this->assertEquals($originalStartDate, $updatedMember->start_date->toDateString());
+        $this->assertEquals('active', $updatedMember->status);
+
+        $request->refresh();
+        $this->assertEquals(MemberChangeRequest::STATUS_APPROVED, $request->status);
+        $this->assertEquals($manager->id, $request->reviewed_by_user_id);
+    }
+
+    public function test_late_renewal_calculates_validity_from_approval_date_and_resets_status_to_active(): void
+    {
+        // Today is Nov 5, 2026. Member expired on Oct 1, 2026 and is inactive.
+        Carbon::setTestNow(Carbon::parse('2026-11-05'));
+
+        $fixture = $this->createMemberFixture(
+            'inactive',
+            Carbon::parse('2026-10-01'),
+            'late.member@emk.test',
+            'MEM-DHK-2026-0006'
+        );
+        $member = $fixture['member'];
+
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($member, $fixture['term']->id, 'LATERENEW1');
+
+        $manager = $this->createStaffUser('workspace_manager');
+        $updatedMember = $service->approveRenewal($request, $manager);
+
+        // Late Renewal Math Assertion:
+        // Validity restarts on Manager approval date (2026-11-05), expiring 12 months later (2027-11-05).
+        $this->assertEquals('2026-11-05', $updatedMember->start_date->toDateString());
+        $this->assertEquals('2027-11-05', $updatedMember->expiry_date->toDateString());
+        $this->assertEquals('active', $updatedMember->status);
+    }
+
+    public function test_approval_creates_paid_invoice_with_bkash_txid(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2026-11-05'));
+
+        $fixture = $this->createMemberFixture('inactive', Carbon::parse('2026-10-01'));
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($fixture['member'], $fixture['term']->id, 'PAIDTX1234');
+
+        $manager = $this->createStaffUser('workspace_manager');
+        $service->approveRenewal($request, $manager);
+
+        $this->assertDatabaseHas('invoices', [
+            'workspace_id' => $fixture['member']->workspace_id,
+            'member_id' => $fixture['member']->id,
+            'amount_bdt' => 500.00,
+            'payment_method' => 'bkash_manual',
+            'payment_reference' => 'PAIDTX1234',
+            'status' => 'paid',
+        ]);
+
+        $invoice = Invoice::where('payment_reference', 'PAIDTX1234')->first();
+        $this->assertNotNull($invoice);
+        $this->assertStringContainsString('-R', $invoice->invoice_number);
+    }
+
+    public function test_approval_creates_immutable_audit_log_entry(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2026-11-05'));
+
+        $fixture = $this->createMemberFixture('active', Carbon::today()->addDays(10));
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($fixture['member'], $fixture['term']->id, 'AUDITTX123');
+
+        $manager = $this->createStaffUser('workspace_manager');
+        $service->approveRenewal($request, $manager, 'Verified bKash merchant transaction');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => $fixture['member']->workspace_id,
+            'actor_id' => $manager->id,
+            'event_type' => AuditLog::EVENT_MEMBER_RENEWAL_APPROVED,
+            'auditable_type' => Member::class,
+            'auditable_id' => $fixture['member']->id,
+            'reason' => 'Verified bKash merchant transaction',
+        ]);
+    }
+
+    public function test_unauthorized_staff_cannot_approve_renewal(): void
+    {
+        $fixture = $this->createMemberFixture('active', Carbon::today()->addDays(10));
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($fixture['member'], $fixture['term']->id, 'NOAUTH1234');
+
+        // Staff user with general role without members.edit or invoices.verify_payment or workspace_manager
+        $staff = $this->createStaffUser('front_desk_lead');
+
+        $this->expectException(AuthorizationException::class);
+        $service->approveRenewal($request, $staff);
+    }
+
+    public function test_member_change_request_directory_approves_renewal_and_updates_view(): void
+    {
+        Carbon::setTestNow(Carbon::parse('2026-11-05'));
+
+        $fixture = $this->createMemberFixture('active', Carbon::today()->addDays(20));
+        $service = app(MemberRenewalService::class);
+        $request = $service->submitRenewalRequest($fixture['member'], $fixture['term']->id, 'DIRTXID123');
+
+        $manager = $this->createStaffUser('workspace_manager');
+
+        Livewire::actingAs($manager, 'web')
+            ->test(MemberChangeRequestDirectory::class, ['workspace' => 'ws-emk-dhaka'])
+            ->assertSee('Membership Renewal')
+            ->call('openDiffModal', $request->id)
+            ->assertSet('isDiffModalOpen', true)
+            ->assertSet('selectedRequestId', $request->id)
+            ->assertSee('DIRTXID123')
+            ->assertSee('Membership Renewal Payment Verification')
+            ->call('approve')
+            ->assertSet('isDiffModalOpen', false)
+            ->assertSee('Membership renewal approved');
+
+        $fixture['member']->refresh();
+        $this->assertEquals('active', $fixture['member']->status);
+        $this->assertDatabaseHas('invoices', [
+            'payment_reference' => 'DIRTXID123',
+            'status' => 'paid',
+        ]);
     }
 }
