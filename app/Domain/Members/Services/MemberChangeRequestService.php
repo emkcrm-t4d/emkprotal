@@ -216,12 +216,125 @@ class MemberChangeRequestService
     }
 
     /**
+     * Atomically approve an email change request and synchronize both members and users tables.
+     * Enforces that only Workspace Managers, Superadmins, or Global Admins can approve per DEC-07 and T-01-07.
+     *
+     * @throws AuthorizationException|DomainException
+     */
+    public function approveEmailChangeRequest(MemberChangeRequest $request, User $reviewerUser): void
+    {
+        $isElevatedAdmin = method_exists($reviewerUser, 'hasRole') && $reviewerUser->hasRole(['superadmin', 'global_admin']);
+        $isWorkspaceManager = method_exists($reviewerUser, 'hasRole') && $reviewerUser->hasRole('workspace_manager');
+
+        if (! $isElevatedAdmin && ! $isWorkspaceManager) {
+            throw new AuthorizationException('Reviewer lacks Workspace Manager authority to approve email changes.');
+        }
+
+        if (! $isElevatedAdmin && (string) $reviewerUser->workspace_id !== (string) $request->workspace_id) {
+            throw new AuthorizationException('Reviewer does not have access to this workspace.');
+        }
+
+        if ($request->request_type !== MemberChangeRequest::TYPE_EMAIL_CHANGE) {
+            throw new DomainException("Request #{$request->id} is not an email change request.");
+        }
+
+        if ($request->status !== MemberChangeRequest::STATUS_PENDING) {
+            throw new DomainException("Cannot approve a change request that is in status [{$request->status}].");
+        }
+
+        DB::transaction(function () use ($request, $reviewerUser): void {
+            /** @var MemberChangeRequest $lockedRequest */
+            $lockedRequest = MemberChangeRequest::withoutGlobalScopes()
+                ->where('id', $request->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($lockedRequest->status !== MemberChangeRequest::STATUS_PENDING) {
+                throw new DomainException("Cannot approve a change request that is in status [{$lockedRequest->status}].");
+            }
+
+            /** @var Member $member */
+            $member = Member::withoutGlobalScopes()
+                ->where('id', $lockedRequest->member_id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            /** @var User $user */
+            $user = User::withoutGlobalScopes()
+                ->where('id', $member->user_id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $newEmail = strtolower(trim((string) ($lockedRequest->new_payload['email'] ?? '')));
+            if (empty($newEmail) || ! filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+                throw new DomainException('Invalid new email address in change request payload.');
+            }
+
+            // TOCTOU Race Condition Defense (T-09-12):
+            // Re-evaluate email uniqueness inside the transaction lock immediately before applying the update.
+            $existsInMembers = Member::withoutGlobalScopes()
+                ->where('id', '!=', $member->id)
+                ->whereRaw('LOWER(email) = ?', [$newEmail])
+                ->exists();
+
+            $existsInUsers = User::withoutGlobalScopes()
+                ->where('id', '!=', $user->id)
+                ->whereRaw('LOWER(email) = ?', [$newEmail])
+                ->exists();
+
+            if ($existsInMembers || $existsInUsers) {
+                throw new DomainException('The requested new email has been claimed by another user prior to approval.');
+            }
+
+            $oldEmail = $member->email;
+
+            // Atomic Dual-Entity Update
+            $member->email = $newEmail;
+            $member->save();
+
+            $user->email = $newEmail;
+            $user->save();
+
+            // Transition request status
+            $lockedRequest->update([
+                'status' => MemberChangeRequest::STATUS_APPROVED,
+                'reviewed_by_user_id' => $reviewerUser->id,
+                'reviewed_at' => now(),
+            ]);
+
+            // Emit immutable AuditLog entry per DEC-11 (D-11)
+            AuditLog::create([
+                'workspace_id' => $member->workspace_id,
+                'actor_id' => $reviewerUser->id,
+                'actor_guard' => 'web',
+                'event_type' => AuditLog::EVENT_MEMBER_EMAIL_CHANGED,
+                'auditable_type' => Member::class,
+                'auditable_id' => $member->id,
+                'old_values' => ['email' => $oldEmail],
+                'new_values' => ['email' => $newEmail],
+                'reason' => "Manager approved email change request #{$lockedRequest->id}: {$lockedRequest->justification}",
+                'ip_address' => request()->ip() ?? '127.0.0.1',
+                'user_agent' => request()->userAgent() ?? 'System',
+                'created_at' => now(),
+            ]);
+
+            // Trigger workflow rule
+            $this->dispatchWorkflowOutcome($lockedRequest, $member, 'approved', '');
+        });
+    }
+
+    /**
      * Atomically approve a pending change request and apply changes to the member profile.
      *
      * @throws AuthorizationException|DomainException
      */
     public function approveRequest(MemberChangeRequest $request, User $reviewerUser): Member
     {
+        if ($request->request_type === MemberChangeRequest::TYPE_EMAIL_CHANGE) {
+            $this->approveEmailChangeRequest($request, $reviewerUser);
+            return Member::withoutGlobalScopes()->findOrFail($request->member_id);
+        }
+
         $this->assertReviewerAuthorized($reviewerUser, $request);
 
         return DB::transaction(function () use ($request, $reviewerUser): Member {

@@ -157,10 +157,17 @@ class MemberChangeRequestDirectory extends Component
             ->findOrFail($this->selectedRequestId);
 
         try {
-            $service->approveRequest($changeRequest, $user);
+            if ($changeRequest->request_type === MemberChangeRequest::TYPE_EMAIL_CHANGE) {
+                $service->approveEmailChangeRequest($changeRequest, $user);
 
-            $this->closeDiffModal();
-            session()->flash('status', 'Change request successfully approved and member profile updated.');
+                $this->closeDiffModal();
+                session()->flash('status', 'Member email successfully updated across portal credentials and member profile.');
+            } else {
+                $service->approveRequest($changeRequest, $user);
+
+                $this->closeDiffModal();
+                session()->flash('status', 'Change request successfully approved and member profile updated.');
+            }
         } catch (AuthorizationException $e) {
             $this->errorMessage = $e->getMessage();
         } catch (DomainException $e) {
@@ -262,16 +269,25 @@ class MemberChangeRequestDirectory extends Component
                 ->find($this->selectedRequestId);
         }
 
-        $canApproveOrReject = $user && (
+        $isElevatedOrManager = $user && (
             (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin', 'workspace_manager']))
-            || $user->can('members.edit')
         );
+
+        $canApproveOrReject = $user && (
+            $isElevatedOrManager || $user->can('members.edit')
+        );
+
+        $canApproveSelected = $selectedRequest && $selectedRequest->request_type === MemberChangeRequest::TYPE_EMAIL_CHANGE
+            ? $isElevatedOrManager
+            : $canApproveOrReject;
 
         return view('livewire.members.member-change-request-directory', [
             'requests' => $requests,
             'metrics' => $metrics,
             'selectedRequest' => $selectedRequest,
             'canApproveOrReject' => $canApproveOrReject,
+            'canApproveSelected' => $canApproveSelected,
+            'isElevatedOrManager' => $isElevatedOrManager,
             'activeModule' => 'members',
         ])->layout('layouts.admin', [
             'activeModule' => 'members',

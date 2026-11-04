@@ -155,8 +155,8 @@
                                         General Profile
                                     </span>
                                 @elseif ($requestItem->request_type === 'email_change')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 text-purple-700 border border-purple-200">
-                                        Email Address
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-300">
+                                        Email Address Change (Requires Manager Approval)
                                     </span>
                                 @elseif ($requestItem->request_type === 'renewal')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
@@ -340,6 +340,21 @@
                             </div>
                         @endif
 
+                        {{-- Email Change Security Alert Banner --}}
+                        @if ($selectedRequest->request_type === 'email_change')
+                            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+                                <div class="flex items-center gap-1.5 font-bold text-amber-950">
+                                    <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Email Address Change (Requires Manager Approval)</span>
+                                </div>
+                                <p class="text-amber-800">
+                                    This change request updates primary portal authentication credentials and contact email. Approving will atomically update both the Member and User tables. Authority is restricted to Workspace Managers and Superadmins per DEC-07.
+                                </p>
+                            </div>
+                        @endif
+
                         {{-- Side-by-Side Diff Table --}}
                         <div>
                             <div class="flex items-center justify-between mb-2">
@@ -363,6 +378,7 @@
                                             $newPayload = $selectedRequest->new_payload ?? [];
                                             $oldPayload = $selectedRequest->old_payload ?? [];
                                             $fieldLabels = [
+                                                'email' => 'Email Address (Portal Username & Notifications)',
                                                 'contact_number' => 'Contact Number',
                                                 'address_house_no' => 'House / Flat No.',
                                                 'address_road_no' => 'Road / Street No.',
@@ -469,15 +485,26 @@
                                     <span wire:loading wire:target="reject">Processing...</span>
                                 </button>
 
-                                <button
-                                    type="button"
-                                    wire:click="approve"
-                                    wire:loading.attr="disabled"
-                                    class="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-xs transition cursor-pointer"
-                                >
-                                    <span wire:loading.remove wire:target="approve">Approve Changes</span>
-                                    <span wire:loading wire:target="approve">Applying...</span>
-                                </button>
+                                @if ($selectedRequest->request_type === 'email_change' && ! $canApproveSelected)
+                                    <button
+                                        type="button"
+                                        disabled
+                                        class="px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-100 border border-slate-200 rounded-xl cursor-not-allowed"
+                                        title="Email change requests require Workspace Manager or Superadmin approval."
+                                    >
+                                        Approve (Manager Only)
+                                    </button>
+                                @else
+                                    <button
+                                        type="button"
+                                        wire:click="approve"
+                                        wire:loading.attr="disabled"
+                                        class="px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-xs transition cursor-pointer"
+                                    >
+                                        <span wire:loading.remove wire:target="approve">Approve Changes</span>
+                                        <span wire:loading wire:target="approve">Applying...</span>
+                                    </button>
+                                @endif
                             </div>
                         @endif
                     </div>

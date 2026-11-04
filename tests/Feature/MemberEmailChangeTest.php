@@ -11,12 +11,15 @@ use App\Domain\Members\Mail\ManagerEmailChangeAlertMail;
 use App\Domain\Members\Models\Member;
 use App\Domain\Members\Models\MemberChangeRequest;
 use App\Domain\Members\Services\MemberChangeRequestService;
+use App\Livewire\Members\MemberChangeRequestDirectory;
 use App\Livewire\Portal\Modals\SubmitEmailChangeModal;
+use App\Livewire\Portal\PortalLogin;
 use App\Models\MemberUser;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Database\Seeders\SpaceAndWorkspaceSeeder;
 use DomainException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -336,5 +339,204 @@ class MemberEmailChangeTest extends TestCase
             ->set('justification', 'Another valid justification for review.')
             ->call('submit')
             ->assertSet('submissionError', 'An email change request is already pending review for this member.');
+    }
+
+    public function test_delegated_staff_cannot_approve_email_change_request(): void
+    {
+        $fixture = $this->createMemberFixture();
+        $member = $fixture['member'];
+        $staff = $this->createStaffUser('delegated_staff', 'ws-emk-dhaka', 'staff.regular@example.com');
+
+        $request = MemberChangeRequest::create([
+            'workspace_id' => $member->workspace_id,
+            'member_id' => $member->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => $member->email],
+            'new_payload' => ['email' => 'approved.email@example.com'],
+            'justification' => 'Valid justification for manager approval.',
+        ]);
+
+        $service = app(MemberChangeRequestService::class);
+
+        $this->expectException(AuthorizationException::class);
+        $this->expectExceptionMessage('Reviewer lacks Workspace Manager authority to approve email changes.');
+
+        $service->approveEmailChangeRequest($request, $staff);
+    }
+
+    public function test_workspace_manager_approves_email_change_successfully_and_synchronizes_both_tables(): void
+    {
+        $fixture = $this->createMemberFixture('old.email@example.com', 'MEM-DHK-2026-0001');
+        $member = $fixture['member'];
+        $memberUser = $fixture['memberUser'];
+        $manager = $this->createStaffUser('workspace_manager', 'ws-emk-dhaka', 'manager.dhaka@example.com');
+
+        $newEmail = 'brand.new@example.com';
+        $request = MemberChangeRequest::create([
+            'workspace_id' => $member->workspace_id,
+            'member_id' => $member->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => 'old.email@example.com'],
+            'new_payload' => ['email' => $newEmail],
+            'justification' => 'Security manager authorized update for university affiliation.',
+        ]);
+
+        $service = app(MemberChangeRequestService::class);
+        $service->approveEmailChangeRequest($request, $manager);
+
+        // Assert member table updated
+        $this->assertEquals($newEmail, $member->fresh()->email);
+
+        // Assert linked user table updated atomically
+        $this->assertEquals($newEmail, $memberUser->fresh()->email);
+
+        // Assert request status updated
+        $freshRequest = $request->fresh();
+        $this->assertEquals(MemberChangeRequest::STATUS_APPROVED, $freshRequest->status);
+        $this->assertEquals($manager->id, $freshRequest->reviewed_by_user_id);
+        $this->assertNotNull($freshRequest->reviewed_at);
+
+        // Assert immutable audit log entry per DEC-11 (D-11)
+        $this->assertDatabaseHas('audit_logs', [
+            'event_type' => AuditLog::EVENT_MEMBER_EMAIL_CHANGED,
+            'auditable_type' => Member::class,
+            'auditable_id' => $member->id,
+            'workspace_id' => $member->workspace_id,
+            'actor_id' => $manager->id,
+            'actor_guard' => 'web',
+        ]);
+    }
+
+    public function test_toctou_race_condition_blocks_approval_if_email_claimed_prior_to_approval(): void
+    {
+        $fixture1 = $this->createMemberFixture('original@example.com', 'MEM-DHK-2026-0001');
+        $manager = $this->createStaffUser('workspace_manager', 'ws-emk-dhaka', 'manager.dhaka@example.com');
+
+        $claimedEmail = 'racing.candidate@example.com';
+
+        $request = MemberChangeRequest::create([
+            'workspace_id' => $fixture1['member']->workspace_id,
+            'member_id' => $fixture1['member']->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => 'original@example.com'],
+            'new_payload' => ['email' => $claimedEmail],
+            'justification' => 'Race condition check justification.',
+        ]);
+
+        // Simulating race condition: another member claims the email between submission and approval
+        $this->createMemberFixture($claimedEmail, 'MEM-DHK-2026-0002');
+
+        $service = app(MemberChangeRequestService::class);
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('The requested new email has been claimed by another user prior to approval.');
+
+        $service->approveEmailChangeRequest($request, $manager);
+    }
+
+    public function test_member_can_immediately_log_in_with_new_email_address_and_old_email_fails(): void
+    {
+        $fixture = $this->createMemberFixture('initial@example.com', 'MEM-DHK-2026-0001');
+        $member = $fixture['member'];
+        $manager = $this->createStaffUser('workspace_manager', 'ws-emk-dhaka', 'manager@example.com');
+
+        $newEmail = 'updated.login@example.com';
+        $request = MemberChangeRequest::create([
+            'workspace_id' => $member->workspace_id,
+            'member_id' => $member->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => 'initial@example.com'],
+            'new_payload' => ['email' => $newEmail],
+            'justification' => 'Immediate authentication test after approval.',
+        ]);
+
+        $service = app(MemberChangeRequestService::class);
+        $service->approveEmailChangeRequest($request, $manager);
+
+        // Attempt login with old email -> fails
+        Livewire::test(PortalLogin::class)
+            ->set('identifier', 'initial@example.com')
+            ->set('password', 'MemberPass123!')
+            ->call('login')
+            ->assertHasErrors(['identifier']);
+
+        $this->assertFalse(auth('member')->check());
+
+        // Attempt login with new email -> succeeds
+        Livewire::test(PortalLogin::class)
+            ->set('identifier', $newEmail)
+            ->set('password', 'MemberPass123!')
+            ->call('login')
+            ->assertHasNoErrors()
+            ->assertRedirect(route('portal.profile'));
+
+        $this->assertTrue(auth('member')->check());
+        $this->assertEquals($member->user_id, auth('member')->id());
+    }
+
+    public function test_livewire_change_request_directory_diff_modal_and_approval_by_manager(): void
+    {
+        $fixture = $this->createMemberFixture('pre.change@example.com', 'MEM-DHK-2026-0001');
+        $member = $fixture['member'];
+        $memberUser = $fixture['memberUser'];
+        $manager = $this->createStaffUser('workspace_manager', 'ws-emk-dhaka', 'manager.review@example.com');
+
+        $request = MemberChangeRequest::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'member_id' => $member->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => 'pre.change@example.com'],
+            'new_payload' => ['email' => 'post.change@example.com'],
+            'justification' => 'Official directory review approval test.',
+        ]);
+
+        $test = Livewire::actingAs($manager, 'web')
+            ->test(MemberChangeRequestDirectory::class, ['workspace' => 'ws-emk-dhaka'])
+            ->assertSee('Email Address Change (Requires Manager Approval)')
+            ->call('openDiffModal', $request->id)
+            ->assertSet('isDiffModalOpen', true)
+            ->assertSet('selectedRequestId', $request->id)
+            ->call('approve')
+            ->assertSet('isDiffModalOpen', false)
+            ->assertSee('Member email successfully updated across portal credentials and member profile.');
+
+        $this->assertEquals('post.change@example.com', $member->fresh()->email);
+        $this->assertEquals('post.change@example.com', $memberUser->fresh()->email);
+        $this->assertEquals(MemberChangeRequest::STATUS_APPROVED, $request->fresh()->status);
+    }
+
+    public function test_livewire_change_request_directory_restricts_approval_for_delegated_staff(): void
+    {
+        $fixture = $this->createMemberFixture('staff.blocked@example.com', 'MEM-DHK-2026-0001');
+        $member = $fixture['member'];
+        $staff = $this->createStaffUser('delegated_staff', 'ws-emk-dhaka', 'staff.unauth@example.com');
+        $staff->givePermissionTo(['members.view', 'members.edit']);
+
+        $request = MemberChangeRequest::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'member_id' => $member->id,
+            'request_type' => MemberChangeRequest::TYPE_EMAIL_CHANGE,
+            'status' => MemberChangeRequest::STATUS_PENDING,
+            'old_payload' => ['email' => 'staff.blocked@example.com'],
+            'new_payload' => ['email' => 'staff.unauthorized.new@example.com'],
+            'justification' => 'Delegated staff unauthorized approval test.',
+        ]);
+
+        Livewire::actingAs($staff, 'web')
+            ->test(MemberChangeRequestDirectory::class, ['workspace' => 'ws-emk-dhaka'])
+            ->call('openDiffModal', $request->id)
+            ->assertSet('isDiffModalOpen', true)
+            ->assertSee('Approve (Manager Only)')
+            ->call('approve')
+            ->assertSet('errorMessage', 'Reviewer lacks Workspace Manager authority to approve email changes.');
+
+        // Verify database remains untouched
+        $this->assertEquals('staff.blocked@example.com', $member->fresh()->email);
+        $this->assertEquals(MemberChangeRequest::STATUS_PENDING, $request->fresh()->status);
     }
 }
