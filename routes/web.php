@@ -147,6 +147,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.email_delivery.index')
             ->middleware(['can:platform_services.manage_settings']);
 
+        Route::get('/settings/workflow-rules', \App\Livewire\Mail\WorkflowRuleManager::class)
+            ->name('crm.workflow_rules.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
