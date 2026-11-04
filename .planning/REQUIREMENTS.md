@@ -28,7 +28,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **FOUN-01**: Set up Laravel 12 application skeleton with Livewire, Spatie Permission, Horizon, Tailwind CSS, and Alpine.js.
 - [x] **FOUN-02**: Configure database, cache, queue workers, scheduled tasks, and logging infrastructure.
-- [ ] **FOUN-03**: Implement private file storage driver for applicant documents with safe system-generated filenames.
+- [x] **FOUN-03**: Implement private file storage driver for applicant documents with safe system-generated filenames.
 - [x] **FOUN-04**: Create central module registration foundation, initial migration baseline, and authenticated admin shell.
 - [x] **FOUN-05**: Establish automated CI/deployment pipeline, health check endpoints, and environment runbook.
 
@@ -156,7 +156,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ARCH-06 | Phase 2 | Complete |
 | FOUN-01 | Phase 3 | Complete |
 | FOUN-02 | Phase 3 | Complete |
-| FOUN-03 | Phase 3 | Pending |
+| FOUN-03 | Phase 3 | Complete |
 | FOUN-04 | Phase 3 | Complete |
 | FOUN-05 | Phase 3 | Complete |
 | AUTH-01 | Phase 4 | Pending |
