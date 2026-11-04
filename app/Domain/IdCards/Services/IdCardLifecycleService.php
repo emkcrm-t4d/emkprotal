@@ -1,0 +1,140 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domain\IdCards\Services;
+
+use App\Domain\Audit\Models\AuditLog;
+use App\Domain\IdCards\Exceptions\InvalidCardStateTransitionException;
+use App\Domain\IdCards\Models\IdCard;
+use App\Domain\Members\Models\Member;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
+class IdCardLifecycleService
+{
+    /**
+     * Create an initial ID card record in provided_for_printing status.
+     */
+    public function createInitialCard(Member $member): IdCard
+    {
+        return DB::transaction(function () use ($member) {
+            $existingCount = IdCard::where('member_id', $member->id)->count();
+            $count = $existingCount + 1;
+
+            do {
+                $suffix = str_pad((string) $count, 2, '0', STR_PAD_LEFT);
+                $cardNumber = "CRD-{$member->member_id}-{$suffix}";
+                $count++;
+            } while (IdCard::where('card_number', $cardNumber)->exists());
+
+            return IdCard::create([
+                'workspace_id' => $member->workspace_id,
+                'member_id' => $member->id,
+                'card_number' => $cardNumber,
+                'status' => 'provided_for_printing',
+            ]);
+        });
+    }
+
+    /**
+     * Advance a card from provided_for_printing to card_printed_ready_for_pickup.
+     * Queues member pickup notification email and records audit log.
+     *
+     * @throws InvalidCardStateTransitionException
+     */
+    public function markPrinted(IdCard $card, ?string $batchReference = null, ?User $staff = null): IdCard
+    {
+        if ($card->status !== 'provided_for_printing') {
+            throw new InvalidCardStateTransitionException(
+                "Cannot mark card as printed: card is currently in '{$card->status}' state (must be 'provided_for_printing')."
+            );
+        }
+
+        $now = Carbon::now();
+
+        $card->status = 'card_printed_ready_for_pickup';
+        $card->printed_at = $now;
+        if ($batchReference !== null && $batchReference !== '') {
+            $card->batch_reference = $batchReference;
+        }
+        $card->save();
+
+        // Queue member pickup notification email
+        $card->loadMissing('member');
+        if ($card->member && !empty($card->member->email)) {
+            if (class_exists(\App\Mail\CardReadyNotificationMail::class)) {
+                Mail::to($card->member->email)->queue(new \App\Mail\CardReadyNotificationMail($card->member, $card));
+            }
+        }
+
+        // DEC-11: Record immutable audit log
+        $actorId = $staff?->id ?? auth()->id();
+        AuditLog::create([
+            'workspace_id' => $card->workspace_id,
+            'actor_id' => $actorId,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_ID_CARD_PRINTED,
+            'auditable_type' => IdCard::class,
+            'auditable_id' => $card->id,
+            'new_values' => [
+                'card_number' => $card->card_number,
+                'member_id' => $card->member_id,
+                'status' => $card->status,
+                'batch_reference' => $card->batch_reference,
+                'printed_at' => $now->toIso8601String(),
+                'staff_id' => $actorId,
+            ],
+            'reason' => 'Physical card printed and checked in ready for member pickup.',
+            'ip_address' => request()->ip() ?? '127.0.0.1',
+            'user_agent' => request()->userAgent() ?? 'System/Console',
+        ]);
+
+        return $card;
+    }
+
+    /**
+     * Advance a card from card_printed_ready_for_pickup to delivered.
+     * Records delivering staff ID and timestamp in immutable audit log.
+     *
+     * @throws InvalidCardStateTransitionException
+     */
+    public function markDelivered(IdCard $card, User $staff): IdCard
+    {
+        if ($card->status !== 'card_printed_ready_for_pickup') {
+            throw new InvalidCardStateTransitionException(
+                "Cannot mark card as delivered: card is currently in '{$card->status}' state (must be 'card_printed_ready_for_pickup')."
+            );
+        }
+
+        $now = Carbon::now();
+
+        $card->status = 'delivered';
+        $card->delivered_at = $now;
+        $card->save();
+
+        // DEC-11: Record immutable audit log with delivering staff ID
+        AuditLog::create([
+            'workspace_id' => $card->workspace_id,
+            'actor_id' => $staff->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_ID_CARD_DELIVERED,
+            'auditable_type' => IdCard::class,
+            'auditable_id' => $card->id,
+            'new_values' => [
+                'card_number' => $card->card_number,
+                'member_id' => $card->member_id,
+                'status' => $card->status,
+                'delivering_staff_id' => $staff->id,
+                'delivered_at' => $now->toIso8601String(),
+            ],
+            'reason' => 'Physical membership card handed over to verified member at front desk.',
+            'ip_address' => request()->ip() ?? '127.0.0.1',
+            'user_agent' => request()->userAgent() ?? 'System/Console',
+        ]);
+
+        return $card;
+    }
+}
