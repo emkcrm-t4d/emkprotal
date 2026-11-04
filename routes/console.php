@@ -29,3 +29,6 @@ Schedule::command('queue:prune-batches --hours=48')->daily();
 // Synchronize official Information Desk IMAP mailbox every five minutes
 Schedule::command('crm:mailbox-sync')->everyFiveMinutes();
 
+// Process daily membership renewal window and post-expiry status transitions
+Schedule::command('crm:process-membership-milestones')->dailyAt('01:00');
+

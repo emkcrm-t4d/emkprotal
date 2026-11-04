@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             DefaultMembershipFormSeeder::class,
             EmailTemplateSeeder::class,
+            WorkflowRuleSeeder::class,
         ]);
     }
 }
