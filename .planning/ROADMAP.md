@@ -78,7 +78,7 @@ Plans:
 
 Plans:
 **Wave 1**
-- [ ] 03-01-PLAN.md — Laravel 12 Application Skeleton, Horizon Queues, Health Tracer, and CI Pipeline
+- [x] 03-01-PLAN.md — Laravel 12 Application Skeleton, Horizon Queues, Health Tracer, and CI Pipeline
 
 **Wave 2**
 - [ ] 03-02-PLAN.md — Relational Database Schema Baseline, 13 Tables, Seeders, and MySQL Append-Only Audit Triggers
@@ -208,7 +208,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 |-------|----------------|--------|-----------|
 | 1. Discovery, Decisions, and Acceptance Criteria | 3/3 | Complete | 2026-11-03 |
 | 2. Architecture, Data Model, and Security Design | 3/3 | Complete    | 2026-11-03 |
-| 3. Application Foundation and Deployment Baseline | 0/0 | Not started | - |
+| 3. Application Foundation and Deployment Baseline | 1/4 | In progress | - |
 | 4. Identity, Access Control, Space Scope, and Audit Core | 0/0 | Not started | - |
 | 5. Form Builder and Public Membership Form | 0/0 | Not started | - |
 | 6. Leads, Verification, and Controlled Conversion | 0/0 | Not started | - |

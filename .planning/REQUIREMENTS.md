@@ -26,11 +26,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Application Foundation
 
-- [ ] **FOUN-01**: Set up Laravel 12 application skeleton with Livewire, Spatie Permission, Horizon, Tailwind CSS, and Alpine.js.
-- [ ] **FOUN-02**: Configure database, cache, queue workers, scheduled tasks, and logging infrastructure.
+- [x] **FOUN-01**: Set up Laravel 12 application skeleton with Livewire, Spatie Permission, Horizon, Tailwind CSS, and Alpine.js.
+- [x] **FOUN-02**: Configure database, cache, queue workers, scheduled tasks, and logging infrastructure.
 - [ ] **FOUN-03**: Implement private file storage driver for applicant documents with safe system-generated filenames.
 - [ ] **FOUN-04**: Create central module registration foundation, initial migration baseline, and authenticated admin shell.
-- [ ] **FOUN-05**: Establish automated CI/deployment pipeline, health check endpoints, and environment runbook.
+- [x] **FOUN-05**: Establish automated CI/deployment pipeline, health check endpoints, and environment runbook.
 
 ### Identity, Access & Audit
 
@@ -154,11 +154,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ARCH-04 | Phase 2 | Complete |
 | ARCH-05 | Phase 2 | Complete |
 | ARCH-06 | Phase 2 | Complete |
-| FOUN-01 | Phase 3 | Pending |
-| FOUN-02 | Phase 3 | Pending |
+| FOUN-01 | Phase 3 | Complete |
+| FOUN-02 | Phase 3 | Complete |
 | FOUN-03 | Phase 3 | Pending |
 | FOUN-04 | Phase 3 | Pending |
-| FOUN-05 | Phase 3 | Pending |
+| FOUN-05 | Phase 3 | Complete |
 | AUTH-01 | Phase 4 | Pending |
 | AUTH-02 | Phase 4 | Pending |
 | AUTH-03 | Phase 4 | Pending |
