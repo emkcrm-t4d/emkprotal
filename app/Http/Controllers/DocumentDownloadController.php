@@ -55,11 +55,11 @@ class DocumentDownloadController extends Controller
             || (method_exists($user, 'isGlobalAdmin') && $user->isGlobalAdmin());
 
         if (!$isElevatedAdmin) {
-            if ($lead && $lead->workspace_id !== $user->workspace_id) {
+            if (!$lead || $lead->workspace_id !== $user->workspace_id) {
                 abort(403, 'Unauthorized: Cross-workspace document access is forbidden.');
             }
 
-            if ($lead && $workspace !== $lead->workspace_id) {
+            if ($workspace !== $lead->workspace_id) {
                 abort(403, 'Unauthorized: Workspace route parameter mismatch.');
             }
         }

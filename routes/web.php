@@ -30,3 +30,33 @@ Route::get('/healthz', function () {
  */
 Route::get('/workspaces/{workspace}/documents/{attachment}', [DocumentDownloadController::class, 'download'])
     ->name('documents.download');
+
+Route::get('/login', function () {
+    return response('Login required', 200);
+})->name('login');
+
+/**
+ * Phase 4 Identity, Workspace Tenancy, and Authorization Tracer Slice per AUTH-01, AUTH-02, DEC-01
+ */
+Route::middleware(['auth:web', \App\Http\Middleware\VerifyWorkspaceAccess::class])
+    ->get('/crm/{workspace}/tracer-check', function ($workspace) {
+        $user = auth()->user();
+
+        $hasAccess = ($user && method_exists($user, 'can') && $user->can('forms.view'))
+            || ($user && method_exists($user, 'hasRole') && $user->hasRole(['workspace_manager', 'superadmin', 'global_admin']));
+
+        if (!$hasAccess) {
+            abort(403, 'Forbidden: Insufficient permissions.');
+        }
+
+        $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+            ? $workspace->id
+            : (string) $workspace;
+
+        return response()->json([
+            'status' => 'ok',
+            'workspace_id' => $workspaceId,
+            'records_count' => \App\Domain\Leads\Models\Lead::count(),
+        ]);
+    })->name('crm.tracer-check');
+
