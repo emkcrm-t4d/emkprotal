@@ -172,6 +172,57 @@ class LeadProfile extends Component
     }
 
     /**
+     * Handle conversion reversed event: refresh lead state and display success message.
+     */
+    #[On('conversionReversed')]
+    public function handleConversionReversed(): void
+    {
+        $this->refreshLead();
+        session()->flash('status', 'Conversion reversed successfully. Lead restored to Under Review.');
+    }
+
+    /**
+     * Computed property: Checks whether lead conversion can be reversed.
+     * Lead must be converted, have a member ID, and pass statutory and purity guards.
+     */
+    #[Computed]
+    public function getIsReversalAllowedProperty(): bool
+    {
+        if ($this->lead->status !== 'converted' || !$this->lead->converted_member_id) {
+            return false;
+        }
+
+        $member = $this->lead->convertedMember;
+        if (!$member) {
+            return false;
+        }
+
+        $check = app(\App\Domain\Members\Services\ConversionReversalService::class)->canReverse($member);
+
+        return $check['allowed'];
+    }
+
+    /**
+     * Open conversion reversal modal (Workspace Manager authority only per DEC-04).
+     */
+    public function openReversalModal(): void
+    {
+        $user = Auth::user();
+        if (!$user) {
+            App::abort(401, 'Unauthenticated');
+        }
+
+        $canReverse = $user->can('leads.reverse_conversion')
+            || (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin', 'workspace_manager']));
+
+        if (!$canReverse) {
+            App::abort(403, 'Unauthorized: Workspace Manager authority (leads.reverse_conversion) required.');
+        }
+
+        $this->dispatch('openConversionReversalModal');
+    }
+
+    /**
      * Computed property: Checks whether lead meets conversion invariant.
      * All 3 streams (Payment, Document, Photo) must be verified, and overall lead status must be approved.
      */

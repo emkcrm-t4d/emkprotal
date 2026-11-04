@@ -67,6 +67,25 @@
                         </svg>
                         <span>Converted to Member: {{ $lead->convertedMember?->member_id ?? $lead->converted_member_id }}</span>
                     </a>
+
+                    @php
+                        $canReverseConversion = auth()->user()?->can('leads.reverse_conversion') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager']);
+                        $isReversalEligible = $this->isReversalAllowed;
+                    @endphp
+
+                    @if($canReverseConversion && $isReversalEligible)
+                        <button
+                            type="button"
+                            wire:click="openReversalModal"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 transition-colors shadow-xs"
+                            id="btn-reverse-conversion"
+                        >
+                            <svg class="w-3.5 h-3.5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span>Reverse Conversion</span>
+                        </button>
+                    @endif
                 @elseif(!$canConvertLead)
                     <button
                         type="button"
@@ -928,8 +947,9 @@
         </div>
     @endif
 
-    <!-- Missing Items, Rejection & Conversion Modals -->
+    <!-- Missing Items, Rejection, Conversion & Reversal Modals -->
     @livewire('leads.modals.missing-items-modal', ['lead' => $lead, 'workspace' => $workspace], key('missing-items-modal-'.$lead->id))
     @livewire('leads.modals.reject-lead-modal', ['lead' => $lead, 'workspace' => $workspace], key('reject-lead-modal-'.$lead->id))
     @livewire('leads.modals.convert-lead-modal', ['lead' => $lead, 'workspace' => $workspace], key('convert-lead-modal-'.$lead->id))
+    @livewire('members.modals.conversion-reversal-modal', ['memberId' => $lead->converted_member_id, 'workspace' => $workspace, 'lead' => $lead], key('conversion-reversal-modal-'.$lead->id))
 </div>
