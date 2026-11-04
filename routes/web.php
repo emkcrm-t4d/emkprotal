@@ -72,6 +72,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.members')
             ->middleware(['can:members.view']);
 
+        Route::get('/members/change-requests', \App\Livewire\Members\MemberChangeRequestDirectory::class)
+            ->name('crm.members.change_requests')
+            ->middleware(['can:members.view']);
+
         Route::get('/members/{member:uuid}', \App\Livewire\Members\MemberProfile::class)
             ->name('crm.members.show')
             ->middleware(['can:members.view']);
