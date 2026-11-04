@@ -105,6 +105,12 @@ Route::prefix('/crm/{workspace}')
             ]);
         })->name('crm.reports');
 
+        Route::get('/forms', \App\Livewire\Forms\FormIndex::class)
+            ->name('crm.forms.index');
+
+        Route::get('/forms/{form}/builder', \App\Livewire\Forms\FormBuilder::class)
+            ->name('crm.forms.builder');
+
         Route::get('/staff', \App\Livewire\Staff\StaffDirectory::class)
             ->name('crm.staff.index');
 
