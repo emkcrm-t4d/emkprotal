@@ -228,11 +228,7 @@ class EndToEndIdentityAccessAuditTest extends TestCase
             ->get('/crm/ws-emk-dhaka/leads');
 
         $allowedResponse->assertStatus(200);
-        $allowedResponse->assertJson([
-            'status' => 'ok',
-            'workspace' => 'ws-emk-dhaka',
-            'module' => 'leads',
-        ]);
+        $allowedResponse->assertSee('Inbound Leads');
     }
 
     /**

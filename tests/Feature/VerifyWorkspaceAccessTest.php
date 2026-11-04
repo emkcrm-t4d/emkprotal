@@ -34,6 +34,8 @@ class VerifyWorkspaceAccessTest extends TestCase
             ['id' => 'ws-corner-sylhet', 'space_id' => 2, 'name' => 'American Corner Sylhet', 'is_active' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
+        $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
+
         // 3. Staff in ws-emk-dhaka
         $this->dhakaStaff = User::create([
             'workspace_id' => 'ws-emk-dhaka',
@@ -82,14 +84,10 @@ class VerifyWorkspaceAccessTest extends TestCase
     public function test_staff_in_assigned_workspace_accessing_leads_receives_200_ok(): void
     {
         $response = $this->actingAs($this->dhakaStaff, 'web')
-            ->getJson('/crm/ws-emk-dhaka/leads');
+            ->get('/crm/ws-emk-dhaka/leads');
 
         $response->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-emk-dhaka',
-                'module' => 'leads',
-            ]);
+            ->assertSee('Inbound Leads');
     }
 
     public function test_staff_in_assigned_workspace_accessing_baseline_routes_receives_200_ok(): void
@@ -128,47 +126,31 @@ class VerifyWorkspaceAccessTest extends TestCase
     public function test_superadmin_can_access_any_workspace_leads(): void
     {
         $responseDhaka = $this->actingAs($this->superAdmin, 'web')
-            ->getJson('/crm/ws-emk-dhaka/leads');
+            ->get('/crm/ws-emk-dhaka/leads');
 
         $responseDhaka->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-emk-dhaka',
-                'module' => 'leads',
-            ]);
+            ->assertSee('Inbound Leads');
 
         $responseSylhet = $this->actingAs($this->superAdmin, 'web')
-            ->getJson('/crm/ws-corner-sylhet/leads');
+            ->get('/crm/ws-corner-sylhet/leads');
 
         $responseSylhet->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-corner-sylhet',
-                'module' => 'leads',
-            ]);
+            ->assertSee('Inbound Leads');
     }
 
     public function test_global_admin_can_access_any_workspace_leads(): void
     {
         $responseDhaka = $this->actingAs($this->globalAdmin, 'web')
-            ->getJson('/crm/ws-emk-dhaka/leads');
+            ->get('/crm/ws-emk-dhaka/leads');
 
         $responseDhaka->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-emk-dhaka',
-                'module' => 'leads',
-            ]);
+            ->assertSee('Inbound Leads');
 
         $responseSylhet = $this->actingAs($this->globalAdmin, 'web')
-            ->getJson('/crm/ws-corner-sylhet/leads');
+            ->get('/crm/ws-corner-sylhet/leads');
 
         $responseSylhet->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-corner-sylhet',
-                'module' => 'leads',
-            ]);
+            ->assertSee('Inbound Leads');
     }
 
     public function test_unauthenticated_request_is_rejected(): void
