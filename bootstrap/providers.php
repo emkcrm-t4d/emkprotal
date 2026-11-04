@@ -21,12 +21,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Third-Party Service Providers
+    | Third-Party & Infrastructure Service Providers
     |--------------------------------------------------------------------------
     |
     | Package providers required for Livewire, Spatie RBAC, Horizon, etc.
     |
     */
+    App\Providers\HorizonServiceProvider::class,
 
     /*
     |--------------------------------------------------------------------------
