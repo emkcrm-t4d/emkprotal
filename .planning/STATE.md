@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 5
 current_phase_name: Form Builder and Public Membership Form
-current_plan: 2
+current_plan: 4
 status: in_progress
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-11-04T07:30:00.000Z"
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-11-04T08:05:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Phase 5 Plan 01 complete (Domain model, FormSchemaEngine, FormValidationCompiler, tracer slice)
-state_head: 6ca7a45
+last_activity_desc: Phase 5 Plan 03 complete (PublicMembershipForm Livewire component, clean public layout, Bangladesh division/district cascades, DEC-09 minor consent trigger, DEC-05 bKash 10-char uppercase formatting)
+state_head: 468702c
 progress:
   total_phases: 12
   completed_phases: 4
   total_plans: 20
-  completed_plans: 16
-  percent: 42
+  completed_plans: 18
+  percent: 50
 ---
 
 # Project State
@@ -29,13 +29,13 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 5 — Form Builder and Public Membership Form
-Current Plan: 05-02-PLAN.md (Wave 2)
+Current Plan: 05-04-PLAN.md (Wave 4)
 Total Plans in Phase: 5
 Next Phase: 6 (Leads, Verification, and Controlled Conversion)
 Status: In progress
-Last activity: 2026-11-04 — 05-01-PLAN.md executed and verified
+Last activity: 2026-11-04 — 05-03-PLAN.md executed and verified
 
-Progress: [████░░░░░░] 42% (Phase 5 in progress)
+Progress: [█████░░░░░] 50% (Phase 5 in progress)
 
 ## Performance Metrics
 
@@ -78,6 +78,8 @@ Progress: [████░░░░░░] 42% (Phase 5 in progress)
 | Phase 04 P04 | 15m | 3 tasks | 11 files |
 | Phase 04 P05 | 15m | 3 tasks | 13 files |
 | Phase 05 P01 | 12min | 3 tasks | 9 files |
+| Phase 05 P02 | 15min | 2 tasks | 7 files |
+| Phase 05 P03 | 15min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -161,10 +163,14 @@ Recent decisions affecting current work:
 - [Phase 05 P01]: Enforced 100-field DoS ceiling per form definition in FormSchemaEngine per T-05-02
 - [Phase 05 P01]: Enforced exact 10-character uppercase alphanumeric bKash Transaction ID validation rule in FormValidationCompiler per DEC-05
 - [Phase 05 P01]: Enforced conditional youth consent upload rule when applicant age derived from date_of_birth is under 18 per DEC-09
+- [Phase 05 P02]: Enforced strict non-delegable managerial authorization on FormIndex and FormBuilder; seeded full 31-field schema in DefaultMembershipFormSeeder
+- [Phase 05 P03]: Isolated public application shell in resources/views/forms/public-layout.blade.php completely decoupled from CRM admin shell
+- [Phase 05 P03]: Enforced DEC-09 minor consent logic dynamically with Field 7 upload and amber warning banner if age < 18
+- [Phase 05 P03]: Enforced DEC-05 bKash Transaction ID dual-layer validation and 8-division 64-district cascade
 
 ### Pending Todos
 
-None - Phase 5 Plan 01 complete. Ready for Phase 5 Plan 02 (Form Builder Admin Interface & Seeded 31-Field Default Membership Form).
+None - Phase 5 Plan 03 complete. Ready for Phase 5 Plan 04 (Secure Submission Processing, Private Document Storage, Lead Ingestion, and Confirmation Notifications).
 
 ### Blockers/Concerns
 
@@ -181,6 +187,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T07:30:00Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-11-04T08:05:00Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None

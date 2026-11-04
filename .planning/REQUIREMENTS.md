@@ -43,9 +43,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Form Builder & Application Form
 
 - [x] **FORM-01**: Build dynamic form builder supporting all required field types, instructions, rules, conditional formulas, and embed options.
-- [ ] **FORM-02**: Implement public 31-field Membership Application Form matching official specification and validation rules.
-- [ ] **FORM-03**: Enforce conditional parent/guardian consent form upload for applicants under 18 years of age.
-- [ ] **FORM-04**: Validate and enforce mandatory 10-character uppercase bKash Transaction ID on submission.
+- [x] **FORM-02**: Implement public 31-field Membership Application Form matching official specification and validation rules.
+- [x] **FORM-03**: Enforce conditional parent/guardian consent form upload for applicants under 18 years of age.
+- [x] **FORM-04**: Validate and enforce mandatory 10-character uppercase bKash Transaction ID on submission.
 - [ ] **FORM-05**: Enforce duplicate submission prevention and unique email validation across the platform.
 - [ ] **FORM-06**: Automatically create Lead record with securely stored private attachments and applicant confirmation email upon valid submission.
 
@@ -165,9 +165,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-04 | Phase 4 | Complete |
 | AUTH-05 | Phase 4 | Complete |
 | FORM-01 | Phase 5 | Complete |
-| FORM-02 | Phase 5 | Pending |
-| FORM-03 | Phase 5 | Pending |
-| FORM-04 | Phase 5 | Pending |
+| FORM-02 | Phase 5 | Complete |
+| FORM-03 | Phase 5 | Complete |
+| FORM-04 | Phase 5 | Complete |
 | FORM-05 | Phase 5 | Pending |
 | FORM-06 | Phase 5 | Pending |
 | LEAD-01 | Phase 6 | Pending |

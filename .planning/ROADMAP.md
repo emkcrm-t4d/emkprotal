@@ -124,17 +124,17 @@ Plans:
   2. Form dynamically displays and requires parent/guardian consent document upload for applicants under 18 years of age.
   3. Form validates a 10-character uppercase bKash Transaction ID and prevents duplicate email submissions.
   4. Form submission creates a Lead record with securely attached private files and dispatches an applicant confirmation email.
-**Plans**: 1/5 plans complete
+**Plans**: 3/5 plans complete
 
 Plans:
 **Wave 1**
 - [x] 05-01-PLAN.md — Form Builder Domain Model, Dynamic Schema Definition, Migration, and End-to-End Form Tracer Slice
 
 **Wave 2**
-- [ ] 05-02-PLAN.md — Form Builder Admin Interface & Seeded 31-Field Default Membership Form
+- [x] 05-02-PLAN.md — Form Builder Admin Interface & Seeded 31-Field Default Membership Form
 
 **Wave 3**
-- [ ] 05-03-PLAN.md — Public Membership Application Form Livewire/Alpine.js Component with Reactive Cascades & Conditional Consent
+- [x] 05-03-PLAN.md — Public Membership Application Form Livewire/Alpine.js Component with Reactive Cascades & Conditional Consent
 
 **Wave 4**
 - [ ] 05-04-PLAN.md — Secure Submission Processing, Private Document Storage, Lead Ingestion, and Confirmation Notifications
