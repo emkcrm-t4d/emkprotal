@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 06
 current_phase_name: Leads, Verification, and Controlled Conversion
-current_plan: 4
+current_plan: 5
 status: ready_to_execute
-stopped_at: "Completed 06-03-PLAN.md"
-last_updated: "2026-11-04T17:11:00.000Z"
+stopped_at: "Completed 06-04-PLAN.md"
+last_updated: "2026-11-04T17:27:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: "Plan 06-03 completed: lead communication workflows, standardized rejection taxonomy, and abusive email blocking"
-state_head: 11d8edb29094709d31d794cbdb9a464501a1db91
+last_activity_desc: "Plan 06-04 completed: atomic 10-step lead-to-member conversion transaction engine and invariant gate"
+state_head: 29cef245a28c0dbf8e8b4502ccad7399571db27c
 progress:
   total_phases: 12
   completed_phases: 5
   total_plans: 26
-  completed_plans: 23
-  percent: 50
+  completed_plans: 24
+  percent: 54
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 06 (Leads, Verification, and Controlled Conversion) — EXECUTING
-Current Plan: 4
+Current Plan: 5
 Total Plans in Phase: 6
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
-Status: Ready for Plan 06-04 execution (Wave 4)
-Last activity: 2026-11-04 — Plan 06-03 completed: Lead Communication Workflows & Abusive Email Blocking
-Progress: [█████░░░░░] 50% (Plan 06-03 complete, Plan 06-04 next)
+Status: Ready for Plan 06-05 execution (Wave 5)
+Last activity: 2026-11-04 — Plan 06-04 completed: Atomic 10-Step Conversion Engine & Monotonic Sequence Generator
+Progress: [█████░░░░░] 54% (Plan 06-04 complete, Plan 06-05 next)
 
 ## Performance Metrics
 
@@ -84,6 +84,7 @@ Progress: [█████░░░░░] 50% (Plan 06-03 complete, Plan 06-04 
 | Phase 06 P01 | 30min | 3 tasks | 11 files |
 | Phase 06 P02 | 20min | 3 tasks | 19 files |
 | Phase 06 P03 | 16min | 3 tasks | 16 files |
+| Phase 06 P04 | 12min | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -189,6 +190,12 @@ Recent decisions affecting current work:
 - [Phase 06 P02]: Enforced Youth Outreach Compliance (DEC-09) mandating parental consent for minors (< 18) and 5-point studio photo compliance checklist before badge approval
 - [Phase 06 P02]: Deployed interactive Livewire VerificationPanel partial embedded in LeadProfile with manager reconciliation UI and approval gating
 - [Phase 06 P03]: Standardized 13-code rejection taxonomy locked per VERIFICATION-DICTIONARY.md; abusive email blocking enforced at submission perimeter with clean reapplication preserved per LEAD-04/07
+- [Phase 06 P04]: Enforced strict lock acquisition order (member_id_sequences -> leads -> membership_terms) eliminating deadlocks under concurrent approvals per CONVERSION-SPEC.md
+- [Phase 06 P04]: Implemented MemberIdSequenceGenerator with row-level pessimistic locking ({SPACE_CODE}-{YEAR}-{5_DIGIT_SEQ}) and overflow guards
+- [Phase 06 P04]: Enforced mathematical Boolean conversion invariant asserting verified payment, document, photo streams, approved status, minor consent, and active email uniqueness
+- [Phase 06 P04]: Computed dynamic start and expiry dates from membership_terms.duration_months added to manager approval date per DEC-08
+- [Phase 06 P04]: Provisioned member portal account with guard 'member' and must_reset_password = true per DEC-06
+- [Phase 06 P04]: Generated post-conversion paid invoice referencing verified bKash TxID per DEC-03 and enqueued ID card in provided_for_printing state
 
 ### Pending Todos
 
@@ -209,6 +216,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T17:11:00Z
-Stopped at: Completed 06-03-PLAN.md
-Resume file: .planning/phases/06-leads-verification-and-controlled-conversion/06-04-PLAN.md
+Last session: 2026-11-04T17:27:00Z
+Stopped at: Completed 06-04-PLAN.md
+Resume file: .planning/phases/06-leads-verification-and-controlled-conversion/06-05-PLAN.md
