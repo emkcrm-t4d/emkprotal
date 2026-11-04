@@ -137,3 +137,62 @@ Route::prefix('/crm/{workspace}')
         })->name('crm.tracer-check');
     });
 
+/**
+ * Public Form Tracer Routes per FORM-01, DEC-01, and DEC-02
+ */
+Route::get('/apply/{slug}', function (string $slug, \Illuminate\Http\Request $request) {
+    $form = \App\Domain\Forms\Models\Form::withoutGlobalScopes()
+        ->where('slug', $slug)
+        ->where('is_published', true)
+        ->first();
+
+    if (!$form) {
+        abort(404, 'Form not found or unpublished.');
+    }
+
+    if ($request->wantsJson()) {
+        return response()->json([
+            'status' => 'ok',
+            'form' => [
+                'uuid' => $form->uuid,
+                'slug' => $form->slug,
+                'title' => $form->title,
+                'description' => $form->description,
+                'schema' => $form->schema,
+                'settings' => $form->settings,
+            ],
+        ]);
+    }
+
+    return response('<!DOCTYPE html><html><head><title>' . e($form->title) . '</title></head><body><h1>' . e($form->title) . '</h1><p>' . e($form->description ?? '') . '</p></body></html>', 200)
+        ->header('Content-Type', 'text/html');
+})->name('public.forms.show');
+
+Route::post('/apply/{slug}/submit', function (string $slug, \Illuminate\Http\Request $request) {
+    $form = \App\Domain\Forms\Models\Form::withoutGlobalScopes()
+        ->where('slug', $slug)
+        ->where('is_published', true)
+        ->first();
+
+    if (!$form) {
+        abort(404, 'Form not found or unpublished.');
+    }
+
+    $submission = \App\Domain\Forms\Models\FormSubmission::create([
+        'form_id' => $form->id,
+        'workspace_id' => $form->workspace_id,
+        'payload' => $request->all(),
+        'status' => 'submitted',
+        'ip_address' => $request->ip(),
+        'user_agent' => $request->userAgent(),
+        'submitted_at' => now(),
+    ]);
+
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Application submitted successfully.',
+        'submission_uuid' => $submission->uuid,
+    ], 200);
+})->name('public.forms.submit');
+
+
