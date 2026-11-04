@@ -37,4 +37,12 @@ class LeadVerification extends Model
     {
         return $this->belongsTo(User::class, 'verified_by_user_id');
     }
+
+    /**
+     * Relationship: reviewer user who performed verification.
+     */
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by_user_id');
+    }
 }
