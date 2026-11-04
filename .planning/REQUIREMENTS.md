@@ -78,11 +78,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Member Portal & Requests
 
-- [ ] **PORT-01**: Provide secure Member authentication via email or Member ID with forced password reset on first login.
-- [ ] **PORT-02**: Display read-only profile information, uploaded documents, and communication history (hiding internal staff notes and audit logs).
-- [ ] **PORT-03**: Implement member profile change-request submission queue for staff review and approval (preventing direct member edits).
-- [ ] **PORT-04**: Provide dedicated Email Change request workflow notifying workspace Manager via email and requiring Manager approval.
-- [ ] **PORT-05**: Provide membership renewal request workflow opening 1 month prior to expiry with payment submission and staff verification.
+- [x] **PORT-01**: Provide secure Member authentication via email or Member ID with forced password reset on first login.
+- [x] **PORT-02**: Display read-only profile information, uploaded documents, and communication history (hiding internal staff notes and audit logs).
+- [x] **PORT-03**: Implement member profile change-request submission queue for staff review and approval (preventing direct member edits).
+- [x] **PORT-04**: Provide dedicated Email Change request workflow notifying workspace Manager via email and requiring Manager approval.
+- [x] **PORT-05**: Provide membership renewal request workflow opening 1 month prior to expiry with payment submission and staff verification.
 
 ### Dashboards, Reporting & Administration
 
@@ -188,11 +188,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MAIL-03 | Phase 8 | Complete |
 | MAIL-04 | Phase 8 | Complete |
 | MAIL-05 | Phase 8 | Complete |
-| PORT-01 | Phase 9 | Pending |
-| PORT-02 | Phase 9 | Pending |
-| PORT-03 | Phase 9 | Pending |
-| PORT-04 | Phase 9 | Pending |
-| PORT-05 | Phase 9 | Pending |
+| PORT-01 | Phase 9 | Complete |
+| PORT-02 | Phase 9 | Complete |
+| PORT-03 | Phase 9 | Complete |
+| PORT-04 | Phase 9 | Complete |
+| PORT-05 | Phase 9 | Complete |
 | DASH-01 | Phase 10 | Pending |
 | DASH-02 | Phase 10 | Pending |
 | DASH-03 | Phase 10 | Pending |

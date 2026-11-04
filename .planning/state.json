@@ -46,7 +46,7 @@
     {
       "number": "9",
       "name": "Read-Only Member Portal, Change Requests, and Renewals",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "10",
@@ -66,8 +66,8 @@
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 9 of 12 · 67% · executing"
+    "label": "Advance to the next step (plan phase 10)",
+    "reason": "Phase 10 of 12 — needs a plan"
   },
-  "updated_at": "2026-11-04T19:12:03.666Z"
+  "updated_at": "2026-11-04T19:42:32.618Z"
 }
