@@ -11,6 +11,7 @@ use App\Domain\Leads\Models\Lead;
 use App\Domain\Leads\Models\LeadAttachment;
 use App\Domain\Members\Models\Member;
 use App\Domain\Workspaces\Models\Workspace;
+use App\Livewire\Members\EditMemberContactModal;
 use App\Livewire\Members\MemberProfile;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -299,5 +300,122 @@ class MemberProfileTest extends TestCase
             ->get("/crm/ws-emk-dhaka/members/{$this->member->uuid}");
 
         $response->assertStatus(403);
+    }
+
+    public function test_staff_with_members_edit_can_update_contact_and_address_details(): void
+    {
+        $staffWithEdit = User::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'name' => 'Editor Staff',
+            'email' => 'editor@emk.test',
+            'password' => bcrypt('secret123'),
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $staffWithEdit->assignRole('delegated_staff');
+        $staffWithEdit->givePermissionTo('members.edit');
+
+        $component = Livewire::actingAs($staffWithEdit, 'web')
+            ->test(EditMemberContactModal::class, [
+                'workspace' => 'ws-emk-dhaka',
+                'member' => $this->member,
+            ]);
+
+        $component->call('openModal');
+        $component->assertSet('isOpen', true);
+
+        // Update fields
+        $component->set('contact_number', '+8801799999999');
+        $component->set('address_house_no', 'Flat 9B, House 99');
+        $component->set('address_road_no', 'Road 11');
+        $component->set('address_area', 'Gulshan 2');
+        $component->set('address_zip_code', '1212');
+        $component->set('address_division', 'dhaka');
+        $component->set('address_district', 'dhaka');
+        $component->set('occupation', 'entrepreneur');
+        $component->set('institution_study', 'IBA, Dhaka University');
+        $component->set('highest_certification', 'postgraduate');
+        $component->set('area_of_subject', 'Finance');
+
+        $component->call('save');
+        $component->assertDispatched('member-contact-updated');
+        $component->assertSet('isOpen', false);
+
+        // Assert database state updated
+        $this->assertDatabaseHas('members', [
+            'id' => $this->member->id,
+            'contact_number' => '+8801799999999',
+            'address_house_no' => 'Flat 9B, House 99',
+            'address_road_no' => 'Road 11',
+            'address_area' => 'Gulshan 2',
+            'occupation' => 'entrepreneur',
+        ]);
+
+        // Assert immutable audit log recorded per DEC-11
+        $this->assertDatabaseHas('audit_logs', [
+            'event_type' => 'member_contact_updated',
+            'auditable_type' => Member::class,
+            'auditable_id' => $this->member->id,
+            'actor_id' => $staffWithEdit->id,
+        ]);
+    }
+
+    public function test_staff_without_members_edit_cannot_invoke_modal_or_save(): void
+    {
+        // $this->staff has delegated_staff without members.edit
+        // 1. Invoking openEditContactModal on MemberProfile fails with 403
+        $component = Livewire::actingAs($this->staff, 'web')
+            ->test(MemberProfile::class, [
+                'workspace' => 'ws-emk-dhaka',
+                'member' => $this->member,
+            ]);
+
+        $component->call('openEditContactModal');
+        $component->assertStatus(403);
+
+        // 2. Direct save on EditMemberContactModal fails with 403
+        $modalComponent = Livewire::actingAs($this->staff, 'web')
+            ->test(EditMemberContactModal::class, [
+                'workspace' => 'ws-emk-dhaka',
+                'member' => $this->member,
+            ]);
+
+        $modalComponent->call('save');
+        $modalComponent->assertStatus(403);
+    }
+
+    public function test_core_identity_fields_remain_strictly_immutable(): void
+    {
+        $staffWithEdit = User::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'name' => 'Editor Staff 2',
+            'email' => 'editor2@emk.test',
+            'password' => bcrypt('secret123'),
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $staffWithEdit->assignRole('delegated_staff');
+        $staffWithEdit->givePermissionTo('members.edit');
+
+        $originalMemberId = $this->member->member_id;
+        $originalEmail = $this->member->email;
+        $originalDob = $this->member->date_of_birth->toDateString();
+        $originalName = $this->member->first_name;
+
+        $component = Livewire::actingAs($staffWithEdit, 'web')
+            ->test(EditMemberContactModal::class, [
+                'workspace' => 'ws-emk-dhaka',
+                'member' => $this->member,
+            ]);
+
+        $component->set('contact_number', '+8801788888888');
+        $component->call('save');
+
+        $freshMember = $this->member->fresh();
+        $this->assertEquals('+8801788888888', $freshMember->contact_number);
+        $this->assertEquals($originalMemberId, $freshMember->member_id);
+        $this->assertEquals($originalEmail, $freshMember->email);
+        $this->assertEquals($originalDob, $freshMember->date_of_birth->toDateString());
+        $this->assertEquals($originalName, $freshMember->first_name);
     }
 }

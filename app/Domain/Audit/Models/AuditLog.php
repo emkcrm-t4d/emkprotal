@@ -34,6 +34,7 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_LEAD_BLOCKED = 'lead_blocked';
     public const EVENT_CONVERSION_COMPLETED = 'conversion_completed';
     public const EVENT_CONVERSION_REVERSED = 'conversion_reversed';
+    public const EVENT_MEMBER_CONTACT_UPDATED = 'member_contact_updated';
 
     protected $table = 'audit_logs';
 
