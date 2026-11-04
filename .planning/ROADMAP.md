@@ -153,7 +153,8 @@ Plans:
   3. Workspace Manager can execute atomic Lead-to-Member conversion, safely re-associating documents with the new Member ID.
   4. Workspace Manager can reverse an erroneous conversion with a mandatory reason, reverting state and recording an immutable audit event.
   5. Reapplicants can reapply after rejection with historical rejection reasons visible to reviewing staff.
-**Plans:** 5 plans
+**Plans**: 6 plans
+**UI hint**: yes
 
 Plans:
 **Wave 1**
@@ -169,7 +170,10 @@ Plans:
 - [ ] 06-04-PLAN.md — Atomic 10-Step Lead-to-Member Conversion Transaction Engine
 
 **Wave 5**
-- [ ] 06-05-PLAN.md — 30-Day Conversion Reversal Protocol & Holistic Phase 6 E2E Integration Suite
+- [ ] 06-05-PLAN.md — Manager Conversion Modal, Invariant Gate UI Defense, and Term Selection
+
+**Wave 6**
+- [ ] 06-06-PLAN.md — 30-Day Conversion Reversal Protocol & Holistic Phase 6 E2E Integration Suite
 
 ### Phase 7: Member Profiles, Invoices, and ID Cards
 **Goal**: Staff can manage Member master profiles, configurable terms/fees, invoices, and ID card issuance lifecycles.
