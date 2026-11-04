@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Controllers\Invoices\InvoiceReceiptController;
+use App\Http\Controllers\Portal\PortalDocumentDownloadController;
+use App\Livewire\Portal\MemberPortalProfile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -240,9 +242,11 @@ Route::middleware(['auth:member'])->group(function () {
  * Protected Member Portal Routes (requires member auth + completed password reset)
  */
 Route::prefix('/portal')->middleware(['auth:member', 'member.password.reset'])->group(function () {
-    Route::get('/profile', function () {
-        return view('portal.placeholder-profile');
-    })->name('portal.profile');
+    Route::get('/profile', MemberPortalProfile::class)
+        ->name('portal.profile');
+
+    Route::get('/documents/{attachment}', [PortalDocumentDownloadController::class, 'download'])
+        ->name('portal.documents.download');
 });
 
 
