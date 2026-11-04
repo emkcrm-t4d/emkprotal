@@ -240,7 +240,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 2. Architecture, Data Model, and Security Design | 3/3 | Complete    | 2026-11-03 |
 | 3. Application Foundation and Deployment Baseline | 4/4 | Complete    | 2026-11-04 |
 | 4. Identity, Access Control, Space Scope, and Audit Core | 5/5 | Complete    | 2026-11-04 |
-| 5. Form Builder and Public Membership Form | 1/5 | In Progress | - |
+| 5. Form Builder and Public Membership Form | 5/5 | Complete    | 2026-11-04 |
 | 6. Leads, Verification, and Controlled Conversion | 0/0 | Not started | - |
 | 7. Member Profiles, Invoices, and ID Cards | 0/0 | Not started | - |
 | 8. Official Email, IMAP, Templates, and Workflow Rules | 0/0 | Not started | - |
