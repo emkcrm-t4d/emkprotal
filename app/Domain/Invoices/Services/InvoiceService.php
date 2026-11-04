@@ -170,6 +170,48 @@ class InvoiceService
     }
 
     /**
+     * Generate a paid ID-card replacement fee invoice (MEMB-06).
+     * Enforces DEC-05 10-char uppercase regex and global uniqueness of the payment reference.
+     *
+     * @throws InvalidArgumentException
+     * @throws DuplicatePaymentReferenceException
+     */
+    public function generateCardReplacementInvoice(Member $member, string $bkashTxId, ?float $feeBdt = null): Invoice
+    {
+        if (!preg_match('/^[A-Z0-9]{10}$/', $bkashTxId)) {
+            throw new InvalidArgumentException(
+                'bKash Transaction ID must be exactly 10 uppercase alphanumeric characters.'
+            );
+        }
+
+        $existsInLeads = Lead::withoutGlobalScopes()->where('bkash_txid', $bkashTxId)->exists();
+        $existsInInvoices = Invoice::withoutGlobalScopes()
+            ->where('payment_reference', $bkashTxId)
+            ->whereNotIn('status', ['voided', 'void_reversed'])
+            ->exists();
+
+        if ($existsInLeads || $existsInInvoices) {
+            throw new DuplicatePaymentReferenceException(
+                "Payment reference [{$bkashTxId}] has already been utilized."
+            );
+        }
+
+        $fee = $feeBdt ?? (float) config('payments.card_replacement_fee_bdt', 200.00);
+
+        return Invoice::create([
+            'workspace_id' => $member->workspace_id,
+            'member_id' => $member->id,
+            'lead_id' => null,
+            'invoice_number' => $this->generateInvoiceNumber((string) $member->workspace_id),
+            'amount_bdt' => $fee,
+            'payment_method' => 'bkash_manual',
+            'payment_reference' => $bkashTxId,
+            'status' => 'paid',
+            'paid_at' => Carbon::now(),
+        ]);
+    }
+
+    /**
      * Void an invoice with manager authorization and immutable audit logging.
      *
      * @throws AuthorizationException

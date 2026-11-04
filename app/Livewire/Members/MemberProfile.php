@@ -99,6 +99,7 @@ class MemberProfile extends Component
     #[On('member-contact-updated')]
     #[On('memberContactUpdated')]
     #[On('member-status-updated')]
+    #[On('id-card-replaced')]
     public function refreshMember(): void
     {
         $this->member->refresh();
@@ -123,6 +124,28 @@ class MemberProfile extends Component
         }
 
         $this->dispatch('openEditMemberContactModal');
+    }
+
+    /**
+     * Whether the current user may replace ID cards.
+     */
+    public function canManageCards(): bool
+    {
+        $user = Auth::user();
+
+        return $user && ($user->can('members.manage_cards') || $user->hasRole(['superadmin', 'global_admin']));
+    }
+
+    /**
+     * Open ID card replacement modal.
+     */
+    public function openCardReplacementModal(): void
+    {
+        if (!$this->canManageCards()) {
+            App::abort(403, 'Unauthorized: members.manage_cards permission required.');
+        }
+
+        $this->dispatch('openCardReplacementModal');
     }
 
     /**

@@ -97,6 +97,16 @@
                     </svg>
                     Edit Contact Details
                 </button>
+                @if ($this->canManageCards())
+                    <button
+                        type="button"
+                        wire:click="openCardReplacementModal"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white text-slate-700 border border-slate-300 rounded-lg text-xs font-medium hover:bg-slate-50 shadow-xs transition-colors"
+                        id="btn-replace-card"
+                    >
+                        Replace ID Card
+                    </button>
+                @endif
                 @if ($this->canChangeStatus())
                     <button
                         type="button"
@@ -550,5 +560,9 @@
 
     @if ($this->canChangeStatus())
         <livewire:members.member-status-modal :member="$member" :workspace="$workspace" wire:key="'status-modal-'.$member->id" />
+    @endif
+
+    @if ($this->canManageCards())
+        <livewire:members.request-card-replacement-modal :member="$member" :workspace="$workspace" wire:key="'card-replace-modal-'.$member->id" />
     @endif
 </div>

@@ -137,4 +137,87 @@ class IdCardLifecycleService
 
         return $card;
     }
+
+    public const REPLACEMENT_REASONS = ['LOST_CARD', 'DAMAGED_CARD', 'NAME_CHANGE', 'OTHER'];
+
+    /**
+     * Replace a member's active card(s): supersede prior cards, issue a new card in
+     * provided_for_printing, optionally bill a replacement fee invoice (MEMB-06).
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function replaceCard(
+        Member $member,
+        string $replacementReason,
+        ?string $bkashTxId = null,
+        ?User $actor = null
+    ): IdCard {
+        if (!in_array($replacementReason, self::REPLACEMENT_REASONS, true)) {
+            throw new \InvalidArgumentException(
+                'Replacement reason must be one of: ' . implode(', ', self::REPLACEMENT_REASONS) . '.'
+            );
+        }
+
+        $bkashTxId = ($bkashTxId !== null && trim($bkashTxId) !== '') ? trim($bkashTxId) : null;
+
+        return DB::transaction(function () use ($member, $replacementReason, $bkashTxId, $actor): IdCard {
+            $activeCards = IdCard::where('member_id', $member->id)
+                ->whereIn('status', ['provided_for_printing', 'card_printed_ready_for_pickup', 'delivered'])
+                ->lockForUpdate()
+                ->get();
+
+            $priorNumbers = [];
+            foreach ($activeCards as $old) {
+                $priorNumbers[] = $old->card_number;
+                $old->status = 'superseded_replaced';
+                $old->replacement_reason = $replacementReason;
+                $old->save();
+            }
+
+            $invoiceNumber = null;
+            if ($bkashTxId !== null) {
+                $invoice = app(\App\Domain\Invoices\Services\InvoiceService::class)
+                    ->generateCardReplacementInvoice($member, $bkashTxId);
+                $invoiceNumber = $invoice->invoice_number;
+            }
+
+            $count = IdCard::where('member_id', $member->id)->count() + 1;
+            do {
+                $suffix = str_pad((string) $count, 2, '0', STR_PAD_LEFT);
+                $cardNumber = "CRD-{$member->member_id}-{$suffix}";
+                $count++;
+            } while (IdCard::where('card_number', $cardNumber)->exists());
+
+            $newCard = IdCard::create([
+                'workspace_id' => $member->workspace_id,
+                'member_id' => $member->id,
+                'card_number' => $cardNumber,
+                'status' => 'provided_for_printing',
+                'replacement_reason' => $replacementReason,
+            ]);
+
+            $actorId = $actor?->id ?? auth()->id();
+            AuditLog::create([
+                'workspace_id' => $member->workspace_id,
+                'actor_id' => $actorId,
+                'actor_guard' => 'web',
+                'event_type' => AuditLog::EVENT_ID_CARD_REPLACED,
+                'auditable_type' => IdCard::class,
+                'auditable_id' => $newCard->id,
+                'new_values' => [
+                    'member_id' => $member->id,
+                    'prior_card_numbers' => $priorNumbers,
+                    'new_card_number' => $newCard->card_number,
+                    'replacement_reason' => $replacementReason,
+                    'fee_invoice_number' => $invoiceNumber,
+                    'actor_user_id' => $actorId,
+                ],
+                'reason' => "ID card replaced: {$replacementReason}.",
+                'ip_address' => request()->ip() ?? '127.0.0.1',
+                'user_agent' => request()->userAgent() ?? 'System/Console',
+            ]);
+
+            return $newCard;
+        });
+    }
 }
