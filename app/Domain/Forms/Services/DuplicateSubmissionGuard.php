@@ -44,6 +44,28 @@ class DuplicateSubmissionGuard
     }
 
     /**
+     * Assert that an applicant email has not been blocked by Workspace Management per LEAD-07.
+     *
+     * @throws ValidationException
+     */
+    public static function assertEmailNotBlocked(string $email): void
+    {
+        $normalized = Str::lower(trim($email));
+
+        $isBlocked = DB::table('leads')
+            ->where('email', $normalized)
+            ->where('status', 'blocked')
+            ->whereNull('deleted_at')
+            ->exists();
+
+        if ($isBlocked) {
+            throw ValidationException::withMessages([
+                'email' => ['This email address has been restricted from submitting further applications. Please contact the front desk.'],
+            ]);
+        }
+    }
+
+    /**
      * Assert that an email is unique for active/pending applications or existing member accounts,
      * while permitting reapplication for previously rejected applicants per DEC-01 and LEAD-07.
      *
@@ -53,7 +75,10 @@ class DuplicateSubmissionGuard
     {
         $normalized = Str::lower(trim($email));
 
-        // 1. Check if an account already exists in users table
+        // 1. Check if applicant email has been blocked per LEAD-07
+        self::assertEmailNotBlocked($normalized);
+
+        // 2. Check if an account already exists in users table
         $userExists = DB::table('users')
             ->where('email', $normalized)
             ->exists();
@@ -61,19 +86,6 @@ class DuplicateSubmissionGuard
         if ($userExists) {
             throw ValidationException::withMessages([
                 'email' => ['An application with this email address is already active or registered.'],
-            ]);
-        }
-
-        // 2. Check if applicant email has been blocked
-        $isBlocked = DB::table('leads')
-            ->where('email', $normalized)
-            ->where('status', 'blocked')
-            ->whereNull('deleted_at')
-            ->exists();
-
-        if ($isBlocked) {
-            throw ValidationException::withMessages([
-                'email' => ['This email address has been blocked from submitting applications.'],
             ]);
         }
 
