@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    @if ($submitted)
+    @if ($submitted || $is_submitted)
         <!-- Submission Success Confirmation Panel -->
         <div class="bg-white rounded-2xl shadow-lg border border-emerald-200 p-8 text-center space-y-6">
             <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-600">
@@ -61,22 +61,41 @@
                 </svg>
             </div>
             <div class="space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    Application Submitted Successfully!
+                </span>
                 <h2 class="text-2xl font-bold text-slate-900">Application Submitted Successfully!</h2>
                 <p class="text-slate-600 max-w-xl mx-auto text-sm">
                     Thank you for applying for membership. Your application has been logged into our secure verification pipeline.
                 </p>
             </div>
-            <div class="inline-block bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 text-left">
+            <div class="inline-block bg-slate-50 border border-slate-200 rounded-xl px-6 py-4 text-left max-w-md w-full">
                 <div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Application Reference ID</div>
-                <div class="text-lg font-mono font-bold text-indigo-700 mt-1 select-all">{{ $submission_uuid }}</div>
-                <div class="text-xs text-slate-500 mt-1">bKash Transaction ID: <strong class="text-slate-700">{{ $bkash_txid }}</strong></div>
+                <div class="flex items-center justify-between gap-2 mt-1">
+                    <span class="text-lg font-mono font-bold text-indigo-700 select-all" id="app-reference-code">{{ $reference_uuid ?? $submission_uuid }}</span>
+                    <button
+                        type="button"
+                        x-on:click="navigator.clipboard.writeText('{{ $reference_uuid ?? $submission_uuid }}')"
+                        class="px-2.5 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition"
+                        title="Copy to clipboard"
+                    >
+                        Copy
+                    </button>
+                </div>
+                <div class="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-600 space-y-1">
+                    <div>Applicant: <strong class="text-slate-800">{{ $first_name }} {{ $last_name }}</strong></div>
+                    <div>Email: <strong class="text-slate-800">{{ $email }}</strong></div>
+                    <div>Selected Space: <strong class="text-slate-800">{{ ucwords(str_replace('_', ' ', $american_space)) }}</strong></div>
+                    <div>bKash Transaction ID: <strong class="text-slate-800 font-mono">{{ $bkash_txid }}</strong></div>
+                </div>
             </div>
-            <div class="text-xs text-slate-500 max-w-lg mx-auto text-left space-y-2 bg-blue-50 p-4 rounded-xl border border-blue-200">
-                <p class="font-bold text-blue-900">Next Steps:</p>
-                <ul class="list-disc list-inside space-y-1 text-blue-800">
-                    <li>Our admissions and verification team will review your identity documents and passport photo.</li>
-                    <li>bKash payment verification typically takes 1 to 2 business days.</li>
-                    <li>You will receive an email confirmation once your membership is approved and your digital card is ready.</li>
+            <div class="text-xs text-slate-600 max-w-lg mx-auto text-left space-y-2 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                <p class="font-bold text-emerald-900">What Happens Next:</p>
+                <p class="text-emerald-800 font-medium">Our verification team will review your payment, documents, and photo within 2-3 business days.</p>
+                <ul class="list-disc list-inside space-y-1 text-emerald-700">
+                    <li>Payment verification against bKash merchant statement.</li>
+                    <li>Identity document and eligibility compliance check.</li>
+                    <li>Studio passport photo check for digital ID card generation.</li>
                 </ul>
             </div>
         </div>

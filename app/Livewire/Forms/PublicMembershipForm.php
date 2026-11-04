@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace App\Livewire\Forms;
 
+use App\Domain\Forms\Mail\ApplicationConfirmationMail;
 use App\Domain\Forms\Models\Form;
 use App\Domain\Forms\Models\FormSubmission;
+use App\Domain\Forms\Services\DuplicateSubmissionGuard;
 use App\Domain\Forms\Services\FormSchemaEngine;
+use App\Domain\Forms\Services\LeadIngestionService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -75,7 +81,9 @@ class PublicMembershipForm extends Component
 
     // Submission lifecycle state
     public bool $submitted = false;
+    public bool $is_submitted = false;
     public ?string $submission_uuid = null;
+    public ?string $reference_uuid = null;
     public ?string $successMessage = null;
     public ?string $errorMessage = null;
 
@@ -367,18 +375,19 @@ class PublicMembershipForm extends Component
         $this->validate();
 
         try {
-            $submission = FormSubmission::create([
-                'form_id' => $this->form->id,
-                'workspace_id' => $this->form->workspace_id,
-                'payload' => [
+            $clientIp = request()->ip() ?: '127.0.0.1';
+            DuplicateSubmissionGuard::checkRateLimit($clientIp);
+
+            $ingestionService = app(LeadIngestionService::class);
+            $lead = $ingestionService->ingest(
+                form: $this->form,
+                validatedData: [
                     'first_name' => $this->first_name,
                     'middle_name' => $this->middle_name,
                     'last_name' => $this->last_name,
                     'american_space' => $this->american_space,
                     'sex' => $this->sex,
                     'date_of_birth' => $this->date_of_birth,
-                    'age_years' => $this->age_years,
-                    'has_parental_consent' => $this->requires_consent && !empty($this->parental_consent_file),
                     'address_house_no' => $this->address_house_no,
                     'address_road_no' => $this->address_road_no,
                     'address_area' => $this->address_area,
@@ -394,9 +403,9 @@ class PublicMembershipForm extends Component
                     'highest_certification' => $this->highest_certification,
                     'highest_certification_other' => $this->highest_certification_other,
                     'area_of_subject' => $this->area_of_subject,
-                    'has_us_experience' => in_array((string) $this->has_us_experience, ['1', 'true'], true),
+                    'has_us_experience' => $this->has_us_experience,
                     'us_experience_location' => $this->us_experience_location,
-                    'is_american_alumni' => in_array((string) $this->is_american_alumni, ['1', 'true'], true),
+                    'is_american_alumni' => $this->is_american_alumni,
                     'american_institution_name' => $this->american_institution_name,
                     'employer_name' => $this->employer_name,
                     'job_title' => $this->job_title,
@@ -404,17 +413,35 @@ class PublicMembershipForm extends Component
                     'bkash_txid' => $this->bkash_txid,
                     'terms_agreed' => $this->terms_agreed,
                 ],
-                'status' => 'submitted',
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'submitted_at' => now(),
-            ]);
+                uploadedFiles: [
+                    'identity_document_files' => $this->identity_document_files,
+                    'photo_file' => $this->photo_file,
+                    'parental_consent_file' => $this->parental_consent_file,
+                ],
+                ipAddress: $clientIp,
+                userAgent: request()->userAgent()
+            );
 
-            $this->submission_uuid = $submission->uuid;
+            // Queue automated applicant confirmation email
+            Mail::to($lead->email)->queue(new ApplicationConfirmationMail($lead));
+
+            $this->submission_uuid = $lead->uuid;
+            $this->reference_uuid = $lead->uuid;
             $this->submitted = true;
-            $this->successMessage = 'Your application has been received successfully! Reference ID: ' . $submission->uuid;
+            $this->is_submitted = true;
+            $this->successMessage = 'Your application has been received successfully! Reference ID: ' . $lead->uuid;
+        } catch (ValidationException $e) {
+            foreach ($e->errors() as $field => $messages) {
+                foreach ($messages as $msg) {
+                    $this->addError($field, $msg);
+                }
+            }
+            $this->errorMessage = 'Please review the highlighted errors before submitting.';
+        } catch (ThrottleRequestsException $e) {
+            $this->addError('bkash_txid', $e->getMessage());
+            $this->errorMessage = $e->getMessage();
         } catch (\Throwable $e) {
-            $this->errorMessage = 'An error occurred while submitting your application. Please try again: ' . $e->getMessage();
+            $this->errorMessage = 'An error occurred while submitting your application: ' . $e->getMessage();
         }
     }
 
