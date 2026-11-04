@@ -81,7 +81,7 @@ Plans:
 - [x] 03-01-PLAN.md — Laravel 12 Application Skeleton, Horizon Queues, Health Tracer, and CI Pipeline
 
 **Wave 2**
-- [ ] 03-02-PLAN.md — Relational Database Schema Baseline, 13 Tables, Seeders, and MySQL Append-Only Audit Triggers
+- [x] 03-02-PLAN.md — Relational Database Schema Baseline, 13 Tables, Seeders, and MySQL Append-Only Audit Triggers
 
 **Wave 3**
 - [ ] 03-03-PLAN.md — Central Module Registry, Zero-Eval Architecture Invariants, and Authenticated Admin Shell
