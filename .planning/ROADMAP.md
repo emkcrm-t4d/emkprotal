@@ -242,8 +242,24 @@ Plans:
   3. Member can submit profile change requests for staff review rather than directly editing data.
   4. Member can initiate a dedicated Email Change request that alerts the Workspace Manager via email for approval.
   5. Member can submit a renewal request starting one month prior to expiry with manual payment details.
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 09-01-PLAN.md — Member Portal Authentication, Multi-Guard Boundary, First-Login Forced Password Reset, and End-to-End Tracer Slice
+
+**Wave 2**
+- [ ] 09-02-PLAN.md — Read-Only Member Portal Profile, Secure Document Streaming, and Threaded Communication View
+
+**Wave 3**
+- [ ] 09-03-PLAN.md — Member Profile Change Request Submission and CRM Review Queue
+
+**Wave 4**
+- [ ] 09-04-PLAN.md — Dedicated Email Change Request Workflow with Manager Alerts and Atomic Synchronization
+
+**Wave 5**
+- [ ] 09-05-PLAN.md — Membership Renewal Request Workflow, 30-Day Window Enforcement, bKash Reconciliation, and Holistic E2E Suite
 
 ### Phase 10: Dashboard, Reports, Data Tools, and Platform Settings
 **Goal**: Workspace managers and administrators can monitor operational metrics, export scoped data, and maintain system backups.
@@ -295,7 +311,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Leads, Verification, and Controlled Conversion | 6/6 | Complete    | 2026-11-04 |
 | 7. Member Profiles, Invoices, and ID Cards | 5/5 | Complete    | 2026-11-04 |
 | 8. Official Email, IMAP, Templates, and Workflow Rules | 5/5 | Complete    | 2026-11-04 |
-| 9. Read-Only Member Portal, Change Requests, and Renewals | 0/0 | Not started | - |
+| 9. Read-Only Member Portal, Change Requests, and Renewals | 0/5 | Not started | - |
 | 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/0 | Not started | - |
 | 11. Zoho Migration and Reconciliation | 0/0 | Not started | - |
 | 12. Verification, Security Review, Release, and Later Payment Gateway | 0/0 | Not started | - |
