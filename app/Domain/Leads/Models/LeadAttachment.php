@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Domain\Leads\Models;
 
+use App\Domain\Tenancy\Contracts\TenantEntityInterface;
+use App\Domain\Tenancy\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class LeadAttachment extends Model
+class LeadAttachment extends Model implements TenantEntityInterface
 {
+    use BelongsToTenant;
+
     protected $table = 'lead_attachments';
 
     protected $guarded = [];
@@ -19,6 +23,14 @@ class LeadAttachment extends Model
             'youth_protection' => 'boolean',
             'size_bytes' => 'integer',
         ];
+    }
+
+    /**
+     * Get the workspace identifier for the tenant entity.
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->workspace_id ?? $this->lead?->workspace_id;
     }
 
     /**

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Domain\Leads\Models;
 
+use App\Domain\Tenancy\Contracts\TenantEntityInterface;
 use App\Domain\Tenancy\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Lead extends Model
+class Lead extends Model implements TenantEntityInterface
 {
     use BelongsToTenant, SoftDeletes;
 
@@ -29,6 +30,14 @@ class Lead extends Model
             'age_at_submission' => 'integer',
         ];
     }
+
+    /**
+     * Get the workspace identifier for the tenant entity.
+     */
+     public function getWorkspaceId(): ?string
+     {
+         return $this->workspace_id ? (string) $this->workspace_id : null;
+     }
 
     /**
      * Relationship: lead has many attachments (identity scan, photo, parental consent).

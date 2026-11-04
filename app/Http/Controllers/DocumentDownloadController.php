@@ -42,6 +42,15 @@ class DocumentDownloadController extends Controller
             abort(401, 'Unauthenticated.');
         }
 
+        $isElevatedAdmin = (method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin())
+            || (method_exists($user, 'isGlobalAdmin') && $user->isGlobalAdmin());
+
+        if (!$isElevatedAdmin) {
+            if (empty($user->workspace_id) || $workspace !== (string) $user->workspace_id) {
+                abort(403, 'Unauthorized: Cross-workspace document access is forbidden.');
+            }
+        }
+
         // Resolve model if raw ID passed
         if (!$attachment instanceof LeadAttachment) {
             $attachment = LeadAttachment::with('lead')->findOrFail($attachment);
@@ -51,8 +60,6 @@ class DocumentDownloadController extends Controller
 
         // 2. Tenancy Isolation Barrier
         $lead = $attachment->lead;
-        $isElevatedAdmin = (method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin())
-            || (method_exists($user, 'isGlobalAdmin') && $user->isGlobalAdmin());
 
         if (!$isElevatedAdmin) {
             if (!$lead || $lead->workspace_id !== $user->workspace_id) {

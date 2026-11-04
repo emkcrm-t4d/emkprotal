@@ -96,6 +96,8 @@ return new class extends Migration
 
         Schema::create('lead_attachments', function (Blueprint $table) {
             $table->id();
+            $table->string('workspace_id', 50)->nullable();
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('restrict');
             $table->foreignId('lead_id')->constrained('leads')->onDelete('cascade');
             $table->enum('document_type', ['identity_document', 'studio_photo', 'parental_consent']);
             $table->string('storage_path', 255);
@@ -106,6 +108,7 @@ return new class extends Migration
             $table->boolean('youth_protection')->default(false);
             $table->timestamps();
 
+            $table->index(['workspace_id', 'document_type'], 'idx_attachments_workspace_type');
             $table->index(['lead_id', 'document_type'], 'idx_attachments_lead_type');
         });
 

@@ -20,10 +20,19 @@ trait BelongsToTenant
         static::addGlobalScope(new TenantScope());
 
         static::creating(function (Model $model): void {
-            if (empty($model->workspace_id) && Auth::check()) {
-                $user = Auth::user();
-                if (!empty($user->workspace_id)) {
-                    $model->workspace_id = (string) $user->workspace_id;
+            if (empty($model->workspace_id)) {
+                if (isset($model->lead_id) && method_exists($model, 'lead')) {
+                    $lead = $model->lead;
+                    if ($lead && !empty($lead->workspace_id)) {
+                        $model->workspace_id = (string) $lead->workspace_id;
+                    }
+                }
+
+                if (empty($model->workspace_id) && Auth::check()) {
+                    $user = Auth::user();
+                    if (!empty($user->workspace_id)) {
+                        $model->workspace_id = (string) $user->workspace_id;
+                    }
                 }
             }
         });
