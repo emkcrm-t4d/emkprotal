@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 current_phase: 4
 current_phase_name: Identity, Access Control, Space Scope, and Audit Core
-current_plan: 3
+current_plan: 4
 status: executing
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-11-04T05:27:00.000Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-11-04T05:48:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Completed 04-02-PLAN.md (Tenancy Defense Layers & Arch Tests)
-state_head: cd584052e8aa2f995328461f8c041a967f4650ed
+last_activity_desc: Completed 04-03-PLAN.md (Scoped RBAC Delegation & Staff Management)
+state_head: 80467dbd932d9360570053baa4a5c91c5472c048
 progress:
   total_phases: 12
   completed_phases: 3
   total_plans: 15
-  completed_plans: 12
-  percent: 27
+  completed_plans: 13
+  percent: 30
 ---
 
 # Project State
@@ -29,20 +29,20 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 4 (Identity, Access Control, Space Scope, and Audit Core) — EXECUTING
-Current Plan: 3
+Current Plan: 4
 Total Plans in Phase: 5
 Next Phase: 4 (Identity, Access Control, Space Scope, and Audit Core)
-Status: Ready to execute
-Last activity: 2026-11-04 — Completed 04-02-PLAN.md (Tenancy Defense Layers & Arch Tests)
+Status: Ready to execute 04-04-PLAN.md
+Last activity: 2026-11-04 — Completed 04-03-PLAN.md (Scoped RBAC Delegation & Staff Management)
 
-Progress: [███░░░░░░░] 27% (Phase 4 Plan 02 complete)
+Progress: [███░░░░░░░] 30% (Phase 4 Plan 03 complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 10.8 min
-- Total execution time: 2.0 hours
+- Total plans completed: 16
+- Average duration: 11.7 min
+- Total execution time: 2.4 hours
 
 **By Phase:**
 
@@ -51,10 +51,10 @@ Progress: [███░░░░░░░] 27% (Phase 4 Plan 02 complete)
 | Phase 1 | 3 | 42 min | 14 min |
 | Phase 2 | 3 | 21 min | 7 min |
 | Phase 3 | 4 | 51 min | 12.8 min |
-| 4 | 2 | 33 min | 16.5 min |
+| 4 | 3 | 58 min | 19.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 7m, 10m, 12m, 14m, 18m, 15m
+- Last 5 plans: 12m, 14m, 18m, 15m, 25m
 - Trend: Consistent delivery velocity
 
 *Updated after each plan completion*
@@ -74,6 +74,7 @@ Progress: [███░░░░░░░] 27% (Phase 4 Plan 02 complete)
 | Phase 3 P04 | 14min | 3 tasks | 10 files |
 | Phase 04 P01 | 18m | 3 tasks | 18 files |
 | Phase 04 P02 | 15m | 3 tasks | 13 files |
+| Phase 04 P03 | 25m | 3 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -145,10 +146,14 @@ Recent decisions affecting current work:
 - [Phase 04 P02]: Implemented Layer 2 Livewire Hydration Guard (ValidatesWorkspaceOnHydration) intercepting entity tampering with HTTP 403 per TENANCY-SPEC.md
 - [Phase 04 P02]: Bound Layer 3 Eloquent Global Scope (TenantScope) via BelongsToTenant across Lead and LeadAttachment models with fail-closed behavior for unassigned users
 - [Phase 04 P02]: Enforced Pest Architecture tests strictly banning withoutGlobalScope across App\Http, App\Domain, and App\Livewire per DEC-01
+- [Phase 04 P03]: Enforced strict 8-action delegable allowlist vs 16 strictly non-delegable managerial actions in DelegationPolicyService per T-01-07
+- [Phase 04 P03]: Enforced TenancyBoundaryException on cross-workspace staff delegation, revocation, and deactivation attempts per DEC-01
+- [Phase 04 P03]: Automated Spatie permission cache purging via PermissionRegistrar::forgetCachedPermissions() on every staff role and permission mutation per AUTH-05
+- [Phase 04 P03]: Deployed Livewire StaffDirectory and RoleDelegation components under /crm/{workspace}/staff guarded by platform_services.delegate_roles and workspace tenancy
 
 ### Pending Todos
 
-None - Phase 4 Plan 02 complete. Ready for Phase 4 Plan 03 (Scoped RBAC Delegation Policy).
+None - Phase 4 Plan 03 complete. Ready for Phase 4 Plan 04 (Immutable Audit Logging Core).
 
 ### Blockers/Concerns
 
@@ -165,6 +170,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T05:27:00Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-11-04T05:48:00Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None

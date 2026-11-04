@@ -36,7 +36,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **AUTH-01**: Implement staff user management with global Admin/Superadmin, workspace Manager, and delegated staff roles.
 - [x] **AUTH-02**: Enforce server-side workspace isolation on all routes, Livewire components, and queries for workspace staff.
-- [ ] **AUTH-03**: Enable workspace Managers to delegate specific module/actions to staff within their assigned workspace only.
+- [x] **AUTH-03**: Enable workspace Managers to delegate specific module/actions to staff within their assigned workspace only.
 - [ ] **AUTH-04**: Implement append-only immutable audit log recording actor, timestamp, target entity, and old/new values (excluding secrets).
 - [ ] **AUTH-05**: Provide an audit log viewer for authorized staff and ensure permission cache invalidation upon access changes.
 
@@ -161,7 +161,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FOUN-05 | Phase 3 | Complete |
 | AUTH-01 | Phase 4 | Complete |
 | AUTH-02 | Phase 4 | Complete |
-| AUTH-03 | Phase 4 | Pending |
+| AUTH-03 | Phase 4 | Complete |
 | AUTH-04 | Phase 4 | Pending |
 | AUTH-05 | Phase 4 | Pending |
 | FORM-01 | Phase 5 | Pending |

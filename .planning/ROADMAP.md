@@ -98,7 +98,7 @@ Plans:
   2. Workspace Manager can delegate authorized module actions to staff within their own workspace.
   3. Global Admin / Superadmin can navigate across workspaces.
   4. Every state transition, login event, and permission update records an immutable, read-only audit log entry excluding secrets.
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 
 Plans:
 **Wave 1**
@@ -108,7 +108,7 @@ Plans:
 - [x] 04-02-PLAN.md — Four-Layer Tenancy Defense Model & Automated Invariant Architecture Tests
 
 **Wave 3**
-- [ ] 04-03-PLAN.md — Scoped RBAC Delegation Policy, Staff Management, and Cache Invalidation
+- [x] 04-03-PLAN.md — Scoped RBAC Delegation Policy, Staff Management, and Cache Invalidation
 - [ ] 04-04-PLAN.md — Append-Only Immutable Audit Logging Core and Sensitive Secret Redaction
 
 **Wave 4**
