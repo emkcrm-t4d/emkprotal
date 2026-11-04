@@ -25,4 +25,12 @@ class MemberUser extends User
     {
         return 'member';
     }
+
+    /**
+     * Relationship: The domain Member record associated with this portal user.
+     */
+    public function member(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Domain\Members\Models\Member::class, 'user_id');
+    }
 }

@@ -210,4 +210,27 @@ Route::post('/apply/{slug}/submit', function (string $slug, \Illuminate\Http\Req
     ], 200);
 })->name('public.forms.submit');
 
+/**
+ * Member Portal Authentication & Entry Routes per PORT-01, DEC-06, and DEC-11
+ */
+Route::get('/portal/login', \App\Livewire\Portal\PortalLogin::class)
+    ->name('portal.login')
+    ->middleware('guest:member');
+
+Route::post('/portal/logout', function () {
+    \Illuminate\Support\Facades\Auth::guard('member')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('portal.login');
+})->name('portal.logout');
+
+Route::get('/portal', function () {
+    return redirect()->route('portal.profile');
+});
+
+Route::get('/portal/profile', function () {
+    return view('portal.placeholder-profile');
+})->name('portal.profile');
+
+
 
