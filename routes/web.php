@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentDownloadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +24,9 @@ Route::get('/healthz', function () {
         'environment' => app()->environment(),
     ]);
 });
+
+/**
+ * Encrypted Private Document Streaming Route per FOUN-03, DEC-09, and DEC-11
+ */
+Route::get('/workspaces/{workspace}/documents/{attachment}', [DocumentDownloadController::class, 'download'])
+    ->name('documents.download');
