@@ -266,7 +266,7 @@ class ModuleRegistry implements ModuleRegistryInterface
         }
 
         // Workspace-specific config if defined
-        $disabled = config("tenancy.workspaces.{$workspaceId}.disabled_modules", []);
+        $disabled = \Illuminate\Support\Facades\Config::get("tenancy.workspaces.{$workspaceId}.disabled_modules", []);
         if (is_array($disabled) && in_array($moduleKey, $disabled, true)) {
             return false;
         }

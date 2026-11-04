@@ -22,7 +22,7 @@ class EnsureModuleEnabled
      */
     public function handle(Request $request, Closure $next, string $moduleKey): Response
     {
-        $workspace = $request->route('workspace');
+        $workspace = $request->route('workspace') ?? $request->attributes->get('workspace');
         $workspaceId = is_object($workspace) && isset($workspace->id)
             ? (string) $workspace->id
             : ($workspace ?? $request->user()?->workspace_id);
