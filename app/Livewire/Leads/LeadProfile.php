@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -82,8 +83,8 @@ class LeadProfile extends Component
             App::abort(403, 'Lead does not belong to the requested workspace.');
         }
 
-        // Eager load attachments and verifications
-        $lead->loadMissing(['attachments', 'verifications.verifiedBy']);
+        // Eager load attachments, verifications, and converted member
+        $lead->loadMissing(['attachments', 'verifications.verifiedBy', 'convertedMember']);
 
         $this->lead = $lead;
 
@@ -153,9 +154,54 @@ class LeadProfile extends Component
     public function refreshLead(): void
     {
         $this->lead->refresh();
-        $this->lead->loadMissing(['attachments', 'verifications.verifiedBy']);
+        $this->lead->loadMissing(['attachments', 'verifications.verifiedBy', 'convertedMember']);
         $this->syncEditableProperties();
         $this->checkReapplicationHistory();
+    }
+
+    /**
+     * Handle conversion completed event: refresh lead state and display converted pill with Member ID.
+     */
+    #[On('conversionCompleted')]
+    public function handleConversionCompleted(?string $memberId = null): void
+    {
+        $this->refreshLead();
+        if ($memberId) {
+            session()->flash('status', "Lead successfully converted to Member [{$memberId}]!");
+        }
+    }
+
+    /**
+     * Computed property: Checks whether lead meets conversion invariant.
+     * All 3 streams (Payment, Document, Photo) must be verified, and overall lead status must be approved.
+     */
+    #[Computed]
+    public function getIsConversionAllowedProperty(): bool
+    {
+        return $this->lead->payment_verification_status === 'verified'
+            && $this->lead->document_verification_status === 'verified'
+            && $this->lead->photo_verification_status === 'verified'
+            && $this->lead->status === 'approved';
+    }
+
+    /**
+     * Open lead-to-member conversion modal (Workspace Manager authority only).
+     */
+    public function openConversionModal(): void
+    {
+        $user = Auth::user();
+        if (!$user) {
+            App::abort(401, 'Unauthenticated');
+        }
+
+        $canConvert = $user->can('leads.convert')
+            || (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin', 'workspace_manager']));
+
+        if (!$canConvert) {
+            App::abort(403, 'Unauthorized: Workspace Manager authority (leads.convert) required.');
+        }
+
+        $this->dispatch('openConvertLeadModal');
     }
 
     /**

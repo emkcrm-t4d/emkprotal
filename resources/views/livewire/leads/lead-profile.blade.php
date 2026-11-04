@@ -51,6 +51,62 @@
             </div>
 
             <div class="mt-4 sm:mt-0 flex items-center gap-2">
+                @php
+                    $canConvertLead = auth()->user()?->can('leads.convert') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager']);
+                    $conversionAllowed = $this->isConversionAllowed;
+                @endphp
+
+                @if($lead->status === 'converted')
+                    <a
+                        href="{{ route('crm.members', ['workspace' => $workspace]) }}"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-100 hover:bg-purple-200 text-purple-800 border border-purple-300 transition-colors shadow-xs"
+                        id="badge-converted-member"
+                    >
+                        <svg class="w-3.5 h-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Converted to Member: {{ $lead->convertedMember?->member_id ?? $lead->converted_member_id }}</span>
+                    </a>
+                @elseif(!$canConvertLead)
+                    <button
+                        type="button"
+                        disabled
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-xs"
+                        title="Conversion requires Workspace Manager authority."
+                        id="btn-convert-lead-disabled-auth"
+                    >
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <span>Convert to Member</span>
+                    </button>
+                @elseif(!$conversionAllowed)
+                    <button
+                        type="button"
+                        disabled
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-xs"
+                        title="All 3 verifications (Payment, Document, Photo) and Manager Approval must be verified to convert."
+                        id="btn-convert-lead-disabled-invariant"
+                    >
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <span>Convert to Member</span>
+                    </button>
+                @else
+                    <button
+                        type="button"
+                        wire:click="openConversionModal"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
+                        id="btn-convert-lead"
+                    >
+                        <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Convert to Member</span>
+                    </button>
+                @endif
+
                 @if(auth()->user()?->can('leads.communicate') || auth()->user()?->hasRole(['superadmin', 'global_admin', 'workspace_manager', 'delegated_staff']))
                     <button
                         type="button"
@@ -872,7 +928,8 @@
         </div>
     @endif
 
-    <!-- Missing Items & Rejection Modals -->
+    <!-- Missing Items, Rejection & Conversion Modals -->
     @livewire('leads.modals.missing-items-modal', ['lead' => $lead, 'workspace' => $workspace], key('missing-items-modal-'.$lead->id))
     @livewire('leads.modals.reject-lead-modal', ['lead' => $lead, 'workspace' => $workspace], key('reject-lead-modal-'.$lead->id))
+    @livewire('leads.modals.convert-lead-modal', ['lead' => $lead, 'workspace' => $workspace], key('convert-lead-modal-'.$lead->id))
 </div>

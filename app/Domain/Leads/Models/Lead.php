@@ -7,8 +7,10 @@ namespace App\Domain\Leads\Models;
 use App\Domain\Tenancy\Contracts\TenantEntityInterface;
 use App\Domain\Tenancy\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Domain\Members\Models\Member;
 
 class Lead extends Model implements TenantEntityInterface
 {
@@ -53,6 +55,14 @@ class Lead extends Model implements TenantEntityInterface
     public function verifications(): HasMany
     {
         return $this->hasMany(LeadVerification::class, 'lead_id');
+    }
+
+    /**
+     * Relationship: converted member entity if lead has been converted.
+     */
+    public function convertedMember(): BelongsTo
+    {
+        return $this->belongsTo(Member::class, 'converted_member_id');
     }
 
     /**
