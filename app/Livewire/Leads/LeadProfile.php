@@ -126,7 +126,8 @@ class LeadProfile extends Component
     protected function checkReapplicationHistory(): void
     {
         // Query historical submissions excluding current record
-        $history = Lead::where('email', $this->lead->email)
+        $history = Lead::with('verifications')
+            ->where('email', $this->lead->email)
             ->where('id', '!=', $this->lead->id)
             ->orderByDesc('created_at')
             ->get();

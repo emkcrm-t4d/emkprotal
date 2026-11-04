@@ -108,6 +108,25 @@
                         This applicant has prior submission history under email <strong>{{ $lead->email }}</strong>. Review previous rejection causes and staff notes below before proceeding with review.
                     </p>
 
+                    @php
+                        $priorRejected = collect($historicalLeads)->firstWhere('status', 'rejected');
+                        $rejectionReason = null;
+                        if ($priorRejected && !empty($priorRejected['verifications'])) {
+                            foreach ($priorRejected['verifications'] as $v) {
+                                if (!empty($v['rejection_reason_code'])) {
+                                    $rejectionReason = $v['rejection_reason_code'];
+                                    break;
+                                }
+                            }
+                        }
+                    @endphp
+
+                    @if($priorRejected)
+                        <div class="mt-2 text-xs font-semibold text-amber-900 bg-amber-200/70 p-2.5 rounded-lg border border-amber-300">
+                            Applicant Reapplication Detected: Previous application on {{ \Carbon\Carbon::parse($priorRejected['submitted_at'] ?? $priorRejected['created_at'])->format('Y-m-d') }} was Rejected (Reason: {{ $rejectionReason ?? 'Standard Rejection' }}).
+                        </div>
+                    @endif
+
                     <!-- Historical applications listing -->
                     <div class="mt-3 overflow-x-auto">
                         <table class="min-w-full text-xs text-left divide-y divide-amber-200 bg-amber-100/60 rounded-lg overflow-hidden">
@@ -385,7 +404,7 @@
                         </div>
                         <div class="py-2.5 flex justify-between">
                             <span class="text-slate-500">Sex (Field 5):</span>
-                            <span class="font-medium text-slate-900 uppercase text-xs">{{ $lead->sex }}</span>
+                            <span class="font-medium text-slate-900 uppercase text-xs">{{ strtoupper($lead->sex) }}</span>
                         </div>
                         <div class="py-2.5 flex justify-between">
                             <span class="text-slate-500">Date of Birth (Field 6):</span>
@@ -498,7 +517,7 @@
                         <div class="py-2.5 flex justify-between">
                             <span class="text-slate-500">Highest Certification (Field 19):</span>
                             <span class="font-medium text-slate-900 uppercase">
-                                {{ str_replace('_', ' ', $lead->highest_certification) }}
+                                {{ strtoupper(str_replace('_', ' ', $lead->highest_certification)) }}
                                 @if($lead->highest_certification_other)
                                     ({{ $lead->highest_certification_other }})
                                 @endif
