@@ -111,6 +111,10 @@ Route::prefix('/crm/{workspace}')
         Route::get('/forms/{form}/builder', \App\Livewire\Forms\FormBuilder::class)
             ->name('crm.forms.builder');
 
+        Route::get('/forms/{form}/submissions', \App\Livewire\Forms\SubmissionViewer::class)
+            ->name('crm.forms.submissions')
+            ->middleware(['can:forms.view_entries']);
+
         Route::get('/staff', \App\Livewire\Staff\StaffDirectory::class)
             ->name('crm.staff.index');
 
