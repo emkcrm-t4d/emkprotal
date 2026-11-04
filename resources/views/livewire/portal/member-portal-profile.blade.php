@@ -1,4 +1,13 @@
 <div class="space-y-6">
+    @if (session('status'))
+        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{{ session('status') }}</span>
+        </div>
+    @endif
+
     {{-- Membership Summary Header --}}
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white">
@@ -64,6 +73,7 @@
                 <div class="flex flex-col sm:flex-row md:flex-col items-start md:items-end justify-center gap-2">
                     <button
                         type="button"
+                        wire:click="$dispatch('openSubmitProfileChangeRequestModal')"
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm transition-colors cursor-pointer"
                         title="Submit a Change Request for staff review"
                     >
@@ -441,4 +451,7 @@
             <livewire:portal.member-portal-communication-history />
         </div>
     @endif
+
+    {{-- Change Request Modal --}}
+    <livewire:portal.modals.submit-profile-change-request-modal :member="$member" />
 </div>

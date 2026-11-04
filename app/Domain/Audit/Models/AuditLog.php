@@ -52,6 +52,9 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_OFFICIAL_EMAIL_DISPATCHED = 'official_email_dispatched';
     public const EVENT_OFFICIAL_EMAIL_FAILED = 'official_email_failed';
     public const EVENT_OFFICIAL_EMAIL_RETRIED = 'official_email_retried';
+    public const EVENT_MEMBER_CHANGE_REQUEST_SUBMITTED = 'member_change_request_submitted';
+    public const EVENT_MEMBER_CHANGE_REQUEST_APPROVED = 'member_change_request_approved';
+    public const EVENT_MEMBER_CHANGE_REQUEST_REJECTED = 'member_change_request_rejected';
 
     protected $table = 'audit_logs';
 

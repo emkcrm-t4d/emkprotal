@@ -89,6 +89,14 @@ class Member extends Model implements TenantEntityInterface
     }
 
     /**
+     * Relationship: Profile and renewal change requests.
+     */
+    public function changeRequests(): HasMany
+    {
+        return $this->hasMany(MemberChangeRequest::class, 'member_id');
+    }
+
+    /**
      * Accessor: Formatted full member name.
      */
     public function getFullNameAttribute(): string
