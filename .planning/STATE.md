@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 08
 current_phase_name: Official Email, IMAP, Templates, and Workflow Rules
 current_plan: 5
-status: executing
-stopped_at: Completed 08-04-PLAN.md
-last_updated: "2026-11-04T17:16:28.282Z"
+status: verifying
+stopped_at: Completed 08-05-PLAN.md
+last_updated: "2026-11-04T17:24:37.929Z"
 last_activity: 2026-11-04
 last_activity_desc: Phase 08 execution started
-state_head: ea0bba5a29d6ec2e10053707fa566240f57a3182
+state_head: 2f5053a06b148bc568cb5dd8675b47eae260caec
 progress:
   total_phases: 12
   completed_phases: 7
   total_plans: 36
-  completed_plans: 35
+  completed_plans: 36
   percent: 58
 ---
 
@@ -33,7 +33,7 @@ Current Plan: 5
 Total Plans in Phase: 5
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
 Next Phase: 7 — Member Profiles, Invoices, and ID Cards
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-11-04 — Phase 08 execution started
 Progress: [██████░░░░] 58% (Phase 06 complete, Phase 07 next)
 
@@ -96,6 +96,7 @@ Progress: [██████░░░░] 58% (Phase 06 complete, Phase 07 next
 | Phase 08 P02 | 8min | 2 tasks | 10 files |
 | Phase 08 P03 | 6min | 2 tasks | 8 files |
 | Phase 08 P04 | 7min | 2 tasks | 11 files |
+| Phase 08 P05 | 6min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -222,6 +223,8 @@ Recent decisions affecting current work:
 - [Phase 08]: Sanitized all SMTP/IMAP transport failure messages via QueuedEmailDispatcher::sanitizeFailureMessage to replace URI credentials and password/secret/token parameters with [REDACTED] before writing to email_messages.failure_reason or audit_logs per DEC-11
 - [Phase 08]: Restricted WorkflowRuleEngine::trigger strictly to WorkflowRule::ALLOWED_TRIGGERS with zero-eval declarative condition checks per MAIL-05 and DEC-02
 - [Phase 08]: Implemented daily crm:process-membership-milestones command dispatching 30-day renewal window notices idempotently and transitioning expired active members to inactive with member_status_changed audit logging
+- [Phase 08]: Embedded EmailThreadPanel on LeadProfile and MemberProfile and wired LeadIngestionService, LeadCommunicationService, LeadConversionService, and IdCardLifecycleService into fault-isolated WorkflowRuleEngine triggers per MAIL-01..MAIL-05
+- [Phase 08]: Authored docs/runbooks/EMAIL-AND-HORIZON-RUNBOOK.md and verified all 5 end-to-end Phase 8 scenarios in EndToEndOfficialMailboxAndWorkflowsTest
 
 ### Pending Todos
 
@@ -242,6 +245,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T17:16:26.074Z
-Stopped at: Completed 08-04-PLAN.md
+Last session: 2026-11-04T17:24:35.697Z
+Stopped at: Completed 08-05-PLAN.md
 Resume file: None
