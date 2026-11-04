@@ -111,6 +111,10 @@ Route::prefix('/crm/{workspace}')
         Route::get('/staff/{staff}/delegation', \App\Livewire\Staff\RoleDelegation::class)
             ->name('crm.staff.delegation');
 
+        Route::get('/audit-logs', \App\Livewire\Audit\AuditLogViewer::class)
+            ->name('crm.audit_logs.index')
+            ->middleware(['can:platform_services.view_audit_logs']);
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
