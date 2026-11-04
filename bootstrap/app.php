@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'workspace.access' => \App\Http\Middleware\VerifyWorkspaceAccess::class,
             'password.reset' => \App\Http\Middleware\EnsurePasswordReset::class,
+            'member.password.reset' => \App\Http\Middleware\EnsureMemberPasswordReset::class,
         ]);
 
         $middleware->priority([

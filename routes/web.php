@@ -228,9 +228,22 @@ Route::get('/portal', function () {
     return redirect()->route('portal.profile');
 });
 
-Route::get('/portal/profile', function () {
-    return view('portal.placeholder-profile');
-})->name('portal.profile');
+/**
+ * Member Portal First-Login Password Reset Routes per DEC-06 (D-06)
+ */
+Route::middleware(['auth:member'])->group(function () {
+    Route::get('/portal/password/reset', \App\Livewire\Portal\PortalFirstPasswordReset::class)
+        ->name('portal.password.reset');
+});
+
+/**
+ * Protected Member Portal Routes (requires member auth + completed password reset)
+ */
+Route::prefix('/portal')->middleware(['auth:member', 'member.password.reset'])->group(function () {
+    Route::get('/profile', function () {
+        return view('portal.placeholder-profile');
+    })->name('portal.profile');
+});
 
 
 

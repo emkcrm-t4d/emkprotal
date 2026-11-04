@@ -294,4 +294,152 @@ class PortalAuthenticationAndTracerTest extends TestCase
         $response->assertRedirect(route('portal.login'));
         $this->assertFalse(Auth::guard('member')->check());
     }
+
+    public function test_authenticated_member_with_must_reset_password_is_redirected_to_password_reset(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'mustreset@emk.test',
+            memberId: 'EMK-2026-00005',
+            password: 'TempPassword123!',
+            mustResetPassword: true
+        );
+
+        $response = $this->actingAs($memberUser, 'member')
+            ->get(route('portal.profile'));
+
+        $response->assertRedirect(route('portal.password.reset'));
+    }
+
+    public function test_json_request_when_password_reset_required_returns_forbidden(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'jsonreset@emk.test',
+            memberId: 'EMK-2026-00006',
+            password: 'TempPassword123!',
+            mustResetPassword: true
+        );
+
+        $response = $this->actingAs($memberUser, 'member')
+            ->getJson(route('portal.profile'));
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'password_reset_required' => true,
+            ]);
+    }
+
+    public function test_direct_get_to_password_reset_does_not_redirect_or_loop(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'resetpage@emk.test',
+            memberId: 'EMK-2026-00007',
+            password: 'TempPassword123!',
+            mustResetPassword: true
+        );
+
+        $response = $this->actingAs($memberUser, 'member')
+            ->get(route('portal.password.reset'));
+
+        $response->assertOk();
+        $response->assertSee('First Login: Create Your Permanent Password');
+    }
+
+    public function test_submitting_valid_new_password_clears_flag_and_allows_profile_access(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'resetflow@emk.test',
+            memberId: 'EMK-2026-00008',
+            password: 'OldTemporaryPassword123!',
+            mustResetPassword: true
+        );
+
+        Livewire::actingAs($memberUser, 'member')
+            ->test(\App\Livewire\Portal\PortalFirstPasswordReset::class)
+            ->set('current_password', 'OldTemporaryPassword123!')
+            ->set('password', 'BrandNewPermanentPass999!')
+            ->set('password_confirmation', 'BrandNewPermanentPass999!')
+            ->call('updatePassword')
+            ->assertHasNoErrors()
+            ->assertRedirect(route('portal.profile'));
+
+        $memberUser->refresh();
+        $this->assertFalse($memberUser->must_reset_password);
+        $this->assertTrue(Hash::check('BrandNewPermanentPass999!', $memberUser->password));
+
+        // Assert audit log was recorded per DEC-11
+        $this->assertDatabaseHas('audit_logs', [
+            'event_type' => 'portal_member_password_reset',
+            'actor_id' => $memberUser->id,
+            'actor_guard' => 'member',
+        ]);
+
+        // Subsequent access to profile is allowed without redirection
+        $response = $this->actingAs($memberUser, 'member')
+            ->get(route('portal.profile'));
+
+        $response->assertOk();
+        $response->assertSee('Welcome, ' . $memberUser->name);
+    }
+
+    public function test_password_reset_validates_mismatch_and_short_passwords(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'badinputs@emk.test',
+            memberId: 'EMK-2026-00009',
+            password: 'CurrentPassword123!',
+            mustResetPassword: true
+        );
+
+        // Incorrect current password
+        Livewire::actingAs($memberUser, 'member')
+            ->test(\App\Livewire\Portal\PortalFirstPasswordReset::class)
+            ->set('current_password', 'WrongPassword!')
+            ->set('password', 'ValidNewPassword123!')
+            ->set('password_confirmation', 'ValidNewPassword123!')
+            ->call('updatePassword')
+            ->assertHasErrors(['current_password']);
+
+        // Password too short (< 8 chars)
+        Livewire::actingAs($memberUser, 'member')
+            ->test(\App\Livewire\Portal\PortalFirstPasswordReset::class)
+            ->set('current_password', 'CurrentPassword123!')
+            ->set('password', 'short')
+            ->set('password_confirmation', 'short')
+            ->call('updatePassword')
+            ->assertHasErrors(['password']);
+
+        // Password identical to current password
+        Livewire::actingAs($memberUser, 'member')
+            ->test(\App\Livewire\Portal\PortalFirstPasswordReset::class)
+            ->set('current_password', 'CurrentPassword123!')
+            ->set('password', 'CurrentPassword123!')
+            ->set('password_confirmation', 'CurrentPassword123!')
+            ->call('updatePassword')
+            ->assertHasErrors(['password']);
+
+        // Confirmation mismatch
+        Livewire::actingAs($memberUser, 'member')
+            ->test(\App\Livewire\Portal\PortalFirstPasswordReset::class)
+            ->set('current_password', 'CurrentPassword123!')
+            ->set('password', 'ValidNewPassword123!')
+            ->set('password_confirmation', 'DifferentConfirmation123!')
+            ->call('updatePassword')
+            ->assertHasErrors(['password']);
+    }
+
+    public function test_compliant_member_visiting_password_reset_is_redirected_to_profile(): void
+    {
+        [$memberUser] = $this->createMemberFixture(
+            email: 'compliant@emk.test',
+            memberId: 'EMK-2026-00010',
+            password: 'AlreadyGoodPass123!',
+            mustResetPassword: false
+        );
+
+        $response = $this->actingAs($memberUser, 'member')
+            ->get(route('portal.password.reset'));
+
+        $response->assertRedirect(route('portal.profile'));
+    }
 }
+
