@@ -35,10 +35,26 @@ Route::get('/login', function () {
     return response('Login required', 200);
 })->name('login');
 
+Route::get('/password/reset-required', function () {
+    return response('Password reset required', 200);
+})->name('password.reset-required');
+
+Route::post('/password/reset-required', function (\Illuminate\Http\Request $request) {
+    $user = auth()->user();
+    if ($user) {
+        $user->must_reset_password = false;
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+        $user->save();
+    }
+    return response()->json(['status' => 'password_updated']);
+})->name('password.update-required');
+
 /**
- * Phase 4 Identity, Workspace Tenancy, and Authorization Tracer Slice per AUTH-01, AUTH-02, DEC-01
+ * Phase 4 Identity, Workspace Tenancy, and Authorization Tracer Slice per AUTH-01, AUTH-02, DEC-01, DEC-06
  */
-Route::middleware(['auth:web', \App\Http\Middleware\VerifyWorkspaceAccess::class])
+Route::middleware(['auth:web', \App\Http\Middleware\VerifyWorkspaceAccess::class, 'password.reset'])
     ->get('/crm/{workspace}/tracer-check', function ($workspace) {
         $user = auth()->user();
 

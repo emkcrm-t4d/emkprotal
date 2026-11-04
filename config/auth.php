@@ -73,7 +73,7 @@ return [
 
         'members' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MEMBER_MODEL', User::class),
+            'model' => env('AUTH_MEMBER_MODEL', \App\Models\MemberUser::class),
         ],
     ],
 

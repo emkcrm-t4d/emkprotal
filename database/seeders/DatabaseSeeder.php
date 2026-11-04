@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SpaceAndWorkspaceSeeder::class,
             MembershipTermSeeder::class,
+            RolesAndPermissionsSeeder::class,
         ]);
     }
 }

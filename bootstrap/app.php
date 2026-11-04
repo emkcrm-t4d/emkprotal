@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'workspace.access' => \App\Http\Middleware\VerifyWorkspaceAccess::class,
+            'password.reset' => \App\Http\Middleware\EnsurePasswordReset::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
