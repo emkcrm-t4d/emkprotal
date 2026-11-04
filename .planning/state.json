@@ -31,7 +31,7 @@
     {
       "number": "6",
       "name": "Leads, Verification, and Controlled Conversion",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "7",
@@ -66,8 +66,8 @@
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 6 of 12 · 45% · executing"
+    "label": "Advance to the next step (plan phase 7)",
+    "reason": "Phase 7 of 12 — needs a plan"
   },
-  "updated_at": "2026-11-04T10:33:00.000Z"
+  "updated_at": "2026-11-04T12:37:07.065Z"
 }
