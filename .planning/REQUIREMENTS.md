@@ -56,7 +56,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **LEAD-03**: Provide manual bKash transaction verification with duplicate transaction ID detection and rejection reason recording.
 - [x] **LEAD-04**: Support communication of missing or invalid application items via official email directly from the Lead profile.
 - [x] **LEAD-05**: Execute atomic Lead-to-Member conversion only when Payment, Document, and Photo verifications are all Complete.
-- [ ] **LEAD-06**: Support controlled conversion reversal with required reason entry, permission verification, and immutable audit event.
+- [x] **LEAD-06**: Support controlled conversion reversal with required reason entry, permission verification, and immutable audit event.
 - [x] **LEAD-07**: Preserve previous application rejection history on reapplication and allow Managers to block abusive emails.
 
 ### Member Profiles, Invoices & ID Cards
@@ -175,7 +175,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEAD-03 | Phase 6 | Complete |
 | LEAD-04 | Phase 6 | Complete |
 | LEAD-05 | Phase 6 | Complete |
-| LEAD-06 | Phase 6 | Pending |
+| LEAD-06 | Phase 6 | Complete |
 | LEAD-07 | Phase 6 | Complete |
 | MEMB-01 | Phase 7 | Pending |
 | MEMB-02 | Phase 7 | Pending |

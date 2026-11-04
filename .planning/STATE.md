@@ -3,18 +3,18 @@ gsd_state_version: "1.0"
 current_phase: 06
 current_phase_name: Leads, Verification, and Controlled Conversion
 current_plan: 6
-status: ready_to_execute
-stopped_at: "Completed 06-05-PLAN.md"
-last_updated: "2026-11-04T17:45:00.000Z"
+status: complete
+stopped_at: "Completed 06-06-PLAN.md"
+last_updated: "2026-11-04T18:10:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: "Plan 06-05 completed: manager conversion modal invariant gate ui and term selection"
-state_head: ebaa287986d19653322e9bfd1844405b14c29c71
+last_activity_desc: "Plan 06-06 completed: 30-day conversion reversal protocol and holistic Phase 6 e2e suite"
+state_head: b7dc95732380cdd8959ea14ba90bc4a831d4e1a4
 progress:
   total_phases: 12
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 26
-  completed_plans: 25
-  percent: 58
+  completed_plans: 26
+  percent: 60
 ---
 
 # Project State
@@ -24,24 +24,25 @@ progress:
 See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated 2026-11-03)
 
 **Core value:** Replace Zoho Forms and Zoho CRM with a modular membership CRM and read-only member portal inside the existing Hub, using separate workspaces for offices (launching with EMK Center Dhaka).
-**Current focus:** Phase 06 — Leads, Verification, and Controlled Conversion
+**Current focus:** Phase 06 — Leads, Verification, and Controlled Conversion (COMPLETED)
 
 ## Current Position
 
-Phase: 06 (Leads, Verification, and Controlled Conversion) — EXECUTING
+Phase: 06 (Leads, Verification, and Controlled Conversion) — COMPLETED
 Current Plan: 6
 Total Plans in Phase: 6
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
-Status: Ready for Plan 06-06 execution (Wave 6)
-Last activity: 2026-11-04 — Plan 06-05 completed: Manager Conversion Modal & UI Invariant Gate
-Progress: [██████░░░░] 58% (Plan 06-05 complete, Plan 06-06 next)
+Next Phase: 7 — Member Profiles, Invoices, and ID Cards
+Status: Phase 06 Complete (6/6 plans complete, all 7 requirements LEAD-01 through LEAD-07 satisfied)
+Last activity: 2026-11-04 — Plan 06-06 completed: 30-day Conversion Reversal Protocol and Holistic Phase 6 E2E Integration Suite
+Progress: [██████░░░░] 60% (Phase 06 complete, Phase 07 next)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 11.7 min
-- Total execution time: 2.4 hours
+- Total plans completed: 16
+- Average duration: 12.5 min
+- Total execution time: 2.8 hours
 
 **By Phase:**
 
@@ -51,6 +52,8 @@ Progress: [██████░░░░] 58% (Plan 06-05 complete, Plan 06-06 
 | Phase 2 | 3 | 21 min | 7 min |
 | Phase 3 | 4 | 51 min | 12.8 min |
 | 4 | 5 | - | - |
+| Phase 5 | 5 | 87 min | 17.4 min |
+| Phase 6 | 6 | 111 min | 18.5 min |
 
 **Recent Trend:**
 - Last 5 plans: 14m, 18m, 15m, 25m, 15m
@@ -86,6 +89,7 @@ Progress: [██████░░░░] 58% (Plan 06-05 complete, Plan 06-06 
 | Phase 06 P03 | 16min | 3 tasks | 16 files |
 | Phase 06 P04 | 12min | 2 tasks | 13 files |
 | Phase 06 P05 | 8min | 1 tasks | 6 files |
+| Phase 06 P06 | 25min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -198,10 +202,16 @@ Recent decisions affecting current work:
 - [Phase 06 P04]: Provisioned member portal account with guard 'member' and must_reset_password = true per DEC-06
 - [Phase 06 P04]: Generated post-conversion paid invoice referencing verified bKash TxID per DEC-03 and enqueued ID card in provided_for_printing state
 - [Phase 06 P05]: Enforced multi-layer conversion invariant defense coupling presentation-layer tooltips and Livewire action guards (leads.convert) with dynamic term fee and duration options per DEC-03/06/08
+- [Phase 06 P06]: Enforced 30-calendar-day statutory cutoff from conversion date rejecting entity rollback attempts thereafter per DEC-04 (D-04)
+- [Phase 06 P06]: Mandated minimum 20-character justification string and administrative password re-authentication via Hash::check prior to conversion reversal
+- [Phase 06 P06]: Executed cascading transactional rollback transitioning member to archived_reversed, portal user to inactive with remember_token cleared, invoice to void_reversed, card to voided_reversal, and restoring lead to under_review while strictly preserving lead verification history and attachments
+- [Phase 06 P06]: Restricted conversion reversal authorization strictly to Workspace Managers (leads.reverse_conversion); non-delegable to delegated staff per DELEGATION-MATRIX.md
+- [Phase 06 P06]: Emitted immutable conversion_reversed audit event in audit_logs capturing manager ID, justification reason, and state snapshots per DEC-11
+- [Phase 06 Complete]: All 7 lead lifecycle requirements (LEAD-01 through LEAD-07) fully verified across 5 holistic operational scenarios; Phase 6 complete and ready for Phase 7 (Member Profiles, Invoices, and ID Cards)
 
 ### Pending Todos
 
-None - Phase 6 plans verified and ready for execution.
+None - Phase 6 fully executed and verified. Phase 7 ready for planning.
 
 ### Blockers/Concerns
 
@@ -218,6 +228,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T17:45:00Z
-Stopped at: Completed 06-05-PLAN.md
-Resume file: .planning/phases/06-leads-verification-and-controlled-conversion/06-06-PLAN.md
+Last session: 2026-11-04T18:10:00Z
+Stopped at: Completed 06-06-PLAN.md (Phase 06 Complete)
+Resume file: .planning/phases/07-member-profiles-invoices-and-id-cards/07-01-PLAN.md

@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Application Foundation and Deployment Baseline** - Laravel 12 / Livewire skeleton, Horizon queues, scheduler, private file storage, and CI/CD pipeline
 - [x] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail (completed 2026-11-04)
 - [x] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules (completed 2026-11-04)
-- [ ] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals
+- [x] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals (completed 2026-11-04)
 - [ ] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle
 - [ ] **Phase 8: Official Email, IMAP, Templates, and Workflow Rules** - Information Desk mailbox integration, threaded profile communications, Horizon email queue, and lifecycle triggers
 - [ ] **Phase 9: Read-Only Member Portal, Change Requests, and Renewals** - Member authentication, read-only profile views, staff-reviewed change requests, email changes, and renewals
@@ -153,7 +153,7 @@ Plans:
   3. Workspace Manager can execute atomic Lead-to-Member conversion, safely re-associating documents with the new Member ID.
   4. Workspace Manager can reverse an erroneous conversion with a mandatory reason, reverting state and recording an immutable audit event.
   5. Reapplicants can reapply after rejection with historical rejection reasons visible to reviewing staff.
-**Plans**: 5/6 plans complete
+**Plans**: 6/6 plans complete
 **UI hint**: yes
 
 Plans:
@@ -173,7 +173,7 @@ Plans:
 - [x] 06-05-PLAN.md — Manager Conversion Modal, Invariant Gate UI Defense, and Term Selection
 
 **Wave 6**
-- [ ] 06-06-PLAN.md — 30-Day Conversion Reversal Protocol & Holistic Phase 6 E2E Integration Suite
+- [x] 06-06-PLAN.md — 30-Day Conversion Reversal Protocol & Holistic Phase 6 E2E Integration Suite
 
 ### Phase 7: Member Profiles, Invoices, and ID Cards
 **Goal**: Staff can manage Member master profiles, configurable terms/fees, invoices, and ID card issuance lifecycles.
