@@ -8,13 +8,16 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'workspace_id', 'guard', 'is_active', 'must_reset_password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasRoles, Notifiable {
+        HasRoles::assignRole as protected spatieAssignRole;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -32,42 +35,32 @@ class User extends Authenticatable
     ];
 
     /**
-     * In-memory or attribute-based role assignment.
-     *
-     * @var array<string>
+     * Resolve guard name for Spatie Permission checks based on user guard attribute.
      */
-    public array $assignedRoles = [];
-
-    /**
-     * Assign role to user for testing/runtime authorization.
-     */
-    public function assignRole(string ...$roles): self
+    public function guardName(): string
     {
-        foreach ($roles as $role) {
-            if (!in_array($role, $this->assignedRoles, true)) {
-                $this->assignedRoles[] = $role;
-            }
-        }
-
-        return $this;
+        return $this->guard ?? 'web';
     }
 
     /**
-     * Determine if user has the given role.
+     * Assign the given role to the model, creating it if it does not yet exist.
      */
-    public function hasRole(string|array $roles): bool
+    public function assignRole(...$roles): static
     {
-        $roleList = is_array($roles) ? $roles : [$roles];
+        $guard = $this->guardName();
+        $roleClass = $this->getRoleClass();
 
-        if (isset($this->role) && in_array($this->role, $roleList, true)) {
-            return true;
-        }
+        $resolvedRoles = collect($roles)->flatten()->map(function ($role) use ($roleClass, $guard) {
+            if (is_string($role)) {
+                return $roleClass::findOrCreate($role, $guard);
+            }
 
-        if (!empty(array_intersect($roleList, $this->assignedRoles))) {
-            return true;
-        }
+            return $role;
+        });
 
-        return false;
+        $this->spatieAssignRole($resolvedRoles->all());
+
+        return $this;
     }
 
     /**
@@ -84,6 +77,26 @@ class User extends Authenticatable
     public function isGlobalAdmin(): bool
     {
         return $this->hasRole('global_admin');
+    }
+
+    /**
+     * Determine if user has Workspace Manager privileges.
+     */
+    public function isWorkspaceManager(): bool
+    {
+        return $this->hasRole('workspace_manager');
+    }
+
+    /**
+     * Determine if user has access to a specific workspace.
+     */
+    public function hasWorkspaceAccess(string $workspaceId): bool
+    {
+        if ($this->isSuperAdmin() || $this->isGlobalAdmin()) {
+            return true;
+        }
+
+        return !empty($this->workspace_id) && $this->workspace_id === $workspaceId;
     }
 
     /**
