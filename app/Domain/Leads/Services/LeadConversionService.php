@@ -161,6 +161,44 @@ final class LeadConversionService
                 'user_agent' => request()->userAgent() ?? 'CLI/System',
             ]);
 
+            if (!empty($lockedLead->workspace_id) && \Illuminate\Support\Facades\Schema::hasTable('workflow_rules')) {
+                try {
+                    $engine = app(\App\Domain\Mail\Services\WorkflowRuleEngine::class);
+                    $vars = [
+                        'applicant_name' => $member->full_name,
+                        'member_name' => $member->full_name,
+                        'member_id' => $member->member_id,
+                        'workspace_name' => (string) $lockedLead->workspace_id,
+                        'expiry_date' => $expiryDate->toDateString(),
+                        'invoice_number' => $invoiceNumber,
+                        'amount_bdt' => number_format((float) $term->fee_bdt, 2),
+                        'action_url' => (string) config('app.url', 'https://hub.emkcenter.org') . '/portal',
+                    ];
+
+                    $engine->trigger(
+                        (string) $lockedLead->workspace_id,
+                        \App\Domain\Mail\Models\WorkflowRule::TRIGGER_LEAD_CONVERTED,
+                        (string) $member->email,
+                        $vars,
+                        $lockedLead->id,
+                        $member->id,
+                        "lead_converted:{$member->id}"
+                    );
+
+                    $engine->trigger(
+                        (string) $lockedLead->workspace_id,
+                        \App\Domain\Mail\Models\WorkflowRule::TRIGGER_PORTAL_ACTIVATED,
+                        (string) $member->email,
+                        $vars,
+                        $lockedLead->id,
+                        $member->id,
+                        "portal_activated:{$member->id}"
+                    );
+                } catch (\Throwable) {
+                    // Fault-isolated per T-08-14 so mail configuration never blocks atomic conversion
+                }
+            }
+
             return $member;
         });
     }

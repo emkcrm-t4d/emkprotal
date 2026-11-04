@@ -142,6 +142,14 @@
             </button>
             <button
                 type="button"
+                wire:click="setTab('emails')"
+                class="pb-3 text-sm font-medium border-b-2 transition-colors {{ $activeTab === 'emails' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                id="tab-btn-member-emails"
+            >
+                Official Emails
+            </button>
+            <button
+                type="button"
                 wire:click="setTab('activity_timeline')"
                 class="pb-3 text-sm font-medium border-b-2 transition-colors {{ $activeTab === 'activity_timeline' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
                 id="tab-btn-timeline"
@@ -437,6 +445,13 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    @endif
+
+    <!-- TAB 2.5: OFFICIAL EMAILS & THREADED CORRESPONDENCE -->
+    @if ($activeTab === 'emails' || $activeTab === 'overview')
+        <div id="tab-member-emails" class="{{ $activeTab === 'emails' ? '' : 'mt-6' }}">
+            <livewire:mail.email-thread-panel :workspace="$workspace" :memberId="$member->id" :leadId="$member->lead_id" :key="'member-emails-'.$member->id" />
         </div>
     @endif
 

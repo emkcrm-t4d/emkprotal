@@ -165,6 +165,26 @@ class LeadCommunicationService
             'user_agent' => request()->userAgent() ?? 'System',
             'created_at' => now(),
         ]);
+
+        if (!empty($lead->workspace_id) && \Illuminate\Support\Facades\Schema::hasTable('workflow_rules')) {
+            try {
+                app(\App\Domain\Mail\Services\WorkflowRuleEngine::class)->trigger(
+                    (string) $lead->workspace_id,
+                    \App\Domain\Mail\Models\WorkflowRule::TRIGGER_LEAD_MISSING_ITEMS,
+                    (string) $lead->email,
+                    [
+                        'applicant_name' => $lead->full_name,
+                        'workspace_name' => (string) $lead->workspace_id,
+                        'reason' => implode(', ', $missingItems) . ($notes ? " ({$notes})" : ''),
+                    ],
+                    $lead->id,
+                    null,
+                    "lead_missing_items:{$lead->id}:" . md5(implode('|', $missingItems) . '|' . ($notes ?? ''))
+                );
+            } catch (\Throwable) {
+                // Fault-isolated per T-08-14
+            }
+        }
     }
 
     /**
@@ -248,6 +268,26 @@ class LeadCommunicationService
             'user_agent' => request()->userAgent() ?? 'System',
             'created_at' => now(),
         ]);
+
+        if (!empty($lead->workspace_id) && \Illuminate\Support\Facades\Schema::hasTable('workflow_rules')) {
+            try {
+                app(\App\Domain\Mail\Services\WorkflowRuleEngine::class)->trigger(
+                    (string) $lead->workspace_id,
+                    \App\Domain\Mail\Models\WorkflowRule::TRIGGER_LEAD_REJECTED,
+                    (string) $lead->email,
+                    [
+                        'applicant_name' => $lead->full_name,
+                        'workspace_name' => (string) $lead->workspace_id,
+                        'reason' => $applicantFacingMessage,
+                    ],
+                    $lead->id,
+                    null,
+                    "lead_rejected:{$lead->id}:{$rejectionReasonCode}"
+                );
+            } catch (\Throwable) {
+                // Fault-isolated per T-08-14
+            }
+        }
     }
 
     /**

@@ -22,7 +22,7 @@ class MemberProfile extends Component
     public string $workspace = '';
     public Member $member;
 
-    // Active Tab state: 'overview', 'invoices', 'activity_timeline'
+    // Active Tab state: 'overview', 'invoices', 'emails', 'activity_timeline'
     public string $activeTab = 'overview';
 
     /**
@@ -87,7 +87,7 @@ class MemberProfile extends Component
      */
     public function setTab(string $tab): void
     {
-        $validTabs = ['overview', 'invoices', 'activity_timeline'];
+        $validTabs = ['overview', 'invoices', 'emails', 'activity_timeline'];
         if (in_array($tab, $validTabs, true)) {
             $this->activeTab = $tab;
         }

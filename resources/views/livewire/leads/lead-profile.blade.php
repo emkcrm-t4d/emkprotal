@@ -310,6 +310,14 @@
             </button>
             <button
                 type="button"
+                wire:click="setTab('emails')"
+                id="tab-btn-emails"
+                class="pb-3 border-b-2 transition-colors {{ $activeTab === 'emails' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+            >
+                Official Emails
+            </button>
+            <button
+                type="button"
                 wire:click="setTab('timeline')"
                 class="pb-3 border-b-2 transition-colors {{ $activeTab === 'timeline' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
             >
@@ -854,7 +862,14 @@
         @livewire('leads.partials.verification-panel', ['lead' => $lead, 'workspace' => $workspace], key('verification-panel-'.$lead->id))
     @endif
 
-    <!-- Tab 4: Audit & Verification Timeline -->
+    <!-- Tab 4: Official Emails & Threaded Correspondence -->
+    @if($activeTab === 'emails' || $activeTab === 'details')
+        <div id="tab-emails" class="{{ $activeTab === 'emails' ? '' : 'mt-6' }}">
+            <livewire:mail.email-thread-panel :workspace="$workspace" :leadId="$lead->id" :key="'lead-emails-'.$lead->id" />
+        </div>
+    @endif
+
+    <!-- Tab 5: Audit & Verification Timeline -->
     @if($activeTab === 'timeline')
         <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-4">
             <h2 class="text-sm font-bold text-slate-900 pb-3 border-b border-slate-200">Application Lifecycle Timeline</h2>

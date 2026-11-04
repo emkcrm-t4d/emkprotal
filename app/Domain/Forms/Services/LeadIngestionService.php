@@ -271,6 +271,25 @@ class LeadIngestionService
                 return $lead;
             });
 
+            if (!empty($lead->workspace_id) && \Illuminate\Support\Facades\Schema::hasTable('workflow_rules')) {
+                try {
+                    app(\App\Domain\Mail\Services\WorkflowRuleEngine::class)->trigger(
+                        (string) $lead->workspace_id,
+                        \App\Domain\Mail\Models\WorkflowRule::TRIGGER_LEAD_SUBMITTED,
+                        (string) $lead->email,
+                        [
+                            'applicant_name' => $lead->full_name,
+                            'workspace_name' => (string) $lead->workspace_id,
+                        ],
+                        $lead->id,
+                        null,
+                        "lead_submitted:{$lead->id}"
+                    );
+                } catch (\Throwable) {
+                    // Fault-isolated per T-08-14 so mail configuration never blocks ingestion
+                }
+            }
+
             return $lead->load('attachments');
         } catch (\Throwable $e) {
             // Rollback files on private disk if any exception occurred

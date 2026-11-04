@@ -68,6 +68,27 @@ class IdCardLifecycleService
             if (class_exists(\App\Mail\CardReadyNotificationMail::class)) {
                 Mail::to($card->member->email)->queue(new \App\Mail\CardReadyNotificationMail($card->member, $card));
             }
+
+            if (!empty($card->workspace_id) && \Illuminate\Support\Facades\Schema::hasTable('workflow_rules')) {
+                try {
+                    app(\App\Domain\Mail\Services\WorkflowRuleEngine::class)->trigger(
+                        (string) $card->workspace_id,
+                        \App\Domain\Mail\Models\WorkflowRule::TRIGGER_ID_CARD_READY,
+                        (string) $card->member->email,
+                        [
+                            'member_name' => $card->member->full_name,
+                            'member_id' => (string) $card->member->member_id,
+                            'workspace_name' => (string) $card->workspace_id,
+                            'expiry_date' => $card->member->expiry_date ? $card->member->expiry_date->format('Y-m-d') : '',
+                        ],
+                        $card->member->lead_id !== null ? (int) $card->member->lead_id : null,
+                        (int) $card->member->id,
+                        "id_card_ready:{$card->id}"
+                    );
+                } catch (\Throwable) {
+                    // Fault-isolated per T-08-14
+                }
+            }
         }
 
         // DEC-11: Record immutable audit log
@@ -176,7 +197,7 @@ class IdCardLifecycleService
 
             $invoiceNumber = null;
             if ($bkashTxId !== null) {
-                $invoice = app(\App\Domain\Invoices\Services\InvoiceService::class)
+                $invoice = \Illuminate\Container\Container::getInstance()->make(\App\Domain\Invoices\Services\InvoiceService::class)
                     ->generateCardReplacementInvoice($member, $bkashTxId);
                 $invoiceNumber = $invoice->invoice_number;
             }

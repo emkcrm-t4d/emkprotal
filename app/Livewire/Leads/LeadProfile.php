@@ -23,7 +23,7 @@ class LeadProfile extends Component
     public string $workspace = '';
     public Lead $lead;
 
-    // Tab state: 'details', 'attachments', 'streams', 'timeline'
+    // Tab state: 'details', 'attachments', 'streams', 'emails', 'timeline'
     public string $activeTab = 'details';
 
     // Reapplication detection per LEAD-07
@@ -143,7 +143,10 @@ class LeadProfile extends Component
      */
     public function setTab(string $tab): void
     {
-        $this->activeTab = $tab;
+        $validTabs = ['details', 'attachments', 'streams', 'emails', 'timeline'];
+        if (in_array($tab, $validTabs, true)) {
+            $this->activeTab = $tab;
+        }
     }
 
     /**
