@@ -1,20 +1,20 @@
 ---
 gsd_state_version: "1.0"
-current_phase: 5
-current_phase_name: Form Builder and Public Membership Form
-current_plan: 5
+current_phase: 6
+current_phase_name: Leads, Verification, and Controlled Conversion
+current_plan: 1
 status: in_progress
-stopped_at: Completed 05-04-PLAN.md
-last_updated: "2026-11-04T08:30:00.000Z"
+stopped_at: Completed 05-05-PLAN.md (Phase 5 Complete)
+last_updated: "2026-11-04T09:05:00.000Z"
 last_activity: 2026-11-04
-last_activity_desc: Phase 5 Plan 04 complete (DuplicateSubmissionGuard, LeadIngestionService, encrypted private file storage, ApplicationConfirmationMail, StoreMembershipApplicationRequest)
-state_head: a945d03
+last_activity_desc: Phase 5 complete (SubmissionViewer, FormSubmissionExportService, audited CSV export, EndToEndFormBuilderAndApplicationTest verifying FORM-01 through FORM-06)
+state_head: 0c09097
 progress:
   total_phases: 12
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 20
-  completed_plans: 19
-  percent: 55
+  completed_plans: 20
+  percent: 60
 ---
 
 # Project State
@@ -24,18 +24,18 @@ progress:
 See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated 2026-11-03)
 
 **Core value:** Replace Zoho Forms and Zoho CRM with a modular membership CRM and read-only member portal inside the existing Hub, using separate workspaces for offices (launching with EMK Center Dhaka).
-**Current focus:** Phase 5 — Form Builder and Public Membership Form
+**Current focus:** Phase 6 — Leads, Verification, and Controlled Conversion
 
 ## Current Position
 
-Phase: 5 — Form Builder and Public Membership Form
-Current Plan: 05-05-PLAN.md (Wave 5)
-Total Plans in Phase: 5
-Next Phase: 6 (Leads, Verification, and Controlled Conversion)
-Status: In progress
-Last activity: 2026-11-04 — 05-04-PLAN.md executed and verified
+Phase: 6 — Leads, Verification, and Controlled Conversion
+Current Plan: 06-01-PLAN.md
+Total Plans in Phase: TBD
+Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
+Status: Ready for Phase 6 planning/execution
+Last activity: 2026-11-04 — 05-05-PLAN.md executed, Phase 5 verified across 8 holistic end-to-end scenarios
 
-Progress: [██████░░░░] 55% (Phase 5 in progress)
+Progress: [██████░░░░] 60% (Phase 5 complete, ready for Phase 6)
 
 ## Performance Metrics
 
@@ -81,6 +81,7 @@ Progress: [██████░░░░] 55% (Phase 5 in progress)
 | Phase 05 P02 | 15min | 2 tasks | 7 files |
 | Phase 05 P03 | 15min | 2 tasks | 7 files |
 | Phase 05 P04 | 20min | 3 tasks | 10 files |
+| Phase 05 P05 | 25min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -173,10 +174,14 @@ Recent decisions affecting current work:
 - [Phase 05 P04]: Implemented Space mapping routing emk_center to ws-emk-dhaka (EMK-DHK) and remaining 5 Spaces to Superadmin staging pool (workspace_id = null) per DEC-01
 - [Phase 05 P04]: Enforced under-18 parental consent and auto-flagged youth_protection = true on minor attachments in private encrypted storage per DEC-09
 - [Phase 05 P04]: Implemented queued ApplicationConfirmationMail dispatch upon successful public application submission
+- [Phase 05 P05]: Submissions viewer Livewire component restricts workspace staff to assigned workspace (ws-emk-dhaka) while permitting cross-workspace inspection for Superadmin per DEC-01
+- [Phase 05 P05]: FormSubmissionExportService neutralizes spreadsheet formula injection risks by prepending single quotes to =, +, -, @ per T-05-10
+- [Phase 05 P05]: Form submission CSV exports record immutable audit log entries in audit_logs with event_type form_submissions_exported and metadata per DEC-11
+- [Phase 05 Complete]: All 6 Form Builder and Public Membership Form requirements (FORM-01 through FORM-06) verified across 8 automated end-to-end integration scenarios; Phase 5 complete and ready for Phase 6 (Leads, Verification, and Controlled Conversion)
 
 ### Pending Todos
 
-None - Phase 5 Plan 04 complete. Ready for Phase 5 Plan 05 (Submissions Viewer, CSV Export, and Holistic Phase 5 Integration & Verification Test Suite).
+None - Phase 5 complete across all 5 plans. Ready for Phase 6 (Leads, Verification, and Controlled Conversion) planning and execution.
 
 ### Blockers/Concerns
 
@@ -193,6 +198,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T08:05:00Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-11-04T09:05:00Z
+Stopped at: Completed 05-05-PLAN.md (Phase 5 Complete)
 Resume file: None

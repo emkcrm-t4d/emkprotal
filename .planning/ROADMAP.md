@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Architecture, Data Model, and Security Design** - Relational schema, module registry contracts, conversion invariants, reversal protocols, and payment adapter boundary
 - [x] **Phase 3: Application Foundation and Deployment Baseline** - Laravel 12 / Livewire skeleton, Horizon queues, scheduler, private file storage, and CI/CD pipeline
 - [x] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail (completed 2026-11-04)
-- [ ] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules
+- [x] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules (completed 2026-11-04)
 - [ ] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals
 - [ ] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle
 - [ ] **Phase 8: Official Email, IMAP, Templates, and Workflow Rules** - Information Desk mailbox integration, threaded profile communications, Horizon email queue, and lifecycle triggers
@@ -124,7 +124,7 @@ Plans:
   2. Form dynamically displays and requires parent/guardian consent document upload for applicants under 18 years of age.
   3. Form validates a 10-character uppercase bKash Transaction ID and prevents duplicate email submissions.
   4. Form submission creates a Lead record with securely attached private files and dispatches an applicant confirmation email.
-**Plans**: 4/5 plans complete
+**Plans**: 5/5 plans complete
 
 Plans:
 **Wave 1**
@@ -140,7 +140,7 @@ Plans:
 - [x] 05-04-PLAN.md — Secure Submission Processing, Private Document Storage, Lead Ingestion, and Confirmation Notifications
 
 **Wave 5**
-- [ ] 05-05-PLAN.md — Submissions Viewer, CSV Export, and Holistic Phase 5 Integration & Verification Test Suite
+- [x] 05-05-PLAN.md — Submissions Viewer, CSV Export, and Holistic Phase 5 Integration & Verification Test Suite
 **UI hint**: yes
 
 ### Phase 6: Leads, Verification, and Controlled Conversion
