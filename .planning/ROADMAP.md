@@ -185,8 +185,24 @@ Plans:
   3. Post-conversion invoices are generated automatically for new memberships and renewals.
   4. Staff can track ID cards through printing, ready-for-pickup notifications, and delivery.
   5. Member status restrictions and revocations require Admin authority and record management instructions.
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 07-01-PLAN.md — Member Directory, Profile Inspector, and End-to-End Member Tracer Slice
+
+**Wave 2**
+- [ ] 07-02-PLAN.md — Dynamic Validity Engine & Workspace Term Management
+
+**Wave 3**
+- [ ] 07-03-PLAN.md — Billing & Invoice Lifecycle, Renewal Records & PDF Receipt Generation
+
+**Wave 4**
+- [ ] 07-04-PLAN.md — ID Card Issuance Lifecycle, Batch Printing & Pickup Notification
+
+**Wave 5**
+- [ ] 07-05-PLAN.md — Member Status Governance, Replacement Cards & Holistic Phase 7 E2E Suite
 
 ### Phase 8: Official Email, IMAP, Templates, and Workflow Rules
 **Goal**: Official mailbox is synchronized with CRM records, and automated lifecycle email workflows are operational.
