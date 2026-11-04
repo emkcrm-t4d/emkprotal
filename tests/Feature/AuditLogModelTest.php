@@ -210,18 +210,22 @@ class AuditLogModelTest extends TestCase
         // When acting as Dhaka Manager, only Dhaka logs are visible
         $this->actingAs($this->dhakaManager);
         $dhakaLogs = AuditLog::all();
-        $this->assertCount(1, $dhakaLogs);
-        $this->assertSame('ws-emk-dhaka', $dhakaLogs->first()->workspace_id);
+        $this->assertNotEmpty($dhakaLogs);
+        $this->assertTrue($dhakaLogs->every(fn (AuditLog $log) => $log->workspace_id === 'ws-emk-dhaka'));
+        $this->assertFalse($dhakaLogs->contains(fn (AuditLog $log) => $log->workspace_id === 'ws-corner-sylhet'));
 
         // When acting as Sylhet Manager, only Sylhet logs are visible
         $this->actingAs($this->sylhetManager);
         $sylhetLogs = AuditLog::all();
-        $this->assertCount(1, $sylhetLogs);
-        $this->assertSame('ws-corner-sylhet', $sylhetLogs->first()->workspace_id);
+        $this->assertNotEmpty($sylhetLogs);
+        $this->assertTrue($sylhetLogs->every(fn (AuditLog $log) => $log->workspace_id === 'ws-corner-sylhet'));
+        $this->assertFalse($sylhetLogs->contains(fn (AuditLog $log) => $log->workspace_id === 'ws-emk-dhaka'));
 
-        // When acting as Superadmin, all logs are visible
+        // When acting as Superadmin, all logs across workspaces are visible
         $this->actingAs($this->superAdmin);
         $allLogs = AuditLog::all();
-        $this->assertCount(2, $allLogs);
+        $this->assertGreaterThanOrEqual($dhakaLogs->count() + $sylhetLogs->count(), $allLogs->count());
+        $this->assertTrue($allLogs->contains(fn (AuditLog $log) => $log->workspace_id === 'ws-emk-dhaka'));
+        $this->assertTrue($allLogs->contains(fn (AuditLog $log) => $log->workspace_id === 'ws-corner-sylhet'));
     }
 }

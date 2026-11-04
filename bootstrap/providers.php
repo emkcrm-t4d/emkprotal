@@ -19,6 +19,7 @@ return [
     |
     */
     App\Providers\ModuleRegistryServiceProvider::class,
+    App\Providers\AuditServiceProvider::class,
 
     /*
     |--------------------------------------------------------------------------
