@@ -82,6 +82,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.invoices.receipt')
             ->middleware(['can:invoices.view']);
 
+        Route::get('/id-cards', \App\Livewire\IdCards\IdCardDirectory::class)
+            ->name('crm.id_cards.index')
+            ->middleware(['can:members.manage_cards']);
+
         Route::get('/reports', function ($workspace) {
             $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
                 ? $workspace->id
