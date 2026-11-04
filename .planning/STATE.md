@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 current_phase: 08
 current_phase_name: Official Email, IMAP, Templates, and Workflow Rules
-current_plan: 4
+current_plan: 5
 status: executing
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-11-04T17:06:26.460Z"
+stopped_at: Completed 08-04-PLAN.md
+last_updated: "2026-11-04T17:16:28.282Z"
 last_activity: 2026-11-04
 last_activity_desc: Phase 08 execution started
-state_head: 9043833e7658732b21c5861774d7d2b1bf9264ac
+state_head: ea0bba5a29d6ec2e10053707fa566240f57a3182
 progress:
   total_phases: 12
   completed_phases: 7
   total_plans: 36
-  completed_plans: 34
+  completed_plans: 35
   percent: 58
 ---
 
@@ -29,7 +29,7 @@ See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated
 ## Current Position
 
 Phase: 08 (Official Email, IMAP, Templates, and Workflow Rules) — EXECUTING
-Current Plan: 4
+Current Plan: 5
 Total Plans in Phase: 5
 Previous Phase: 5 — Form Builder and Public Membership Form (COMPLETED)
 Next Phase: 7 — Member Profiles, Invoices, and ID Cards
@@ -95,6 +95,7 @@ Progress: [██████░░░░] 58% (Phase 06 complete, Phase 07 next
 | Phase 08 P01 | 14min | 2 tasks | 15 files |
 | Phase 08 P02 | 8min | 2 tasks | 10 files |
 | Phase 08 P03 | 6min | 2 tasks | 8 files |
+| Phase 08 P04 | 7min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -219,6 +220,8 @@ Recent decisions affecting current work:
 - [Phase 08]: Seeded all 9 canonical lifecycle email templates in English and Bengali and exposed Livewire EmailTemplateManager with live preview and immutable audit logging
 - [Phase 08]: Enforced dual-layer duplicate-send prevention combining QueuedEmailDispatcher deterministic deduplication_key lookups and DispatchOfficialEmailJob row-locked status === 'sent' short-circuit checks per MAIL-04
 - [Phase 08]: Sanitized all SMTP/IMAP transport failure messages via QueuedEmailDispatcher::sanitizeFailureMessage to replace URI credentials and password/secret/token parameters with [REDACTED] before writing to email_messages.failure_reason or audit_logs per DEC-11
+- [Phase 08]: Restricted WorkflowRuleEngine::trigger strictly to WorkflowRule::ALLOWED_TRIGGERS with zero-eval declarative condition checks per MAIL-05 and DEC-02
+- [Phase 08]: Implemented daily crm:process-membership-milestones command dispatching 30-day renewal window notices idempotently and transitioning expired active members to inactive with member_status_changed audit logging
 
 ### Pending Todos
 
@@ -239,6 +242,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-04T17:06:24.574Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-11-04T17:16:26.074Z
+Stopped at: Completed 08-04-PLAN.md
 Resume file: None
