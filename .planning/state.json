@@ -36,7 +36,7 @@
     {
       "number": "7",
       "name": "Member Profiles, Invoices, and ID Cards",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "8",
@@ -66,8 +66,8 @@
   ],
   "next": {
     "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 7 of 12 · 50% · executing"
+    "label": "Advance to the next step (plan phase 8)",
+    "reason": "Phase 8 of 12 — needs a plan"
   },
-  "updated_at": "2026-11-04T13:55:35.494Z"
+  "updated_at": "2026-11-04T15:33:34.952Z"
 }

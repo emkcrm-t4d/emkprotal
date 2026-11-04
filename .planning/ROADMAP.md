@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Identity, Access Control, Space Scope, and Audit Core** - Role-based access control, strict server-side workspace isolation, staff delegation, and append-only audit trail (completed 2026-11-04)
 - [x] **Phase 5: Form Builder and Public Membership Form** - Dynamic form builder and published 31-field public membership form with under-18 consent and bKash TxID rules (completed 2026-11-04)
 - [x] **Phase 6: Leads, Verification, and Controlled Conversion** - Lead CRM, tri-state verification (Payment, Document, Photo), duplicate prevention, atomic conversion, and reversals (completed 2026-11-04)
-- [ ] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle
+- [x] **Phase 7: Member Profiles, Invoices, and ID Cards** - Member master profile, configurable terms/fees, post-conversion invoicing, and 3-stage ID card issuance lifecycle (completed 2026-11-04)
 - [ ] **Phase 8: Official Email, IMAP, Templates, and Workflow Rules** - Information Desk mailbox integration, threaded profile communications, Horizon email queue, and lifecycle triggers
 - [ ] **Phase 9: Read-Only Member Portal, Change Requests, and Renewals** - Member authentication, read-only profile views, staff-reviewed change requests, email changes, and renewals
 - [ ] **Phase 10: Dashboard, Reports, Data Tools, and Platform Settings** - Workspace-scoped operational dashboards, CSV/Excel export tools, admin controls, and encrypted backup routines
@@ -185,24 +185,24 @@ Plans:
   3. Post-conversion invoices are generated automatically for new memberships and renewals.
   4. Staff can track ID cards through printing, ready-for-pickup notifications, and delivery.
   5. Member status restrictions and revocations require Admin authority and record management instructions.
-**Plans**: 5 plans
+**Plans**: 5/5 plans complete
 **UI hint**: yes
 
 Plans:
 **Wave 1**
-- [ ] 07-01-PLAN.md — Member Directory, Profile Inspector, and End-to-End Member Tracer Slice
+- [x] 07-01-PLAN.md — Member Directory, Profile Inspector, and End-to-End Member Tracer Slice
 
 **Wave 2**
-- [ ] 07-02-PLAN.md — Dynamic Validity Engine & Workspace Term Management
+- [x] 07-02-PLAN.md — Dynamic Validity Engine & Workspace Term Management
 
 **Wave 3**
-- [ ] 07-03-PLAN.md — Billing & Invoice Lifecycle, Renewal Records & PDF Receipt Generation
+- [x] 07-03-PLAN.md — Billing & Invoice Lifecycle, Renewal Records & PDF Receipt Generation
 
 **Wave 4**
-- [ ] 07-04-PLAN.md — ID Card Issuance Lifecycle, Batch Printing & Pickup Notification
+- [x] 07-04-PLAN.md — ID Card Issuance Lifecycle, Batch Printing & Pickup Notification
 
 **Wave 5**
-- [ ] 07-05-PLAN.md — Member Status Governance, Replacement Cards & Holistic Phase 7 E2E Suite
+- [x] 07-05-PLAN.md — Member Status Governance, Replacement Cards & Holistic Phase 7 E2E Suite
 
 ### Phase 8: Official Email, IMAP, Templates, and Workflow Rules
 **Goal**: Official mailbox is synchronized with CRM records, and automated lifecycle email workflows are operational.
@@ -277,7 +277,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Identity, Access Control, Space Scope, and Audit Core | 5/5 | Complete    | 2026-11-04 |
 | 5. Form Builder and Public Membership Form | 5/5 | Complete    | 2026-11-04 |
 | 6. Leads, Verification, and Controlled Conversion | 6/6 | Complete    | 2026-11-04 |
-| 7. Member Profiles, Invoices, and ID Cards | 0/0 | Not started | - |
+| 7. Member Profiles, Invoices, and ID Cards | 5/5 | Complete    | 2026-11-04 |
 | 8. Official Email, IMAP, Templates, and Workflow Rules | 0/0 | Not started | - |
 | 9. Read-Only Member Portal, Change Requests, and Renewals | 0/0 | Not started | - |
 | 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/0 | Not started | - |

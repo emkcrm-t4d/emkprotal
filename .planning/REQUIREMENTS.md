@@ -61,12 +61,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Member Profiles, Invoices & ID Cards
 
-- [ ] **MEMB-01**: Implement Member master profile displaying personal details, documents, payment history, notes, and activity timeline.
-- [ ] **MEMB-02**: Support database-configurable membership terms and fee structures with dynamic start and expiry date calculation.
-- [ ] **MEMB-03**: Manage Member statuses (Active, Inactive, Restricted, Revoked) with Admin-only restriction/revocation authority.
-- [ ] **MEMB-04**: Automatically generate post-conversion invoices and renewal payment records verified by workspace staff.
-- [ ] **MEMB-05**: Implement ID card issuance lifecycle tracking (Provided for Printing → Card Printed & Ready → Delivered) with pickup notification.
-- [ ] **MEMB-06**: Provide ID card replacement workflow recording replacement reason and restarting issuance cycle.
+- [x] **MEMB-01**: Implement Member master profile displaying personal details, documents, payment history, notes, and activity timeline.
+- [x] **MEMB-02**: Support database-configurable membership terms and fee structures with dynamic start and expiry date calculation.
+- [x] **MEMB-03**: Manage Member statuses (Active, Inactive, Restricted, Revoked) with Admin-only restriction/revocation authority.
+- [x] **MEMB-04**: Automatically generate post-conversion invoices and renewal payment records verified by workspace staff.
+- [x] **MEMB-05**: Implement ID card issuance lifecycle tracking (Provided for Printing → Card Printed & Ready → Delivered) with pickup notification.
+- [x] **MEMB-06**: Provide ID card replacement workflow recording replacement reason and restarting issuance cycle.
 
 ### Official Mailbox & Notifications
 
@@ -177,12 +177,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEAD-05 | Phase 6 | Complete |
 | LEAD-06 | Phase 6 | Complete |
 | LEAD-07 | Phase 6 | Complete |
-| MEMB-01 | Phase 7 | Pending |
-| MEMB-02 | Phase 7 | Pending |
-| MEMB-03 | Phase 7 | Pending |
-| MEMB-04 | Phase 7 | Pending |
-| MEMB-05 | Phase 7 | Pending |
-| MEMB-06 | Phase 7 | Pending |
+| MEMB-01 | Phase 7 | Complete |
+| MEMB-02 | Phase 7 | Complete |
+| MEMB-03 | Phase 7 | Complete |
+| MEMB-04 | Phase 7 | Complete |
+| MEMB-05 | Phase 7 | Complete |
+| MEMB-06 | Phase 7 | Complete |
 | MAIL-01 | Phase 8 | Pending |
 | MAIL-02 | Phase 8 | Pending |
 | MAIL-03 | Phase 8 | Pending |
