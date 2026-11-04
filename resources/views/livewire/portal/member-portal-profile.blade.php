@@ -101,24 +101,52 @@
             </div>
 
             {{-- Validity Window --}}
-            <div class="p-4 sm:p-5">
-                <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">Validity Period</span>
-                <div class="text-sm font-bold text-slate-900 mt-1 flex items-center gap-1.5">
-                    <span>{{ $member->start_date?->format('M d, Y') ?? '—' }}</span>
-                    <span class="text-slate-400">&rarr;</span>
-                    <span>{{ $member->expiry_date?->format('M d, Y') ?? '—' }}</span>
+            <div class="p-4 sm:p-5 flex flex-col justify-between">
+                <div>
+                    <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">Validity Period</span>
+                    <div class="text-sm font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                        <span>{{ $member->start_date?->format('M d, Y') ?? '—' }}</span>
+                        <span class="text-slate-400">&rarr;</span>
+                        <span>{{ $member->expiry_date?->format('M d, Y') ?? '—' }}</span>
+                    </div>
+                    @php
+                        $isExpired = $member->expiry_date && $member->expiry_date->isPast();
+                        $daysRemaining = $member->expiry_date ? (int) now()->diffInDays($member->expiry_date, false) : 0;
+                        $renewalService = app(\App\Domain\Members\Services\MemberRenewalService::class);
+                        $canRenew = $renewalService->isRenewalWindowOpen($member);
+                        $renewalOpensAt = $member->expiry_date?->copy()->subDays(30);
+                    @endphp
+                    <span class="text-xs {{ $isExpired ? 'text-rose-600 font-medium' : ($daysRemaining < 30 ? 'text-amber-600 font-medium' : 'text-slate-500') }} mt-0.5 block">
+                        @if ($isExpired)
+                            Expired {{ abs($daysRemaining) }} days ago
+                        @else
+                            {{ $daysRemaining }} days remaining
+                        @endif
+                    </span>
                 </div>
-                @php
-                    $isExpired = $member->expiry_date && $member->expiry_date->isPast();
-                    $daysRemaining = $member->expiry_date ? (int) now()->diffInDays($member->expiry_date, false) : 0;
-                @endphp
-                <span class="text-xs {{ $isExpired ? 'text-rose-600 font-medium' : ($daysRemaining < 30 ? 'text-amber-600 font-medium' : 'text-slate-500') }} mt-0.5 block">
-                    @if ($isExpired)
-                        Expired {{ abs($daysRemaining) }} days ago
+
+                <div class="mt-3">
+                    @if ($canRenew)
+                        <button
+                            type="button"
+                            @click="$dispatch('openSubmitRenewalModal')"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-xs transition cursor-pointer"
+                        >
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span>Renew Membership</span>
+                        </button>
                     @else
-                        {{ $daysRemaining }} days remaining
+                        <div
+                            class="inline-flex items-center gap-1.5 text-[11px] text-slate-400 cursor-not-allowed"
+                            title="Renewal opens 30 days before expiration ({{ $renewalOpensAt?->format('M d, Y') ?? '—' }})"
+                        >
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                            <span>Renewal opens {{ $renewalOpensAt?->format('M d, Y') ?? '30 days prior' }}</span>
+                        </div>
                     @endif
-                </span>
+                </div>
             </div>
 
             {{-- Physical ID Card Indicator --}}
@@ -468,4 +496,5 @@
     {{-- Change Request Modals --}}
     <livewire:portal.modals.submit-profile-change-request-modal :member="$member" />
     <livewire:portal.modals.submit-email-change-modal :member="$member" />
+    <livewire:portal.modals.submit-renewal-modal :member="$member" />
 </div>
