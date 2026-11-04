@@ -18,6 +18,7 @@ return [
     | Modular domain service providers (e.g., Workspace, Lead, Member).
     |
     */
+    App\Providers\ModuleRegistryServiceProvider::class,
 
     /*
     |--------------------------------------------------------------------------
