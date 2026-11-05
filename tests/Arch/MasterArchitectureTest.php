@@ -204,3 +204,4 @@ test('module registry conformance locks all 18 non-delegable and 8 delegable act
         expect(ModuleRegistry::DELEGABLE_ACTIONS)->toContain($action);
     }
 });
+
