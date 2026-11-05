@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 #[Layout('layouts.admin')]
@@ -17,6 +18,8 @@ class PlatformSettingsHub extends Component
 {
     public string $workspaceId = '';
     public string $workspace = '';
+
+    #[Url(as: 'tab', except: 'general')]
     public string $activeTab = 'general';
 
     /**
