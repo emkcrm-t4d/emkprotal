@@ -630,3 +630,4 @@ class EndToEndDashboardAndPlatformSettingsTest extends TestCase
         ]);
     }
 }
+
