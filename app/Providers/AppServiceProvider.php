@@ -39,5 +39,11 @@ class AppServiceProvider extends ServiceProvider
             }
             return null;
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \App\Domain\Migration\Commands\ZohoImportCommand::class,
+            ]);
+        }
     }
 }

@@ -268,4 +268,114 @@ class ZohoDataIngestionTest extends TestCase
         $this->assertNotNull($stagingRecord);
         $this->assertEquals('staged', $stagingRecord->status);
     }
+
+    public function test_artisan_zoho_import_command_executes_successfully(): void
+    {
+        $csvPath = $this->tempDir . '/cli_contacts.csv';
+        $content = "CONTACTID,First Name,Last Name,Email,Mobile,Date of Birth,Gender,House No,Area,Postal Code,Division,District,Membership Type,Start Date,Status\n" .
+            "ZCLI-001,Rahim,Uddin,rahim.uddin@example.com,01755667788,1995-06-15,Male,12,Dhanmondi,1209,Dhaka,Dhaka,1 Year,2024-01-01,Active\n" .
+            "ZCLI-002,Karim,Uddin,karim.uddin@example.com,01755667799,1993-08-20,Male,14,Dhanmondi,1209,Dhaka,Dhaka,1 Year,2024-01-01,Active\n";
+        file_put_contents($csvPath, $content);
+
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
+            'file' => $csvPath,
+            '--workspace' => $this->workspaceId,
+            '--type' => 'contacts_members',
+            '--chunk' => 1,
+        ]);
+
+        $output = \Illuminate\Support\Facades\Artisan::output();
+
+        $this->assertEquals(0, $exitCode);
+        $this->assertStringContainsString('EMK Portal - Legacy Zoho Data Ingestion Tool', $output);
+        $this->assertStringContainsString('Ingestion batch completed successfully', $output);
+        $this->assertStringContainsString('ZCLI-001', Member::where('zoho_id', 'ZCLI-001')->value('zoho_id'));
+        $this->assertStringContainsString('ZCLI-002', Member::where('zoho_id', 'ZCLI-002')->value('zoho_id'));
+    }
+
+    public function test_artisan_zoho_import_command_fails_gracefully_when_file_missing_or_invalid(): void
+    {
+        // 1. Missing file
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
+            'file' => $this->tempDir . '/non_existent.csv',
+            '--workspace' => $this->workspaceId,
+        ]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+
+        $this->assertEquals(1, $exitCode);
+        $this->assertStringContainsString('does not exist or is not readable', $output);
+
+        // 2. Invalid extension
+        $txtPath = $this->tempDir . '/invalid_ext.txt';
+        file_put_contents($txtPath, 'some data');
+
+        $exitCodeTxt = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
+            'file' => $txtPath,
+            '--workspace' => $this->workspaceId,
+        ]);
+        $outputTxt = \Illuminate\Support\Facades\Artisan::output();
+
+        $this->assertEquals(1, $exitCodeTxt);
+        $this->assertStringContainsString('must have a .csv extension', $outputTxt);
+    }
+
+    public function test_artisan_zoho_import_command_rejects_non_existent_workspace(): void
+    {
+        $csvPath = $this->tempDir . '/dummy.csv';
+        file_put_contents($csvPath, "CONTACTID,First Name,Last Name,Email\nZC-1,A,B,a@example.com\n");
+
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
+            'file' => $csvPath,
+            '--workspace' => 'ws-non-existent-random',
+        ]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+
+        $this->assertEquals(1, $exitCode);
+        $this->assertStringContainsString('Target workspace [ws-non-existent-random] does not exist', $output);
+    }
+
+    public function test_artisan_zoho_import_command_maintains_memory_bounds_under_multi_chunk_load(): void
+    {
+        $csvPath = $this->tempDir . '/large_contacts.csv';
+        $handle = fopen($csvPath, 'w');
+        fputcsv($handle, [
+            'CONTACTID', 'First Name', 'Last Name', 'Email', 'Mobile', 'Date of Birth',
+            'Gender', 'House No', 'Area', 'Postal Code', 'Division', 'District', 'Membership Type', 'Start Date', 'Status',
+        ]);
+
+        for ($i = 1; $i <= 150; $i++) {
+            fputcsv($handle, [
+                "ZMEM-CHUNK-{$i}",
+                "User{$i}",
+                "Test",
+                "user{$i}.chunk@example.com",
+                "0171" . str_pad((string) $i, 7, '0', STR_PAD_LEFT),
+                '1995-01-01',
+                'Male',
+                "House {$i}",
+                'Area',
+                '1209',
+                'Dhaka',
+                'Dhaka',
+                '1 Year',
+                '2024-01-01',
+                'Active',
+            ]);
+        }
+        fclose($handle);
+
+        $exitCode = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
+            'file' => $csvPath,
+            '--workspace' => $this->workspaceId,
+            '--type' => 'contacts_members',
+            '--chunk' => 25,
+        ]);
+
+        $this->assertEquals(0, $exitCode);
+        $this->assertEquals(150, Member::where('email', 'like', '%.chunk@example.com')->count());
+
+        // Verify peak memory consumption is safely below 64MB per T-11-02
+        $peakMemory = memory_get_peak_usage(true);
+        $this->assertLessThan(64 * 1024 * 1024, $peakMemory, "Memory peak exceeded 64MB envelope: {$peakMemory} bytes");
+    }
 }
