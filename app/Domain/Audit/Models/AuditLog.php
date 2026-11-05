@@ -62,6 +62,7 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_MEMBER_EMAIL_CHANGED = 'member_email_changed';
     public const EVENT_MEMBER_RENEWAL_SUBMITTED = 'member_renewal_submitted';
     public const EVENT_MEMBER_RENEWAL_APPROVED = 'member_renewal_approved';
+    public const EVENT_PLATFORM_SETTING_UPDATED = 'platform_setting_updated';
 
     protected $table = 'audit_logs';
 
