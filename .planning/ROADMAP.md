@@ -270,7 +270,7 @@ Plans:
   2. Staff can export filtered member data to CSV/Excel strictly within their authorized workspace scope.
   3. Administrator can manage staff roles, permissions, email templates, and platform parameters through protected settings screens.
   4. Automated and manual backups execute with encryption, protected access, and documented restore verification.
-**Plans**: 3/5 plans complete
+**Plans**: 4/5 plans complete
 **UI hint**: yes
 
 Plans:
@@ -284,7 +284,7 @@ Plans:
 - [x] 10-03-PLAN.md — Unified Platform Settings Hub & System Parameters Engine (DASH-04)
 
 **Wave 4**
-- [ ] 10-04-PLAN.md — Automated & Manual Encrypted Backup System & Recovery Runbook (DASH-05)
+- [x] 10-04-PLAN.md — Automated & Manual Encrypted Backup System & Recovery Runbook (DASH-05)
 
 **Wave 5**
 - [ ] 10-05-PLAN.md — Holistic Phase 10 End-to-End Integration Suite (DASH-01 through DASH-05)
