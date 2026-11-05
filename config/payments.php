@@ -9,6 +9,13 @@ return [
     */
     'default_driver' => env('PAYMENT_DEFAULT_DRIVER', 'bkash_manual'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Production Mock Driver Safety Guard
+    |--------------------------------------------------------------------------
+    */
+    'allow_mock_in_production' => env('PAYMENTS_ALLOW_MOCK_IN_PRODUCTION', false),
+
     'drivers' => [
         'bkash_manual' => [
             'merchant_wallet_number' => env('BKASH_MERCHANT_WALLET', '01700000000'),

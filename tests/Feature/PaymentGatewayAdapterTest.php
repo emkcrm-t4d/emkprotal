@@ -315,4 +315,16 @@ class PaymentGatewayAdapterTest extends TestCase
         $this->expectExceptionMessage('Driver [unsupported_gateway] not supported');
         $manager->driver('unsupported_gateway');
     }
+
+    public function test_payment_manager_prohibits_mock_driver_in_production_environment_without_explicit_flag(): void
+    {
+        $this->app['env'] = 'production';
+        config(['payments.allow_mock_in_production' => false]);
+
+        $manager = new PaymentManager($this->app);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Mock payment gateway driver is strictly prohibited in production.');
+        $manager->createMockDriver();
+    }
 }

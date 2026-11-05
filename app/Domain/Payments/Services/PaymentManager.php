@@ -38,6 +38,10 @@ class PaymentManager extends Manager
      */
     public function createMockDriver(): PaymentAdapterInterface
     {
+        if (app()->environment('production') && ! (bool) $this->config->get('payments.allow_mock_in_production', false)) {
+            throw new \RuntimeException('Mock payment gateway driver is strictly prohibited in production.');
+        }
+
         return new MockGatewayPaymentAdapter(
             config: (array) $this->config->get('payments.drivers.mock', [])
         );
