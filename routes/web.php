@@ -151,6 +151,18 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.audit_logs.index')
             ->middleware(['can:platform_services.view_audit_logs']);
 
+        Route::get('/settings', \App\Livewire\Platform\PlatformSettingsHub::class)
+            ->name('crm.settings.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
+        Route::get('/platform_services', function ($workspace) {
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? $workspace->id
+                : (string) $workspace;
+
+            return redirect()->route('crm.settings.index', $workspaceId);
+        })->name('crm.platform_services');
+
         Route::get('/settings/terms', \App\Livewire\Members\ManageTerms::class)
             ->name('crm.terms.index')
             ->middleware(['can:platform_services.manage_settings']);
