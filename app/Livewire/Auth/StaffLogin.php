@@ -37,6 +37,13 @@ class StaffLogin extends Component
         ];
     }
 
+    public function fillCredentials(string $email, string $password): void
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->resetErrorBag();
+    }
+
     /**
      * Authenticate staff / administrator user against the 'web' guard.
      */
