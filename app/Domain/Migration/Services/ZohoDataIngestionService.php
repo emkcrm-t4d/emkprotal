@@ -288,7 +288,7 @@ class ZohoDataIngestionService
                 'email' => $mapped['email'],
                 'password' => null,
                 'guard' => 'member',
-                'is_active' => true,
+                'is_active' => false,
                 'must_reset_password' => true,
                 'zoho_id' => $zohoId,
             ]);

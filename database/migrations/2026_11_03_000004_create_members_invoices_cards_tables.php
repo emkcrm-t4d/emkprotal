@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('workspace_id', 50);
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('restrict');
             $table->foreignId('lead_id')->unique()->constrained('leads')->onDelete('restrict');
-            $table->foreignId('user_id')->unique()->constrained('users')->onDelete('restrict');
+            $table->foreignId('user_id')->nullable()->unique()->constrained('users')->onDelete('restrict');
             $table->foreignId('membership_term_id')->constrained('membership_terms')->onDelete('restrict');
             $table->enum('status', [
                 'active',

@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
                 \App\Domain\Migration\Commands\ZohoImportCommand::class,
                 \App\Domain\Migration\Commands\ZohoImportAttachmentsCommand::class,
                 \App\Domain\Migration\Commands\ZohoReconcileCommand::class,
+                \App\Domain\Migration\Commands\ZohoDryRunCommand::class,
+                \App\Domain\Migration\Commands\ZohoProvisionPortalAccountsCommand::class,
             ]);
         }
     }

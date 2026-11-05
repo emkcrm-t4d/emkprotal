@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'workspace_id', 'guard', 'is_active', 'must_reset_password'])]
+#[Fillable(['name', 'email', 'password', 'workspace_id', 'guard', 'is_active', 'must_reset_password', 'zoho_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -32,6 +32,7 @@ class User extends Authenticatable
         'guard',
         'is_active',
         'must_reset_password',
+        'zoho_id',
     ];
 
     /**
