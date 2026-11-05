@@ -1,52 +1,52 @@
 <div class="space-y-6">
-    <!-- Top Bar: Tenancy Context & Superadmin Switcher -->
-    <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+    <!-- Top Bar: Glass Blur View Tenancy Context & Superadmin Switcher -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/10 p-6 sm:p-7 text-white">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $isGlobalView ? 'bg-purple-100 text-purple-800 border border-purple-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300' }}">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $isGlobalView ? 'bg-purple-500/20 text-purple-300 border border-purple-400/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' }} shadow-xs">
                         {{ $isGlobalView ? 'Global Aggregation' : 'Workspace Scoped' }}
                     </span>
-                    <span class="text-xs font-mono text-slate-500">
+                    <span class="text-xs font-mono text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-lg">
                         {{ $isGlobalView ? 'all-american-spaces' : ($selectedWorkspaceScope ?: $workspaceId) }}
                     </span>
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900 mt-1">
+                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2">
                     {{ $isGlobalView ? 'All American Spaces — Consolidated Analytics' : 'Operational Metrics & Analytics' }}
                 </h1>
-                <p class="text-sm text-slate-500 mt-0.5">
+                <p class="text-sm text-slate-300 mt-1">
                     Real-time operational KPIs, conversion pipeline, card issuance, and financial ledgers.
                 </p>
             </div>
 
             <!-- Superadmin Multi-Workspace Switcher per DASH-02 -->
             @if ($canSwitchScope)
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
-                    <div class="flex items-center gap-1">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-slate-950/60 p-2.5 rounded-2xl border border-white/10">
+                    <div class="flex items-center gap-1.5">
                         <button
                             type="button"
                             wire:click="toggleGlobalView(false)"
-                            class="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors {{ !$isGlobalView ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200' }}"
+                            class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer {{ !$isGlobalView ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10' }}"
                         >
                             Single Workspace
                         </button>
                         <button
                             type="button"
                             wire:click="toggleGlobalView(true)"
-                            class="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors {{ $isGlobalView ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200' }}"
+                            class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer {{ $isGlobalView ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10' }}"
                         >
                             All Spaces (National)
                         </button>
                     </div>
 
                     @if (!$isGlobalView && count($availableWorkspaces) > 0)
-                        <div class="sm:border-l sm:border-slate-300 sm:pl-2">
+                        <div class="sm:border-l sm:border-white/10 sm:pl-2">
                             <select
                                 wire:change="switchWorkspaceScope($event.target.value)"
-                                class="w-full sm:w-auto text-xs rounded-md border-slate-300 bg-white py-1.5 pl-2.5 pr-8 font-medium text-slate-700 shadow-xs focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full sm:w-auto text-xs rounded-xl border-white/15 bg-white/10 py-2 pl-3 pr-8 font-medium text-white shadow-inner focus:border-amber-400 focus:ring-amber-400 cursor-pointer"
                             >
                                 @foreach ($availableWorkspaces as $ws)
-                                    <option value="{{ $ws['id'] }}" @selected(($selectedWorkspaceScope ?: $workspaceId) === $ws['id'])>
+                                    <option value="{{ $ws['id'] }}" class="bg-slate-900 text-white" @selected(($selectedWorkspaceScope ?: $workspaceId) === $ws['id'])>
                                         {{ $ws['name'] }} ({{ $ws['code'] }})
                                     </option>
                                 @endforeach
@@ -56,7 +56,7 @@
                 </div>
             @else
                 <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs">
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-white/10 text-amber-300 border border-white/10 shadow-xs">
                         {{ $workspaceId }}
                     </span>
                 </div>
@@ -64,15 +64,15 @@
         </div>
 
         <!-- Date Range Filter Bar -->
-        <div class="mt-5 pt-4 border-t border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="mt-6 pt-5 border-t border-white/10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <!-- Preset Buttons -->
             <div class="flex flex-wrap items-center gap-1.5">
-                <span class="text-xs font-medium text-slate-500 mr-1">Timeframe:</span>
+                <span class="text-xs font-semibold text-slate-300 mr-1">Timeframe:</span>
                 @foreach (['7_days' => '7 Days', '30_days' => '30 Days', '90_days' => '90 Days', 'year' => 'This Year', 'all' => 'All Time'] as $key => $label)
                     <button
                         type="button"
                         wire:click="applyDatePreset('{{ $key }}')"
-                        class="px-2.5 py-1 text-xs font-medium rounded-md transition-colors {{ $datePreset === $key ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}"
+                        class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer {{ $datePreset === $key ? 'bg-amber-400 text-slate-950 font-bold shadow-md' : 'bg-white/10 text-slate-300 hover:text-white hover:bg-white/15 border border-white/5' }}"
                     >
                         {{ $label }}
                     </button>
@@ -81,32 +81,32 @@
 
             <!-- Custom Date Inputs & Refresh -->
             <div class="flex flex-wrap items-center gap-2">
-                <div class="flex items-center gap-1.5 text-xs text-slate-600">
+                <div class="flex items-center gap-1.5 text-xs text-slate-300">
                     <label for="date-from" class="font-medium">From:</label>
                     <input
                         type="date"
                         id="date-from"
                         wire:model.live="dateFrom"
-                        class="text-xs rounded-md border-slate-300 py-1 px-2 text-slate-700 shadow-xs focus:border-indigo-500 focus:ring-indigo-500"
+                        class="text-xs rounded-xl border-white/15 bg-white/10 py-1.5 px-3 text-white shadow-inner focus:border-amber-400 focus:ring-amber-400"
                     />
                 </div>
-                <div class="flex items-center gap-1.5 text-xs text-slate-600">
+                <div class="flex items-center gap-1.5 text-xs text-slate-300">
                     <label for="date-to" class="font-medium">To:</label>
                     <input
                         type="date"
                         id="date-to"
                         wire:model.live="dateTo"
-                        class="text-xs rounded-md border-slate-300 py-1 px-2 text-slate-700 shadow-xs focus:border-indigo-500 focus:ring-indigo-500"
+                        class="text-xs rounded-xl border-white/15 bg-white/10 py-1.5 px-3 text-white shadow-inner focus:border-amber-400 focus:ring-amber-400"
                     />
                 </div>
                 <button
                     type="button"
                     wire:click="refreshMetrics"
                     wire:loading.attr="disabled"
-                    class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400"
                     title="Refresh and bypass cache"
                 >
-                    <svg wire:loading.class="animate-spin" class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg wire:loading.class="animate-spin" class="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                     <span>Refresh</span>

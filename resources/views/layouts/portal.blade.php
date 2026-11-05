@@ -18,13 +18,21 @@
 @php
     $isLoginPage = request()->routeIs('portal.login');
 @endphp
-<body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-100 bg-[#0b0f17] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
-    <!-- Ambient 3D Glass Theme Backdrop Lighting -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+<body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-100 bg-[#070b12] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
+    <!-- Atmospheric EMK Center Background with Glass Blur & Dark Scrim -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20" aria-hidden="true">
+        <img 
+            src="{{ asset('images/emk-bg.webp') }}" 
+            alt="EMK Center Background" 
+            class="w-full h-full object-cover object-center scale-105 filter blur-[2px] opacity-30 contrast-125 brightness-90"
+        >
+        <div class="absolute inset-0 bg-[#070b12]/85 backdrop-blur-xs"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12] via-transparent to-[#070b12]/90"></div>
+        <!-- Ambient Glass Theme Lighting Accents matching hanging lamps -->
+        <div class="absolute top-10 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-[140px]"></div>
         <div class="absolute -top-32 -left-32 w-[34rem] h-[34rem] bg-indigo-500/15 rounded-full blur-[140px]"></div>
-        <div class="absolute top-1/4 -right-24 w-[36rem] h-[36rem] bg-amber-500/10 rounded-full blur-[150px]"></div>
         <div class="absolute -bottom-32 left-1/3 w-[38rem] h-[38rem] bg-teal-600/10 rounded-full blur-[160px]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
     </div>
     <!-- Skip to main content link for keyboard & screen reader accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:p-4 focus:bg-indigo-600 focus:text-white focus:z-50 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Skip to main content</a>
