@@ -350,7 +350,107 @@
         main a.text-indigo-400:hover {
             color: #fbbf24 !important;
         }
+
+        /* Auto-Hide vs Pinned Sidebar Layout Synchronization */
+        main.crm-main {
+            padding-left: 0 !important;
+            transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        @media (min-width: 1024px) {
+            html.sidebar-pinned main.crm-main {
+                padding-left: 16rem !important;
+            }
+        }
     </style>
+
+    <script>
+        // Check initial pinned state to prevent layout shift (FOUC)
+        (function() {
+            try {
+                if (localStorage.getItem('emk_sidebar_pinned') === 'true') {
+                    document.documentElement.classList.add('sidebar-pinned');
+                } else {
+                    document.documentElement.classList.remove('sidebar-pinned');
+                }
+            } catch (e) {}
+        })();
+
+        document.addEventListener('alpine:init', function() {
+            Alpine.store('sidebar', {
+                pinned: localStorage.getItem('emk_sidebar_pinned') === 'true',
+                open: localStorage.getItem('emk_sidebar_pinned') === 'true',
+                mobileOpen: false,
+                timer: null,
+
+                init() {
+                    if (this.pinned) {
+                        this.open = true;
+                        document.documentElement.classList.add('sidebar-pinned');
+                    } else {
+                        document.documentElement.classList.remove('sidebar-pinned');
+                    }
+                },
+
+                togglePin() {
+                    this.pinned = !this.pinned;
+                    try {
+                        localStorage.setItem('emk_sidebar_pinned', this.pinned ? 'true' : 'false');
+                    } catch (e) {}
+                    if (this.pinned) {
+                        document.documentElement.classList.add('sidebar-pinned');
+                        this.clearTimer();
+                        this.open = true;
+                    } else {
+                        document.documentElement.classList.remove('sidebar-pinned');
+                        this.startTimer();
+                    }
+                },
+
+                toggleManual() {
+                    if (window.innerWidth < 1024) {
+                        this.mobileOpen = !this.mobileOpen;
+                    } else {
+                        this.clearTimer();
+                        this.open = !this.open;
+                    }
+                },
+
+                closeMobile() {
+                    this.mobileOpen = false;
+                },
+
+                onMouseEnter() {
+                    if (window.innerWidth >= 1024 && !this.pinned) {
+                        this.clearTimer();
+                        this.open = true;
+                    }
+                },
+
+                onMouseLeave() {
+                    if (window.innerWidth >= 1024 && !this.pinned) {
+                        this.startTimer();
+                    }
+                },
+
+                startTimer() {
+                    this.clearTimer();
+                    var self = this;
+                    this.timer = setTimeout(function() {
+                        if (!self.pinned) {
+                            self.open = false;
+                        }
+                    }, 3000);
+                },
+
+                clearTimer() {
+                    if (this.timer) {
+                        clearTimeout(this.timer);
+                        this.timer = null;
+                    }
+                }
+            });
+        });
+    </script>
 </head>
 <body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
@@ -416,8 +516,11 @@
         <!-- Livewire Reactive Admin Shell Component -->
         <livewire:admin.admin-shell :activeModule="$activeModule ?? null" />
 
-        <!-- Main Content Canvas (Auto-Adjusts based on Background Image Color) -->
-        <main class="flex-1 lg:pl-64 flex flex-col">
+        <!-- Main Content Canvas (Auto-Adjusts based on Background Image Color & Sidebar Pin State) -->
+        <main 
+            class="crm-main flex-1 flex flex-col transition-all duration-300 ease-in-out"
+            :class="$store.sidebar && $store.sidebar.pinned ? 'lg:pl-64' : 'lg:pl-0'"
+        >
             <div class="py-6 px-4 sm:px-6 lg:px-8 xl:px-10 flex-1 w-full mx-auto">
                 {{ $slot ?? '' }}
                 @yield('content')

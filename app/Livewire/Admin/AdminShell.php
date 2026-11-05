@@ -81,11 +81,41 @@ class AdminShell extends Component
             return $registry->isModuleEnabledForWorkspace($module->key, $workspaceId);
         });
 
+        // Custom sequence and display names requested by user
+        $sequenceOrder = [
+            'leads' => 1,
+            'members' => 2,
+            'invoices' => 3,
+            'dashboard_reports' => 4,
+            'platform_services' => 5,
+            'forms' => 6,
+            'member_portal' => 7,
+            'migration' => 8,
+        ];
+
+        $displayNames = [
+            'leads' => 'Lead and Applicant',
+            'members' => 'Member Profiles & ID',
+            'invoices' => 'Billing & Fee Records',
+            'dashboard_reports' => 'Operational & Mission',
+            'platform_services' => 'Settings',
+            'forms' => 'Form Builder',
+            'member_portal' => 'Member Portal',
+            'migration' => 'Legacy Zoho Ingestion',
+        ];
+
+        usort($modules, function ($a, $b) use ($sequenceOrder) {
+            $orderA = $sequenceOrder[$a->key] ?? 99;
+            $orderB = $sequenceOrder[$b->key] ?? 99;
+            return $orderA <=> $orderB;
+        });
+
         $user = Auth::guard('web')->user();
 
         return view('livewire.admin.admin-shell', [
             'workspace' => $this->workspace,
             'modules' => $modules,
+            'displayNames' => $displayNames,
             'user' => $user,
         ]);
     }

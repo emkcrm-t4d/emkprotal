@@ -81,7 +81,7 @@
                 <div>
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3">Contact & Support</h2>
                     <ul class="space-y-1.5 text-xs text-slate-600">
-                        <li>Email: <a href="mailto:info@emkcenter.org" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">info@emkcenter.org</a></li>
+                        <li>Email: <a href="mailto:membership@emk.com.bd" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">membership@emk.com.bd</a> (<a href="mailto:info@emkcenter.org" class="text-indigo-600 hover:underline">info@emkcenter.org</a>)</li>
                         <li>Information Desk: <a href="tel:+8809606513103" class="hover:underline">+8809606513103</a> | <a href="tel:+8801926666995" class="hover:underline">+8801926666995</a></li>
                         <li>Hours: Saturday – Thursday, 9:30 AM – 6:00 PM</li>
                         <li>Official Website: <a href="https://www.emk.com.bd" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">www.emk.com.bd</a></li>
