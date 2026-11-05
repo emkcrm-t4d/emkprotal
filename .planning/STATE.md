@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 current_phase: 11
 current_plan: 5
-status: executing
-stopped_at: Completed 11-04-PLAN.md
-last_updated: "2026-11-05T07:15:00.000Z"
+status: complete
+stopped_at: Completed 11-05-PLAN.md
+last_updated: "2026-11-05T07:35:00.000Z"
 last_activity: 2026-11-05
-last_activity_desc: Completed Phase 11 Plan 04
-state_head: ea51d77d526f68c08f0aa9eed78dabedf0665ff4
+last_activity_desc: Completed Phase 11 Plan 05 (Phase 11 Complete)
+state_head: 0d154f37f454bf67962a8f400403df62d3804f9a
 progress:
   total_phases: 12
-  completed_phases: 10
+  completed_phases: 11
   total_plans: 51
-  completed_plans: 50
-  percent: 90
+  completed_plans: 51
+  percent: 92
 ---
 
 # Project State
@@ -23,25 +23,25 @@ progress:
 See: [.planning/PROJECT.md](file:///d:/EMK_Protal/.planning/PROJECT.md) (updated 2026-11-03)
 
 **Core value:** Replace Zoho Forms and Zoho CRM with a modular membership CRM and read-only member portal inside the existing Hub, using separate workspaces for offices (launching with EMK Center Dhaka).
-**Current focus:** Phase 11
+**Current focus:** Phase 11 (Completed), advancing to Phase 12
 
 ## Current Position
 
-Phase: 11 — EXECUTING
-Current Plan: 5
+Phase: 11 — COMPLETED
+Current Plan: 5 (Complete)
 Total Plans in Phase: 5
 Previous Phase: 10 — Dashboard, Reports, Data Tools, and Platform Settings (COMPLETED)
 Next Phase: 12 — Verification, Security Review, Release, and Later Payment Gateway
-Status: Executing Phase 11 (Plan 11-04 completed, advancing to Plan 11-05)
-Last activity: 2026-11-05 — Completed Phase 11 Plan 04
-Progress: [█████████░] 90% (Plan 11-04 complete)
+Status: Phase 11 Complete (All 5 plans verified)
+Last activity: 2026-11-05 — Completed Phase 11 Plan 05
+Progress: [█████████░] 92% (Phase 11 complete, ready for Phase 12)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 52
-- Average duration: 12.5 min
-- Total execution time: 2.8 hours
+- Total plans completed: 53
+- Average duration: 12.7 min
+- Total execution time: 3.2 hours
 
 **By Phase:**
 
@@ -58,6 +58,7 @@ Progress: [█████████░] 90% (Plan 11-04 complete)
 | 08 | 5 | - | - |
 | 09 | 5 | - | - |
 | 10 | 5 | - | - |
+| Phase 11 | 5 | 95 min | 19 min |
 
 **Recent Trend:**
 - Last 5 plans: 14m, 18m, 15m, 25m, 15m
@@ -108,6 +109,7 @@ Progress: [█████████░] 90% (Plan 11-04 complete)
 | Phase 11 P02 | 15min | 2 tasks | 6 files |
 | Phase 11 P03 | 20min | 2 tasks | 11 files |
 | Phase 11 P04 | 25min | 2 tasks | 8 files |
+| Phase 11 P05 | 22min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -116,6 +118,12 @@ Progress: [█████████░] 90% (Plan 11-04 complete)
 Decisions are logged in PROJECT.md Key Decisions table and [DECISION-REGISTER.md](file:///d:/EMK_Protal/.planning/phases/01-discovery-decisions-and-acceptance-criteria/DECISION-REGISTER.md).
 Recent decisions affecting current work:
 
+- [Phase 11 P05]: Decoupled user creation from ZohoDataIngestionService so historical member records import with user_id=null, enabling PortalAccountProvisioningService to stage passwordless inactive accounts per DEC-06 (D-06).
+- [Phase 11 P05]: Validated full 7-scenario operational migration lifecycle simulation proving zero persistent database mutations in dry-run mode and 100% reconciliation match on live execution per MIGR-01 through MIGR-05.
+- [Phase 11 P05]: Enforced architecture rule strictly forbidding withoutGlobalScope across App\Domain\Migration and App\Livewire\Migration per DEC-01 (D-01).
+- [Phase 11 P05]: Enforced architecture rule strictly prohibiting dynamic code evaluation (eval, create_function) across migration domains per DEC-02 (D-02).
+- [Phase 11 P05]: Guaranteed global route() helper is never used in App\Domain\Migration classes, strictly adhering to \Illuminate\Support\Facades\URL::route() discipline.
+- [Phase 11 P05]: Synchronized ModuleRegistry to bind 'crm.migration.reconciliation' default route and lock 'migration.import_zoho' and 'migration.export_zoho' as STRICTLY_NON_DELEGABLE managerial actions per T-01-07 and T-11-13.
 - [Phase 11 P04]: Guaranteed dry-run rollback in finally block ensuring 0 database writes per MIGR-05 and T-11-10.
 - [Phase 11 P04]: Staged legacy member portal accounts with guard='member', is_active=false, must_reset_password=true, and password=null per DEC-06 (D-06) and T-11-11.
 - [Phase 11 P04]: Enforced fails-closed authentication on member guard rejecting login for unactivated accounts.
