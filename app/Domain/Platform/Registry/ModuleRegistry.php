@@ -43,7 +43,7 @@ class ModuleRegistry implements ModuleRegistryInterface
     ];
 
     /**
-     * The 16 managerial non-delegable actions locked to prevent staff privilege escalation per T-01-07.
+     * The 18 managerial non-delegable actions locked to prevent staff privilege escalation per T-01-07.
      */
     public const STRICTLY_NON_DELEGABLE = [
         'forms.publish',
@@ -62,6 +62,8 @@ class ModuleRegistry implements ModuleRegistryInterface
         'platform_services.manage_users',
         'platform_services.delegate_roles',
         'platform_services.view_audit_logs',
+        'migration.import_zoho',
+        'migration.export_zoho',
     ];
 
     public function __construct()
@@ -199,11 +201,11 @@ class ModuleRegistry implements ModuleRegistryInterface
             domainNamespace: 'App\Domain\Migration',
             description: 'Legacy Zoho Forms and CRM ingestion, field transformation, and data reconciliation.',
             actions: [
-                'migration.import_zoho' => new ActionDefinition('migration.import_zoho', 'migration', 'Import Zoho Data', 'Execute legacy Zoho data ingestion pipeline', false, false),
-                'migration.export_zoho' => new ActionDefinition('migration.export_zoho', 'migration', 'Export Zoho Data', 'Export rollback datasets in Zoho format', false, false),
+                'migration.import_zoho' => new ActionDefinition('migration.import_zoho', 'migration', 'Import Zoho Data', 'Execute legacy Zoho data ingestion pipeline', false, true),
+                'migration.export_zoho' => new ActionDefinition('migration.export_zoho', 'migration', 'Export Zoho Data', 'Export rollback datasets in Zoho format', false, true),
                 'migration.reconcile_data' => new ActionDefinition('migration.reconcile_data', 'migration', 'Reconcile Data', 'Run automated reconciliation scripts', false, false),
             ],
-            defaultRoute: null,
+            defaultRoute: 'crm.migration.reconciliation',
         ));
     }
 
@@ -290,6 +292,7 @@ class ModuleRegistry implements ModuleRegistryInterface
         return match ($moduleKey) {
             'dashboard_reports' => "/crm/{$workspaceId}/reports",
             'platform_services' => "/crm/{$workspaceId}/settings",
+            'migration' => "/crm/{$workspaceId}/migration/reconciliation",
             default => "/crm/{$workspaceId}/{$moduleKey}",
         };
     }
