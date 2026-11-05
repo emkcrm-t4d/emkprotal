@@ -270,8 +270,24 @@ Plans:
   2. Staff can export filtered member data to CSV/Excel strictly within their authorized workspace scope.
   3. Administrator can manage staff roles, permissions, email templates, and platform parameters through protected settings screens.
   4. Automated and manual backups execute with encryption, protected access, and documented restore verification.
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 10-01-PLAN.md — Operational Dashboard & Metrics Service (DASH-01, DASH-02)
+
+**Wave 2**
+- [ ] 10-02-PLAN.md — Authorized Workspace Data Export Engine & Audit Logging (DASH-03)
+
+**Wave 3**
+- [ ] 10-03-PLAN.md — Unified Platform Settings Hub & System Parameters Engine (DASH-04)
+
+**Wave 4**
+- [ ] 10-04-PLAN.md — Automated & Manual Encrypted Backup System & Recovery Runbook (DASH-05)
+
+**Wave 5**
+- [ ] 10-05-PLAN.md — Holistic Phase 10 End-to-End Integration Suite (DASH-01 through DASH-05)
 
 ### Phase 11: Zoho Migration and Reconciliation
 **Goal**: Legacy Zoho data and documents are imported, safely associated, and verified with zero reconciliation discrepancies.
@@ -312,6 +328,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 7. Member Profiles, Invoices, and ID Cards | 5/5 | Complete    | 2026-11-04 |
 | 8. Official Email, IMAP, Templates, and Workflow Rules | 5/5 | Complete    | 2026-11-04 |
 | 9. Read-Only Member Portal, Change Requests, and Renewals | 5/5 | Complete    | 2026-11-05 |
-| 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/0 | Not started | - |
+| 10. Dashboard, Reports, Data Tools, and Platform Settings | 0/5 | Planning complete | - |
 | 11. Zoho Migration and Reconciliation | 0/0 | Not started | - |
 | 12. Verification, Security Review, Release, and Later Payment Gateway | 0/0 | Not started | - |
