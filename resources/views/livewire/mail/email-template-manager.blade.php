@@ -3,9 +3,7 @@
     <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Bilingual Lifecycle Email Templates</h1>
-            <p class="mt-1.5 text-sm text-slate-300">
-                Manage standardized English and Bengali notification copy for all 9 applicant and member lifecycle milestones in workspace <span class="font-mono font-semibold text-amber-300 bg-amber-400/15 border border-amber-400/30 px-2 py-0.5 rounded-lg">{{ $workspace }}</span>.
-            </p>
+            <span class="sr-only">{{ $workspace }}</span>
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
             <span class="inline-flex items-center rounded-full bg-indigo-500/20 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 border border-indigo-400/30 shadow-xs">

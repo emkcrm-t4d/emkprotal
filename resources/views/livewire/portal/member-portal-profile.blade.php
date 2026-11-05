@@ -199,9 +199,9 @@
             <button
                 type="button"
                 wire:click="setTab('profile')"
-                class="py-2.5 px-4 min-h-[44px] inline-flex items-center gap-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer {{ $activeTab === 'profile' ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-amber-300 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                class="py-2.5 px-5 min-h-[44px] inline-flex items-center gap-2 rounded-full text-xs sm:text-sm font-bold transition cursor-pointer {{ $activeTab === 'profile' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
-                <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4 {{ $activeTab === 'profile' ? 'text-slate-950' : 'text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 <span>Personal Profile</span>
@@ -210,14 +210,14 @@
             <button
                 type="button"
                 wire:click="setTab('documents')"
-                class="py-2.5 px-4 min-h-[44px] inline-flex items-center gap-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer {{ $activeTab === 'documents' ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-amber-300 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                class="py-2.5 px-5 min-h-[44px] inline-flex items-center gap-2 rounded-full text-xs sm:text-sm font-bold transition cursor-pointer {{ $activeTab === 'documents' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
-                <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4 {{ $activeTab === 'documents' ? 'text-slate-950' : 'text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span>Uploaded Documents</span>
                 @if ($member->lead?->attachments && $member->lead->attachments->count() > 0)
-                    <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold {{ $activeTab === 'documents' ? 'bg-slate-950 text-white' : 'bg-amber-400/20 text-amber-300 border border-amber-400/30' }}">
                         {{ $member->lead->attachments->count() }}
                     </span>
                 @endif
@@ -226,9 +226,9 @@
             <button
                 type="button"
                 wire:click="setTab('communications')"
-                class="py-2.5 px-4 min-h-[44px] inline-flex items-center gap-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer {{ $activeTab === 'communications' ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-amber-300 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                class="py-2.5 px-5 min-h-[44px] inline-flex items-center gap-2 rounded-full text-xs sm:text-sm font-bold transition cursor-pointer {{ $activeTab === 'communications' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
-                <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4 {{ $activeTab === 'communications' ? 'text-slate-950' : 'text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span>Official Correspondence</span>
@@ -243,8 +243,7 @@
             <div class="bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-6 sm:p-8 hover:border-white/20 transition-all">
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                     <div>
-                        <h3 class="text-base font-bold text-white tracking-tight">Personal & Demographic Details</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Verified applicant identity and personal specifications.</p>
+                        <h3 class="text-base font-bold text-white tracking-tight">Personal &amp; Demographic Details</h3>
                     </div>
                     <span class="text-[11px] font-medium text-slate-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10">
                         Read-Only View
@@ -294,8 +293,7 @@
             <div class="bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] p-6 sm:p-8 hover:border-white/20 transition-all">
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                     <div>
-                        <h3 class="text-base font-bold text-white tracking-tight">Contact & Address Information</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Primary communication details and residential address.</p>
+                        <h3 class="text-base font-bold text-white tracking-tight">Contact &amp; Address Information</h3>
                     </div>
                     <span class="text-[11px] font-medium text-slate-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10">
                         Read-Only View

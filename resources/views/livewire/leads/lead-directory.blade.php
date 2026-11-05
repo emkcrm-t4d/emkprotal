@@ -9,13 +9,8 @@
             </nav>
             <div class="flex items-center gap-3">
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Inbound Leads & Applications</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-xl text-xs font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">
-                    {{ $workspace }}
-                </span>
+                <span class="sr-only">{{ $workspace }}</span>
             </div>
-            <p class="mt-1 text-sm text-slate-300">
-                Workspace-isolated applicant intake, tri-state verification review, and admissions queue per DEC-01.
-            </p>
         </div>
 
         <div class="mt-2 sm:mt-0 flex items-center gap-3">

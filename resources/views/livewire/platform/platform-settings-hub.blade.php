@@ -14,13 +14,8 @@
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
                         Platform Settings Hub
                     </h1>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-400/10 text-amber-300 border border-amber-400/20" id="badge-workspace">
-                        {{ $workspaceId }}
-                    </span>
+                    <span class="sr-only" id="badge-workspace">{{ $workspaceId }}</span>
                 </div>
-                <p class="mt-1.5 text-sm text-slate-300 max-w-3xl leading-relaxed">
-                    Unified operational parameter configuration, credential management, and platform service administration per DASH-04 and ASVS V8.2.
-                </p>
             </div>
 
             <div class="mt-4 sm:mt-0 flex items-center gap-3">
@@ -71,7 +66,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg>
                 <span class="text-xs font-semibold">System Parameters</span>
-                <span class="text-[10px] text-amber-400 font-mono mt-0.5">Active</span>
             </a>
 
             <a
@@ -83,7 +77,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span class="text-xs font-semibold">Membership Terms</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Terms & Fees</span>
             </a>
 
             <a
@@ -95,7 +88,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
                 <span class="text-xs font-semibold">Staff & Delegations</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Accounts</span>
             </a>
 
             <a
@@ -107,7 +99,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span class="text-xs font-semibold">Email Templates</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Notifications</span>
             </a>
 
             <a
@@ -119,7 +110,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span class="text-xs font-semibold">Delivery Monitor</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Logs & Queues</span>
             </a>
 
             <a
@@ -131,7 +121,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 <span class="text-xs font-semibold">Workflow Rules</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Automation</span>
             </a>
 
             <a
@@ -143,7 +132,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
                 <span class="text-xs font-semibold">Backups & Health</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Recovery</span>
             </a>
 
             <a
@@ -155,7 +143,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
                 <span class="text-xs font-semibold">Audit Logs</span>
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Trail & ASVS</span>
             </a>
         </div>
     </div>

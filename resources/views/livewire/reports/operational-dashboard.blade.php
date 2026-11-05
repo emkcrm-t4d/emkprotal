@@ -7,16 +7,13 @@
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $isGlobalView ? 'bg-purple-500/20 text-purple-300 border border-purple-400/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' }} shadow-xs">
                         {{ $isGlobalView ? 'Global Aggregation' : 'Workspace Scoped' }}
                     </span>
-                    <span class="text-xs font-mono text-amber-300 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-lg">
+                    <span class="sr-only">
                         {{ $isGlobalView ? 'all-american-spaces' : ($selectedWorkspaceScope ?: $workspaceId) }}
                     </span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mt-2">
                     {{ $isGlobalView ? 'All American Spaces — Consolidated Analytics' : 'Operational Metrics & Analytics' }}
                 </h1>
-                <p class="text-sm text-slate-300 mt-1">
-                    Real-time operational KPIs, conversion pipeline, card issuance, and financial ledgers.
-                </p>
             </div>
 
             <!-- Superadmin Multi-Workspace Switcher per DASH-02 -->
@@ -55,11 +52,7 @@
                     @endif
                 </div>
             @else
-                <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-white/10 text-amber-300 border border-white/10 shadow-xs">
-                        {{ $workspaceId }}
-                    </span>
-                </div>
+                <span class="sr-only">{{ $workspaceId }}</span>
             @endif
         </div>
 
@@ -246,114 +239,113 @@
         <!-- ========================================== -->
         <!-- SINGLE WORKSPACE OPERATIONAL DASHBOARD -->
         <!-- ========================================== -->
-        <!-- 4-Column Quick KPI Cards per DASH-01 -->
+        <!-- 4-Column Quick KPI Cards in 3D Frosted Glass -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Active Members Card -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Active Members</span>
-                    <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Active Members</span>
+                    <span class="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ number_format($metrics->memberStatusBreakdown['active'] ?? 0) }}</span>
-                    <span class="text-xs text-slate-500">of {{ number_format($metrics->totalMembers) }} total</span>
+                    <span class="text-3xl font-black text-white">{{ number_format($metrics->memberStatusBreakdown['active'] ?? 0) }}</span>
+                    <span class="text-xs text-slate-400">of {{ number_format($metrics->totalMembers) }} total</span>
                 </div>
-                <div class="mt-2 text-xs text-slate-500 flex items-center gap-2">
-                    <span class="text-amber-600 font-medium">{{ $metrics->memberStatusBreakdown['inactive'] ?? 0 }} inactive</span>
+                <div class="mt-2 text-xs text-slate-400 flex items-center gap-2">
+                    <span class="text-amber-400 font-medium">{{ $metrics->memberStatusBreakdown['inactive'] ?? 0 }} inactive</span>
                     <span>•</span>
-                    <span class="text-rose-600 font-medium">{{ ($metrics->memberStatusBreakdown['restricted'] ?? 0) + ($metrics->memberStatusBreakdown['revoked'] ?? 0) }} sanctioned</span>
+                    <span class="text-rose-400 font-medium">{{ ($metrics->memberStatusBreakdown['restricted'] ?? 0) + ($metrics->memberStatusBreakdown['revoked'] ?? 0) }} sanctioned</span>
                 </div>
             </div>
 
             <!-- 2. Pipeline Leads Under Review Card -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Pipeline Leads</span>
-                    <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Pipeline Leads</span>
+                    <span class="p-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-slate-900">{{ number_format(($metrics->leadPipelineBreakdown['under_review'] ?? 0) + ($metrics->leadPipelineBreakdown['submitted'] ?? 0)) }}</span>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                    <span class="text-3xl font-black text-white">{{ number_format(($metrics->leadPipelineBreakdown['under_review'] ?? 0) + ($metrics->leadPipelineBreakdown['submitted'] ?? 0)) }}</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
                         {{ $metrics->conversionRate }}% Conv. Rate
                     </span>
                 </div>
-                <div class="mt-2 text-xs text-slate-500">
+                <div class="mt-2 text-xs text-slate-400">
                     <span>{{ $metrics->leadPipelineBreakdown['converted'] ?? 0 }} converted of {{ number_format($metrics->totalLeads) }} total leads</span>
                 </div>
             </div>
 
             <!-- 3. ID Cards Ready for Pickup Card -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Cards Ready for Pickup</span>
-                    <span class="p-2 rounded-lg bg-amber-50 text-amber-600">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Cards Ready for Pickup</span>
+                    <span class="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-amber-600">{{ number_format($metrics->idCardStatusBreakdown['card_printed_ready_for_pickup'] ?? 0) }}</span>
-                    <span class="text-xs text-slate-500">ready at desk</span>
+                    <span class="text-3xl font-black text-amber-300">{{ number_format($metrics->idCardStatusBreakdown['card_printed_ready_for_pickup'] ?? 0) }}</span>
+                    <span class="text-xs text-slate-400">ready at desk</span>
                 </div>
-                <div class="mt-2 text-xs text-slate-500">
+                <div class="mt-2 text-xs text-slate-400">
                     <span>{{ $metrics->idCardStatusBreakdown['provided_for_printing'] ?? 0 }} queued for print • {{ $metrics->idCardStatusBreakdown['delivered'] ?? 0 }} delivered</span>
                 </div>
             </div>
 
             <!-- 4. Total Collected Revenue Card -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5">
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-medium uppercase tracking-wider text-slate-500">Collected Revenue</span>
-                    <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Collected Revenue</span>
+                    <span class="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-extrabold text-emerald-600">৳ {{ number_format($metrics->totalRevenueBdt, 2) }}</span>
-                    <span class="text-xs text-slate-500 font-medium">BDT</span>
+                    <span class="text-3xl font-black text-emerald-300">৳ {{ number_format($metrics->totalRevenueBdt, 2) }}</span>
+                    <span class="text-xs text-slate-400 font-medium">BDT</span>
                 </div>
-                <div class="mt-2 text-xs text-slate-500">
+                <div class="mt-2 text-xs text-slate-400">
                     <span>{{ number_format($metrics->paidInvoicesCount) }} paid invoice records</span>
                 </div>
             </div>
         </div>
 
-        <!-- Middle Section: Lead Pipeline Funnel & Member Distribution -->
+        <!-- Middle Section: Lead Pipeline Funnel & Member Distribution in 3D Frosted Glass -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Lead Pipeline Funnel Visualizer (2 Columns) -->
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-xs border border-slate-200 p-6">
-                <div class="flex items-center justify-between mb-4">
+            <div class="lg:col-span-2 bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
+                <div class="flex items-center justify-between mb-5">
                     <div>
-                        <h2 class="text-base font-bold text-slate-900">Lead Pipeline Funnel</h2>
-                        <p class="text-xs text-slate-500">Distribution across application, verification, conversion, and rejection stages.</p>
+                        <h2 class="text-base font-bold text-white tracking-tight">Lead Pipeline Funnel</h2>
                     </div>
-                    <span class="text-xs font-mono bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md">
+                    <span class="text-xs font-mono bg-white/10 text-amber-300 border border-white/10 px-3 py-1 rounded-full font-bold">
                         Total: {{ number_format($metrics->totalLeads) }}
                     </span>
                 </div>
 
-                <div class="space-y-3">
+                <div class="space-y-3.5">
                     @php
                         $leadStages = [
                             ['key' => 'submitted', 'name' => 'Submitted (New)', 'color' => 'bg-blue-500'],
                             ['key' => 'under_review', 'name' => 'Under Review', 'color' => 'bg-indigo-500'],
                             ['key' => 'missing_items', 'name' => 'Missing Items', 'color' => 'bg-amber-500'],
                             ['key' => 'approved', 'name' => 'Approved (Ready to Convert)', 'color' => 'bg-teal-500'],
-                            ['key' => 'converted', 'name' => 'Converted to Member', 'color' => 'bg-emerald-600'],
+                            ['key' => 'converted', 'name' => 'Converted to Member', 'color' => 'bg-emerald-500'],
                             ['key' => 'rejected', 'name' => 'Rejected', 'color' => 'bg-rose-500'],
-                            ['key' => 'blocked', 'name' => 'Blocked (Sanctioned)', 'color' => 'bg-slate-700'],
-                            ['key' => 'draft', 'name' => 'Draft', 'color' => 'bg-slate-400'],
+                            ['key' => 'blocked', 'name' => 'Blocked (Sanctioned)', 'color' => 'bg-slate-600'],
+                            ['key' => 'draft', 'name' => 'Draft', 'color' => 'bg-slate-500'],
                         ];
                     @endphp
 
@@ -363,14 +355,14 @@
                             $pct = $metrics->totalLeads > 0 ? round(($count / $metrics->totalLeads) * 100, 1) : 0;
                         @endphp
                         <div>
-                            <div class="flex justify-between items-center text-xs mb-1">
-                                <span class="font-medium text-slate-700">{{ $stage['name'] }}</span>
+                            <div class="flex justify-between items-center text-xs mb-1.5">
+                                <span class="font-semibold text-slate-300">{{ $stage['name'] }}</span>
                                 <div class="flex items-center gap-2">
-                                    <span class="font-bold text-slate-900">{{ number_format($count) }}</span>
+                                    <span class="font-bold text-white">{{ number_format($count) }}</span>
                                     <span class="text-slate-400 font-mono w-12 text-right">({{ $pct }}%)</span>
                                 </div>
                             </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                            <div class="w-full bg-slate-950/80 rounded-full h-2.5 overflow-hidden border border-white/5">
                                 <div
                                     class="{{ $stage['color'] }} h-2.5 rounded-full transition-all duration-300"
                                     style="width: {{ max($pct, ($count > 0 ? 2 : 0)) }}%"
@@ -381,20 +373,19 @@
                 </div>
             </div>
 
-            <!-- Member Status Distribution (1 Column) -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 flex flex-col justify-between">
+            <!-- Member Status Distribution (1 Column - Redesigned High-Contrast Pod) -->
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white flex flex-col justify-between">
                 <div>
-                    <h2 class="text-base font-bold text-slate-900 mb-1">Member Statuses</h2>
-                    <p class="text-xs text-slate-500 mb-4">Current membership health & status breakdown.</p>
+                    <h2 class="text-base font-bold text-white tracking-tight mb-4">Member Statuses</h2>
 
-                    <div class="space-y-3">
+                    <div class="space-y-2.5">
                         @php
                             $memberStatuses = [
-                                ['key' => 'active', 'name' => 'Active', 'badge' => 'bg-emerald-100 text-emerald-800 border-emerald-200'],
-                                ['key' => 'inactive', 'name' => 'Inactive (Expired)', 'badge' => 'bg-amber-100 text-amber-800 border-amber-200'],
-                                ['key' => 'restricted', 'name' => 'Restricted (Hold)', 'badge' => 'bg-rose-100 text-rose-800 border-rose-200'],
-                                ['key' => 'revoked', 'name' => 'Revoked', 'badge' => 'bg-slate-200 text-slate-800 border-slate-300'],
-                                ['key' => 'archived_reversed', 'name' => 'Archived (Reversed)', 'badge' => 'bg-slate-100 text-slate-600 border-slate-200'],
+                                ['key' => 'active', 'name' => 'Active', 'badge' => 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'],
+                                ['key' => 'inactive', 'name' => 'Inactive (Expired)', 'badge' => 'bg-amber-500/20 text-amber-300 border-amber-500/30'],
+                                ['key' => 'restricted', 'name' => 'Restricted (Hold)', 'badge' => 'bg-rose-500/20 text-rose-300 border-rose-500/30'],
+                                ['key' => 'revoked', 'name' => 'Revoked', 'badge' => 'bg-slate-800 text-slate-300 border-white/10'],
+                                ['key' => 'archived_reversed', 'name' => 'Archived (Reversed)', 'badge' => 'bg-slate-800/60 text-slate-400 border-white/10'],
                             ];
                         @endphp
 
@@ -402,33 +393,32 @@
                             @php
                                 $mCount = $metrics->memberStatusBreakdown[$status['key']] ?? 0;
                             @endphp
-                            <div class="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 bg-slate-50/50">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border {{ $status['badge'] }}">
+                            <div class="flex items-center justify-between p-3 rounded-2xl border border-white/10 bg-slate-950/60 shadow-inner">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $status['badge'] }}">
                                     {{ $status['name'] }}
                                 </span>
-                                <span class="text-sm font-bold text-slate-900">{{ number_format($mCount) }}</span>
+                                <span class="text-base font-black text-white">{{ number_format($mCount) }}</span>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
-                <div class="mt-6 pt-4 border-t border-slate-100">
+                <div class="mt-6 pt-4 border-t border-white/10">
                     <div class="flex justify-between items-center text-xs">
-                        <span class="font-medium text-slate-500">Total Enrolled Members</span>
-                        <span class="font-extrabold text-slate-900 text-base">{{ number_format($metrics->totalMembers) }}</span>
+                        <span class="font-medium text-slate-400">Total Enrolled Members</span>
+                        <span class="font-black text-white text-base">{{ number_format($metrics->totalMembers) }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Lower Section: ID Card Issuance Lifecycle Breakdown -->
-        <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6">
+        <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl text-white">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h2 class="text-base font-bold text-slate-900">Physical ID Card Issuance Lifecycle</h2>
-                    <p class="text-xs text-slate-500">PVC plastic badges tracking across printing batch, front desk pickup, and delivery per DEC-08.</p>
+                    <h2 class="text-base font-bold text-white tracking-tight">Physical ID Card Issuance Lifecycle</h2>
                 </div>
-                <span class="text-xs font-mono bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-md">
+                <span class="text-xs font-mono bg-white/10 text-amber-300 border border-white/10 px-3 py-1 rounded-full font-bold">
                     Total Badges: {{ number_format($metrics->totalIdCards) }}
                 </span>
             </div>
@@ -436,11 +426,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 @php
                     $idCardStates = [
-                        ['key' => 'provided_for_printing', 'title' => 'Queued for Printing', 'icon_bg' => 'bg-blue-50 text-blue-600'],
-                        ['key' => 'card_printed_ready_for_pickup', 'title' => 'Ready for Pickup', 'icon_bg' => 'bg-amber-50 text-amber-600'],
-                        ['key' => 'delivered', 'title' => 'Delivered to Member', 'icon_bg' => 'bg-emerald-50 text-emerald-600'],
-                        ['key' => 'superseded_replaced', 'title' => 'Superseded / Replaced', 'icon_bg' => 'bg-slate-100 text-slate-600'],
-                        ['key' => 'voided_reversal', 'title' => 'Voided Reversal', 'icon_bg' => 'bg-rose-50 text-rose-600'],
+                        ['key' => 'provided_for_printing', 'title' => 'Queued for Printing'],
+                        ['key' => 'card_printed_ready_for_pickup', 'title' => 'Ready for Pickup'],
+                        ['key' => 'delivered', 'title' => 'Delivered to Member'],
+                        ['key' => 'superseded_replaced', 'title' => 'Superseded / Replaced'],
+                        ['key' => 'voided_reversal', 'title' => 'Voided Reversal'],
                     ];
                 @endphp
 
@@ -448,11 +438,11 @@
                     @php
                         $cCount = $metrics->idCardStatusBreakdown[$cardState['key']] ?? 0;
                     @endphp
-                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50/40">
-                        <span class="text-xs font-medium text-slate-600 block">{{ $cardState['title'] }}</span>
-                        <div class="mt-2 flex items-baseline gap-1">
-                            <span class="text-2xl font-bold text-slate-900">{{ number_format($cCount) }}</span>
-                            <span class="text-xs text-slate-400">cards</span>
+                    <div class="p-4 rounded-2xl border border-white/10 bg-slate-950/60 shadow-inner">
+                        <span class="text-xs font-semibold text-slate-400 block">{{ $cardState['title'] }}</span>
+                        <div class="mt-2 flex items-baseline gap-1.5">
+                            <span class="text-2xl font-black text-white">{{ number_format($cCount) }}</span>
+                            <span class="text-xs text-slate-500">cards</span>
                         </div>
                     </div>
                 @endforeach

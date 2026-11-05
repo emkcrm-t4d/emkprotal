@@ -67,12 +67,12 @@
                 </div>
                 <div>
                     <h2 class="text-sm font-bold text-white tracking-tight leading-tight">{{ $workspace['name'] }}</h2>
-                    <div class="flex items-center gap-2 mt-0.5">
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-amber-300">{{ $workspace['id'] }}</span>
-                        @if ($workspace['is_active'])
+                    <span class="sr-only">{{ $workspace['id'] }}</span>
+                    @if ($workspace['is_active'])
+                        <div class="mt-0.5">
                             <span class="text-[10px] text-emerald-400 font-medium">● Active</span>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <button 
@@ -110,7 +110,7 @@
                 >
                     <span class="w-2 h-2 rounded-full {{ $isActive ? 'bg-amber-400 animate-pulse' : 'bg-slate-500 group-hover:bg-amber-400' }}"></span>
                     <span class="flex-1 truncate">{{ $module->name }}</span>
-                    <span class="text-[11px] font-mono text-slate-400 group-hover:text-slate-300">{{ $module->key }}</span>
+                    <span class="sr-only">{{ $module->key }}</span>
                 </a>
             @endforeach
         </nav>
@@ -166,9 +166,7 @@
                 </div>
                 <div>
                     <h1 class="text-sm font-bold text-white tracking-tight leading-snug">{{ $workspace['name'] }}</h1>
-                    <div class="mt-0.5 flex items-center gap-2">
-                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-amber-300 border border-white/10">{{ $workspace['id'] }}</span>
-                    </div>
+                    <span class="sr-only">{{ $workspace['id'] }}</span>
                 </div>
             </div>
         </div>
@@ -200,7 +198,7 @@
                         <span class="w-2 h-2 rounded-full shrink-0 {{ $isActive ? 'bg-amber-400 animate-pulse' : 'bg-slate-500 group-hover:bg-amber-400' }}"></span>
                         <span class="truncate">{{ $module->name }}</span>
                     </div>
-                    <span class="text-[11px] font-mono shrink-0 {{ $isActive ? 'text-amber-300' : 'text-slate-500 group-hover:text-slate-400' }}">{{ $module->key }}</span>
+                    <span class="sr-only">{{ $module->key }}</span>
                 </a>
             @endforeach
         </nav>

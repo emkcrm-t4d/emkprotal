@@ -10,14 +10,9 @@
                 <span class="text-slate-900 font-semibold">Membership Terms</span>
             </nav>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Membership Terms & Fees</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-800 border border-slate-200">
-                    {{ $workspace }}
-                </span>
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Membership Terms &amp; Fees</h1>
+                <span class="sr-only">{{ $workspace }}</span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">
-                Configure workspace validity durations, membership fee structures, and renewal pricing per DEC-08.
-            </p>
         </div>
 
         <div class="mt-4 sm:mt-0 flex items-center gap-3">

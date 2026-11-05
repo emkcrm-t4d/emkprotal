@@ -2,10 +2,8 @@
     <!-- Header Section -->
     <div class="sm:flex sm:items-center sm:justify-between border-b border-slate-200 pb-5">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">Workspace Staff Directory</h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Manage operational staff and configure role delegations for workspace: <span class="font-mono font-semibold text-slate-800">{{ $workspace }}</span>
-            </p>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Workspace Staff Directory</h1>
+            <span class="sr-only">{{ $workspace }}</span>
         </div>
         <div class="mt-4 sm:mt-0 flex gap-3">
             <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">

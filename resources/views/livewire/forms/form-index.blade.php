@@ -1,22 +1,19 @@
 <div class="space-y-6">
     <!-- Header Section -->
-    <div class="sm:flex sm:items-center sm:justify-between border-b border-slate-200 pb-5">
+    <div class="sm:flex sm:items-center sm:justify-between pb-4">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">Form Management & Builder</h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Configure application forms, deploy visual layouts, and generate embed codes for workspace: 
-                <span class="font-mono font-semibold text-slate-800">{{ $workspace }}</span>
-            </p>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Form Management & Builder</h1>
+            <span class="sr-only">{{ $workspace }}</span>
         </div>
         <div class="mt-4 sm:mt-0 flex gap-3">
             @if (auth()->user()?->can('forms.create') || auth()->user()?->hasRole(['workspace_manager', 'superadmin', 'global_admin']))
                 <button
                     type="button"
                     wire:click="openCreateModal"
-                    class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors"
+                    class="inline-flex items-center gap-2 rounded-full bg-white text-slate-950 font-bold px-4 py-2 text-xs shadow-lg shadow-white/20 hover:bg-amber-400 transition-all cursor-pointer"
                 >
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    <svg class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                     </svg>
                     Create New Form
                 </button>
@@ -73,58 +70,58 @@
     </div>
 
     <!-- Forms Table -->
-    <div class="bg-white shadow-xs ring-1 ring-slate-900/5 rounded-lg overflow-hidden">
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
-                <thead class="bg-slate-50 text-slate-700">
+            <table class="min-w-full divide-y divide-white/10 text-left text-sm">
+                <thead class="bg-slate-950/60 text-slate-300">
                     <tr>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 sm:pl-6 font-semibold">Form Title & Slug</th>
-                        <th scope="col" class="px-3 py-3.5 font-semibold">Version</th>
-                        <th scope="col" class="px-3 py-3.5 font-semibold">Status</th>
-                        <th scope="col" class="px-3 py-3.5 font-semibold">Submissions</th>
-                        <th scope="col" class="px-3 py-3.5 font-semibold">Default</th>
-                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-right font-semibold">Actions</th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 sm:pl-6 font-bold text-white text-xs uppercase tracking-wider">Form Title</th>
+                        <th scope="col" class="px-3 py-3.5 font-bold text-white text-xs uppercase tracking-wider">Version</th>
+                        <th scope="col" class="px-3 py-3.5 font-bold text-white text-xs uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-3 py-3.5 font-bold text-white text-xs uppercase tracking-wider">Submissions</th>
+                        <th scope="col" class="px-3 py-3.5 font-bold text-white text-xs uppercase tracking-wider">Default</th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 text-right font-bold text-white text-xs uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 bg-white">
+                <tbody class="divide-y divide-white/5 bg-slate-900/40">
                     @forelse ($forms as $form)
-                        <tr class="hover:bg-slate-50/80 transition-colors">
+                        <tr class="hover:bg-white/5 transition-colors">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
-                                <div class="font-medium text-slate-900">{{ $form->title }}</div>
-                                <div class="text-xs font-mono text-slate-500">{{ $form->slug }}</div>
+                                <div class="font-bold text-white text-sm tracking-tight">{{ $form->title }}</div>
+                                <span class="sr-only">{{ $form->slug }}</span>
                             </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-xs font-mono text-slate-600">
+                            <td class="whitespace-nowrap px-3 py-4 text-xs font-mono text-slate-300">
                                 v{{ $form->version }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4">
                                 @if ($form->is_published)
-                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-300 border border-emerald-500/30">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                         Published
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/20">
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-800/80 px-2.5 py-1 text-xs font-semibold text-slate-300 border border-white/10">
                                         <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                         Draft / Archived
                                     </span>
                                 @endif
                             </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-xs text-slate-600">
-                                <span class="font-semibold text-slate-800">{{ $form->submissions_count }}</span> entries
+                            <td class="whitespace-nowrap px-3 py-4 text-xs text-slate-300">
+                                <span class="font-bold text-white">{{ $form->submissions_count }}</span> entries
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-xs">
                                 @if ($form->is_default)
-                                    <span class="inline-flex items-center rounded bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 border border-amber-200">
+                                    <span class="inline-flex items-center rounded-full bg-amber-400/15 px-2.5 py-1 text-xs font-semibold text-amber-300 border border-amber-400/30">
                                         Default Form
                                     </span>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-500">—</span>
                                 @endif
                             </td>
                             <td class="whitespace-nowrap py-4 pl-3 pr-4 sm:pr-6 text-right text-xs font-medium space-x-2">
                                 <a 
                                     href="{{ route('crm.forms.builder', ['workspace' => $workspace, 'form' => $form->id]) }}" 
-                                    class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 hover:bg-indigo-100 transition-colors"
+                                    class="inline-flex items-center rounded-full bg-white text-slate-950 px-3.5 py-1.5 text-xs font-bold shadow-md hover:bg-amber-400 transition-colors"
                                 >
                                     Builder
                                 </a>
@@ -132,7 +129,7 @@
                                 <button
                                     type="button"
                                     wire:click="openEmbedModal({{ $form->id }})"
-                                    class="inline-flex items-center rounded-md bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20 hover:bg-slate-100 transition-colors"
+                                    class="inline-flex items-center rounded-full bg-white/10 text-slate-200 border border-white/10 px-3 py-1.5 text-xs font-semibold hover:bg-white/20 transition-colors"
                                 >
                                     Embed
                                 </button>
@@ -143,7 +140,7 @@
                                             type="button"
                                             wire:click="archive({{ $form->id }})"
                                             wire:confirm="Are you sure you want to archive this form? Public submissions will be blocked."
-                                            class="inline-flex items-center rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20 hover:bg-amber-100 transition-colors"
+                                            class="inline-flex items-center rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 px-3 py-1.5 text-xs font-semibold hover:bg-amber-500/30 transition-colors"
                                         >
                                             Archive
                                         </button>
@@ -151,7 +148,7 @@
                                         <button
                                             type="button"
                                             wire:click="publish({{ $form->id }})"
-                                            class="inline-flex items-center rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 hover:bg-emerald-100 transition-colors"
+                                            class="inline-flex items-center rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1.5 text-xs font-semibold hover:bg-emerald-500/30 transition-colors"
                                         >
                                             Publish
                                         </button>
@@ -161,8 +158,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-sm text-slate-500">
-                                <p class="font-medium text-slate-900">No forms found for this workspace.</p>
+                            <td colspan="6" class="px-6 py-12 text-center text-sm text-slate-400">
+                                <p class="font-medium text-white">No forms found for this workspace.</p>
                                 <p class="mt-1 text-xs text-slate-400">Click "Create New Form" above to initialize a new form definition.</p>
                             </td>
                         </tr>
@@ -172,7 +169,7 @@
         </div>
 
         @if ($forms->hasPages())
-            <div class="border-t border-slate-200 px-4 py-3 sm:px-6">
+            <div class="border-t border-white/10 px-4 py-3 sm:px-6">
                 {{ $forms->links() }}
             </div>
         @endif

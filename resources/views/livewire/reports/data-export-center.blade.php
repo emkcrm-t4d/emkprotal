@@ -7,12 +7,9 @@
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
                         Workspace Scoped
                     </span>
-                    <span class="text-xs font-mono text-slate-500">{{ $workspaceId }}</span>
+                    <span class="sr-only">{{ $workspaceId }}</span>
                 </div>
                 <h1 class="text-2xl font-bold text-slate-900 mt-1">Data Export Center</h1>
-                <p class="text-sm text-slate-500 mt-0.5">
-                    Extract filtered operational records, pipelines, and financial ledgers to CSV with memory-protected streaming.
-                </p>
             </div>
             <div>
                 <a

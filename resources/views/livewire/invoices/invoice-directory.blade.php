@@ -9,13 +9,8 @@
             </nav>
             <div class="flex items-center gap-3">
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Billing &amp; Invoice Records</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-xl text-xs font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">
-                    {{ $workspace }}
-                </span>
+                <span class="sr-only">{{ $workspace }}</span>
             </div>
-            <p class="mt-1 text-sm text-slate-300">
-                Official post-conversion and renewal invoices, bKash reconciliation, and billing ledgers.
-            </p>
         </div>
 
         <div class="mt-2 sm:mt-0 flex items-center gap-3">
