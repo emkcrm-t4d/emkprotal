@@ -66,6 +66,7 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_BACKUP_CREATED = 'backup_created';
     public const EVENT_BACKUP_RESTORE_VERIFIED = 'backup_restore_verified';
     public const EVENT_BACKUP_DELETED = 'backup_deleted';
+    public const EVENT_ZOHO_BATCH_IMPORTED = 'zoho_batch_imported';
 
     protected $table = 'audit_logs';
 
