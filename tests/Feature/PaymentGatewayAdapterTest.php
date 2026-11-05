@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Domain\Payments\Adapters\ManualBkashPaymentAdapter;
 use App\Domain\Payments\Adapters\MockGatewayPaymentAdapter;
 use App\Domain\Payments\Contracts\PaymentAdapterInterface;
 use App\Domain\Payments\Contracts\PaymentGatewayAdapterInterface;
@@ -12,9 +13,12 @@ use App\Domain\Payments\DTOs\PaymentRedirectResponse;
 use App\Domain\Payments\DTOs\PaymentVerificationRequest;
 use App\Domain\Payments\DTOs\WebhookResult;
 use App\Domain\Payments\Exceptions\UnsupportedPaymentOperationException;
+use App\Domain\Payments\Services\PaymentGatewayManager;
+use App\Domain\Payments\Services\PaymentManager;
 use Error;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use Tests\TestCase;
 
 class PaymentGatewayAdapterTest extends TestCase
@@ -229,5 +233,86 @@ class PaymentGatewayAdapterTest extends TestCase
         $resultBadSig = $adapter->handleWebhook($requestBadSig);
         $this->assertFalse($resultBadSig->isHandled);
         $this->assertStringContainsString('Invalid webhook digital signature', (string) $resultBadSig->errorMessage);
+    }
+
+    public function test_manual_bkash_adapter_throws_unsupported_exception_on_online_methods(): void
+    {
+        $adapter = new ManualBkashPaymentAdapter();
+
+        $this->assertSame('bkash_manual', $adapter->getDriverName());
+        $this->assertTrue($adapter->supportsManualVerification());
+
+        $initRequest = new PaymentInitiationRequest(
+            invoiceId: 1,
+            memberId: null,
+            amountBdt: 1000.0,
+            customerName: 'Test',
+            customerEmail: 'test@example.com',
+            customerPhone: '+8801700000000',
+            callbackUrl: 'https://emk.test/cb',
+            cancelUrl: 'https://emk.test/cancel'
+        );
+
+        $this->expectException(UnsupportedPaymentOperationException::class);
+        $this->expectExceptionMessage('Driver [bkash_manual] does not support online payment initiation');
+        $adapter->initiatePayment($initRequest);
+    }
+
+    public function test_manual_bkash_adapter_throws_unsupported_exception_on_webhook(): void
+    {
+        $adapter = new ManualBkashPaymentAdapter();
+        $request = Request::create('/payments/webhook/bkash', 'POST');
+
+        $this->expectException(UnsupportedPaymentOperationException::class);
+        $this->expectExceptionMessage('Driver [bkash_manual] does not support automated webhook callbacks');
+        $adapter->handleWebhook($request);
+    }
+
+    public function test_payment_manager_default_driver_resolution(): void
+    {
+        $manager = app(PaymentManager::class);
+
+        $this->assertSame('bkash_manual', $manager->getDefaultDriver());
+        $this->assertInstanceOf(ManualBkashPaymentAdapter::class, $manager->driver());
+        $this->assertSame('bkash_manual', $manager->driver()->getDriverName());
+    }
+
+    public function test_payment_manager_and_gateway_manager_driver_resolution_and_swapping(): void
+    {
+        /** @var PaymentManager $paymentManager */
+        $paymentManager = app(PaymentManager::class);
+        /** @var PaymentGatewayManager $gatewayManager */
+        $gatewayManager = app(PaymentGatewayManager::class);
+
+        // Explicit driver calls
+        $mockFromPayment = $paymentManager->driver('mock');
+        $mockFromGateway = $gatewayManager->driver('mock');
+
+        $this->assertInstanceOf(MockGatewayPaymentAdapter::class, $mockFromPayment);
+        $this->assertInstanceOf(MockGatewayPaymentAdapter::class, $mockFromGateway);
+        $this->assertSame('mock', $mockFromPayment->getDriverName());
+        $this->assertSame('mock', $mockFromGateway->getDriverName());
+
+        // Resolving future gateway drivers (sslcommerz and bkash_gateway)
+        $sslDriver = $paymentManager->driver('sslcommerz');
+        $this->assertInstanceOf(PaymentAdapterInterface::class, $sslDriver);
+
+        $bkashGwDriver = $paymentManager->driver('bkash_gateway');
+        $this->assertInstanceOf(PaymentAdapterInterface::class, $bkashGwDriver);
+
+        // Dynamic runtime driver switching via config per DEC-10
+        config(['payments.default_driver' => 'mock']);
+        $newPaymentManager = new PaymentManager(app());
+        $this->assertSame('mock', $newPaymentManager->getDefaultDriver());
+        $this->assertInstanceOf(MockGatewayPaymentAdapter::class, $newPaymentManager->driver());
+    }
+
+    public function test_payment_manager_throws_invalid_argument_exception_for_unknown_driver(): void
+    {
+        $manager = app(PaymentManager::class);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Driver [unsupported_gateway] not supported');
+        $manager->driver('unsupported_gateway');
     }
 }

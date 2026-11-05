@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\Payments\Adapters;
 
 use App\Domain\Payments\Contracts\PaymentAdapterInterface;
+use App\Domain\Payments\DTOs\PaymentInitiationRequest;
+use App\Domain\Payments\DTOs\PaymentRedirectResponse;
 use App\Domain\Payments\DTOs\PaymentVerificationRequest;
 use App\Domain\Payments\DTOs\PaymentVerificationResult;
+use App\Domain\Payments\DTOs\WebhookResult;
+use App\Domain\Payments\Exceptions\UnsupportedPaymentOperationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -157,6 +162,32 @@ class ManualBkashPaymentAdapter implements PaymentAdapterInterface
             reference: $txid,
             evidencePayload: $evidencePayload,
             status: 'verified'
+        );
+    }
+
+    /**
+     * Initiate an outbound payment session.
+     * Manual driver does not support online payment initiation per DEC-05.
+     *
+     * @throws UnsupportedPaymentOperationException
+     */
+    public function initiatePayment(PaymentInitiationRequest $request): PaymentRedirectResponse
+    {
+        throw new UnsupportedPaymentOperationException(
+            'Driver [bkash_manual] does not support online payment initiation. Manual TxID verification is required per DEC-05.'
+        );
+    }
+
+    /**
+     * Process an asynchronous gateway webhook.
+     * Manual driver does not support automated webhook callbacks.
+     *
+     * @throws UnsupportedPaymentOperationException
+     */
+    public function handleWebhook(Request $request): WebhookResult
+    {
+        throw new UnsupportedPaymentOperationException(
+            'Driver [bkash_manual] does not support automated webhook callbacks.'
         );
     }
 }

@@ -15,5 +15,27 @@ return [
             'reference_prefix'       => 'EMK',
             'regex'                  => '^[A-Z0-9]{10}$',
         ],
+
+        'sslcommerz' => [
+            'store_id'     => env('SSLCOMMERZ_STORE_ID'),
+            'store_passwd' => env('SSLCOMMERZ_STORE_PASSWORD'),
+            'sandbox'      => env('SSLCOMMERZ_SANDBOX', true),
+            'api_domain'   => env('SSLCOMMERZ_API_DOMAIN', 'https://sandbox.sslcommerz.com'),
+        ],
+
+        'bkash_gateway' => [
+            'app_key'      => env('BKASH_APP_KEY'),
+            'app_secret'   => env('BKASH_APP_SECRET'),
+            'username'     => env('BKASH_USERNAME'),
+            'password'     => env('BKASH_PASSWORD'),
+            'sandbox'      => env('BKASH_SANDBOX', true),
+            'api_domain'   => env('BKASH_API_DOMAIN', 'https://tokenized.sandbox.bka.sh/v1.2.0-beta'),
+        ],
+
+        'mock' => [
+            'endpoint'     => env('MOCK_PAYMENT_ENDPOINT', 'https://payment.mock/checkout'),
+            'secret'       => env('MOCK_PAYMENT_SECRET', 'mock-secret-key'),
+            'auto_approve' => env('MOCK_PAYMENT_AUTO_APPROVE', true),
+        ],
     ],
 ];
