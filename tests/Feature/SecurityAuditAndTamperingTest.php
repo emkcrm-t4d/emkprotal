@@ -815,4 +815,23 @@ class SecurityAuditAndTamperingTest extends TestCase
             'Session cookies must enforce SameSite=lax or SameSite=strict per ASVS V3.'
         );
     }
+
+    /**
+     * Test workspace data export gracefully handles malformed date filter inputs without unhandled exceptions.
+     */
+    public function test_workspace_data_export_gracefully_handles_malformed_date_inputs(): void
+    {
+        Auth::login($this->dhakaManager);
+
+        /** @var \App\Domain\Reports\Services\WorkspaceDataExportService $exportService */
+        $exportService = app(\App\Domain\Reports\Services\WorkspaceDataExportService::class);
+
+        // Pass invalid dates
+        $response = $exportService->exportMembers('ws-emk-dhaka', [
+            'date_from' => 'not-a-real-date',
+            'date_to' => '99999-invalid',
+        ]);
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
 }

@@ -96,14 +96,14 @@ class WorkspaceDataExportService
             $query->where('status', (string) $status);
         }
 
-        $dateFrom = $filters['date_from'] ?? $filters['dateFrom'] ?? null;
-        if (!empty($dateFrom)) {
-            $query->whereDate('created_at', '>=', Carbon::parse((string) $dateFrom)->toDateString());
+        $parsedFrom = $this->parseDateSafely($filters['date_from'] ?? $filters['dateFrom'] ?? null);
+        if ($parsedFrom !== null) {
+            $query->whereDate('created_at', '>=', $parsedFrom);
         }
 
-        $dateTo = $filters['date_to'] ?? $filters['dateTo'] ?? null;
-        if (!empty($dateTo)) {
-            $query->whereDate('created_at', '<=', Carbon::parse((string) $dateTo)->toDateString());
+        $parsedTo = $this->parseDateSafely($filters['date_to'] ?? $filters['dateTo'] ?? null);
+        if ($parsedTo !== null) {
+            $query->whereDate('created_at', '<=', $parsedTo);
         }
 
         if (!empty($filters['search'])) {
@@ -216,14 +216,14 @@ class WorkspaceDataExportService
             $query->where('status', (string) $status);
         }
 
-        $dateFrom = $filters['date_from'] ?? $filters['dateFrom'] ?? null;
-        if (!empty($dateFrom)) {
-            $query->whereDate('submitted_at', '>=', Carbon::parse((string) $dateFrom)->toDateString());
+        $parsedFrom = $this->parseDateSafely($filters['date_from'] ?? $filters['dateFrom'] ?? null);
+        if ($parsedFrom !== null) {
+            $query->whereDate('submitted_at', '>=', $parsedFrom);
         }
 
-        $dateTo = $filters['date_to'] ?? $filters['dateTo'] ?? null;
-        if (!empty($dateTo)) {
-            $query->whereDate('submitted_at', '<=', Carbon::parse((string) $dateTo)->toDateString());
+        $parsedTo = $this->parseDateSafely($filters['date_to'] ?? $filters['dateTo'] ?? null);
+        if ($parsedTo !== null) {
+            $query->whereDate('submitted_at', '<=', $parsedTo);
         }
 
         if (!empty($filters['search'])) {
@@ -324,14 +324,14 @@ class WorkspaceDataExportService
             $query->where('status', (string) $status);
         }
 
-        $dateFrom = $filters['date_from'] ?? $filters['dateFrom'] ?? null;
-        if (!empty($dateFrom)) {
-            $query->whereDate('created_at', '>=', Carbon::parse((string) $dateFrom)->toDateString());
+        $parsedFrom = $this->parseDateSafely($filters['date_from'] ?? $filters['dateFrom'] ?? null);
+        if ($parsedFrom !== null) {
+            $query->whereDate('created_at', '>=', $parsedFrom);
         }
 
-        $dateTo = $filters['date_to'] ?? $filters['dateTo'] ?? null;
-        if (!empty($dateTo)) {
-            $query->whereDate('created_at', '<=', Carbon::parse((string) $dateTo)->toDateString());
+        $parsedTo = $this->parseDateSafely($filters['date_to'] ?? $filters['dateTo'] ?? null);
+        if ($parsedTo !== null) {
+            $query->whereDate('created_at', '<=', $parsedTo);
         }
 
         if (!empty($filters['search'])) {
@@ -539,6 +539,22 @@ class WorkspaceDataExportService
         }
 
         return trim($str);
+    }
+
+    /**
+     * Safely parse a date string into Y-m-d format, returning null on invalid input.
+     */
+    protected function parseDateSafely(mixed $date): ?string
+    {
+        if (empty($date) || (!is_string($date) && !is_numeric($date))) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse((string) $date)->toDateString();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }
 
