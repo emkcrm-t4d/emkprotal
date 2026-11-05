@@ -15,21 +15,28 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b12] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
-    <!-- Atmospheric EMK Center Background with Glass Blur & Dark Scrim -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20" aria-hidden="true">
+<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b13] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
+    <!-- Atmospheric Fitted EMK Background Canvas (Auto-Adjusts per Device Screen & Never Crops) -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20 bg-[#070b13]" aria-hidden="true">
+        <!-- Ambient Extended Glow Underlay to seamlessly fill any aspect-ratio borders without clipping -->
         <img 
             src="{{ asset('images/emk-bg.webp') }}" 
-            alt="EMK Center Background" 
-            class="w-full h-full object-cover object-center scale-105 filter blur-[2px] opacity-30 contrast-125 brightness-90"
+            alt="" 
+            class="absolute inset-0 w-full h-full object-cover object-center filter blur-2xl opacity-25 scale-110"
+            aria-hidden="true"
         >
-        <div class="absolute inset-0 bg-[#070b12]/85 backdrop-blur-xs"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12] via-transparent to-[#070b12]/90"></div>
-        <!-- Ambient Glass Theme Lighting Accents matching hanging lamps -->
-        <div class="absolute top-10 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-[140px]"></div>
-        <div class="absolute -top-32 -left-32 w-[34rem] h-[34rem] bg-indigo-500/15 rounded-full blur-[140px]"></div>
-        <div class="absolute -bottom-32 left-1/3 w-[38rem] h-[38rem] bg-teal-600/10 rounded-full blur-[160px]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+        <!-- Uncropped Fit Layer: Intact 100% of the image, auto-adjusts based on viewport pixels -->
+        <img 
+            src="{{ asset('images/emk-bg.webp') }}" 
+            alt="EMK Center Interior" 
+            class="absolute inset-0 w-full h-full object-contain object-center filter blur-[1px] opacity-40 brightness-95 contrast-105"
+        >
+        <!-- Minimalist Dark Glass Scrim with Subtle Vignette -->
+        <div class="absolute inset-0 bg-[#070b13]/65 backdrop-blur-xs"></div>
+        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b13]/40 to-[#070b13]/85"></div>
+        <!-- Ambient lighting highlights -->
+        <div class="absolute top-12 left-1/3 w-[30rem] h-[30rem] bg-amber-500/10 rounded-full blur-[140px]"></div>
+        <div class="absolute -bottom-24 right-1/4 w-[32rem] h-[32rem] bg-indigo-500/10 rounded-full blur-[150px]"></div>
     </div>
 
     <!-- Skip to main content link for accessibility -->
