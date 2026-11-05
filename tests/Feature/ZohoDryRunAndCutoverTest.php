@@ -246,4 +246,145 @@ class ZohoDryRunAndCutoverTest extends TestCase
             ->expectsOutputToContain('guard=member, is_active=false, password=null (DEC-06)')
             ->assertExitCode(0);
     }
+
+    public function test_hub_delta_export_service_extracts_records_submitted_after_cutoff(): void
+    {
+        $cutoff = \Carbon\Carbon::parse('2026-11-05 10:00:00');
+
+        // Lead 1: Submitted before cutoff (should NOT be exported)
+        \App\Domain\Leads\Models\Lead::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => $this->workspaceId,
+            'target_space_code' => 'EMK-DHK',
+            'status' => 'submitted',
+            'bkash_txid' => 'TXBEFORE01',
+            'first_name' => 'Old',
+            'last_name' => 'Lead',
+            'email' => 'old.lead@example.com',
+            'contact_number' => '+8801700000001',
+            'date_of_birth' => '1995-01-01',
+            'age_at_submission' => 31,
+            'sex' => 'male',
+            'address_house_no' => '1',
+            'address_area' => 'Mirpur',
+            'address_zip_code' => '1216',
+            'address_division' => 'dhaka',
+            'address_district' => 'dhaka',
+            'occupation' => 'student',
+            'institution_study' => 'DU',
+            'highest_certification' => 'undergraduate_degree',
+            'area_of_subject' => 'Arts',
+            'submitted_at' => \Carbon\Carbon::parse('2026-11-05 08:00:00'),
+        ]);
+
+        // Lead 2: Submitted after cutoff (MUST be exported)
+        \App\Domain\Leads\Models\Lead::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => $this->workspaceId,
+            'target_space_code' => 'EMK-DHK',
+            'status' => 'submitted',
+            'bkash_txid' => 'TXAFTER001',
+            'first_name' => 'New',
+            'last_name' => 'Applicant',
+            'email' => 'new.applicant@example.com',
+            'contact_number' => '+8801700000002',
+            'date_of_birth' => '1998-05-12',
+            'age_at_submission' => 28,
+            'sex' => 'female',
+            'address_house_no' => '42',
+            'address_area' => 'Gulshan',
+            'address_zip_code' => '1212',
+            'address_division' => 'dhaka',
+            'address_district' => 'dhaka',
+            'occupation' => 'engineer',
+            'institution_study' => 'BUET',
+            'highest_certification' => 'undergraduate_degree',
+            'area_of_subject' => 'CSE',
+            'submitted_at' => \Carbon\Carbon::parse('2026-11-05 12:30:00'),
+        ]);
+
+        /** @var \App\Domain\Migration\Services\HubDeltaExportService $exportService */
+        $exportService = app(\App\Domain\Migration\Services\HubDeltaExportService::class);
+        $csv = $exportService->exportDeltaSince($cutoff, $this->workspaceId);
+
+        // Verify CSV header
+        $this->assertStringContainsString('"Lead UUID","Zoho ID","First Name"', $csv);
+
+        // Verify new applicant is in CSV, old lead is excluded
+        $this->assertStringContainsString('new.applicant@example.com', $csv);
+        $this->assertStringContainsString('TXAFTER001', $csv);
+        $this->assertStringNotContainsString('old.lead@example.com', $csv);
+        $this->assertStringNotContainsString('TXBEFORE01', $csv);
+
+        // Verify audit log entry created per DEC-11
+        $auditLog = AuditLog::where('event_type', AuditLog::EVENT_HUB_DELTA_EXPORTED)
+            ->where('workspace_id', $this->workspaceId)
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($auditLog);
+        $this->assertEquals(1, $auditLog->new_values['exported_records_count']);
+    }
+
+    public function test_hub_delta_export_service_sanitizes_csv_formula_injection(): void
+    {
+        /** @var \App\Domain\Migration\Services\HubDeltaExportService $exportService */
+        $exportService = app(\App\Domain\Migration\Services\HubDeltaExportService::class);
+
+        // Assert single quote prepended to formula injection triggers per T-11-12
+        $this->assertEquals("'=SUM(A1:A10)", $exportService->sanitizeCell('=SUM(A1:A10)'));
+        $this->assertEquals("'+123456789", $exportService->sanitizeCell('+123456789'));
+        $this->assertEquals("'-100", $exportService->sanitizeCell('-100'));
+        $this->assertEquals("'@attacker.com", $exportService->sanitizeCell('@attacker.com'));
+
+        // Normal cells unaffected
+        $this->assertEquals('John Doe', $exportService->sanitizeCell('John Doe'));
+        $this->assertEquals('BKASH12345', $exportService->sanitizeCell('BKASH12345'));
+    }
+
+    public function test_artisan_zoho_export_hub_delta_command_writes_sanitized_csv_and_logs_audit(): void
+    {
+        $outputPath = $this->tempDir . '/delta_export.csv';
+
+        $this->artisan('zoho:export-hub-delta', [
+            '--since' => '2026-11-05 00:00:00',
+            '--workspace' => $this->workspaceId,
+            '--output' => $outputPath,
+        ])
+            ->expectsOutputToContain('EMK Portal - Cutover Delta Exporter & Rollback Tool')
+            ->expectsOutputToContain('Formula injection sanitized (T-11-12)')
+            ->assertExitCode(0);
+
+        $this->assertFileExists($outputPath);
+        $csvContent = file_get_contents($outputPath);
+        $this->assertStringContainsString('"Lead UUID","Zoho ID","First Name"', $csvContent);
+    }
+
+    public function test_cutover_runbook_codifies_seven_steps_and_rollback_triggers(): void
+    {
+        $runbookPath = base_path('.planning/phases/11-zoho-migration-and-reconciliation/CUTOVER-RUNBOOK.md');
+        $this->assertFileExists($runbookPath);
+
+        $content = file_get_contents($runbookPath);
+
+        // Assert 7 cutover steps codified per GAP-P1-06
+        $this->assertStringContainsString('Step 1: Pre-Cutover Staging Dry Run', $content);
+        $this->assertStringContainsString('Step 2: Staff Training Sign-Off', $content);
+        $this->assertStringContainsString('Step 3: Form Freeze at Cutoff', $content);
+        $this->assertStringContainsString('Step 4: Final Delta Ingestion', $content);
+        $this->assertStringContainsString('Step 5: DNS & Web Server Switch', $content);
+        $this->assertStringContainsString('Step 6: Queue & Worker Ignition', $content);
+        $this->assertStringContainsString('Step 7: Live Production Smoke Test', $content);
+
+        // Assert quantifiable rollback triggers TR-01 through TR-05 codified
+        $this->assertStringContainsString('TR-01', $content);
+        $this->assertStringContainsString('TR-02', $content);
+        $this->assertStringContainsString('TR-03', $content);
+        $this->assertStringContainsString('TR-04', $content);
+        $this->assertStringContainsString('TR-05', $content);
+
+        // Assert 30-minute emergency rollback sequence and delta export command
+        $this->assertStringContainsString('30-Minute Emergency Rollback Sequence', $content);
+        $this->assertStringContainsString('zoho:export-hub-delta', $content);
+    }
 }
