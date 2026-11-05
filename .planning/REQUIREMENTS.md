@@ -98,7 +98,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MIGR-02**: Map legacy fields, terms, and statuses while preserving Zoho record IDs for audit traceability.
 - [x] **MIGR-03**: Safely associate legacy documents and photos with imported member profiles under secure naming conventions.
 - [x] **MIGR-04**: Generate reconciliation reports verifying record counts, active/inactive statuses, unique emails, and dates against Zoho source data.
-- [ ] **MIGR-05**: Execute dry-run verification, import portal accounts in inactive state, and establish cutover/rollback procedures.
+- [x] **MIGR-05**: Execute dry-run verification, import portal accounts in inactive state, and establish cutover/rollback procedures.
 
 ### Release Verification & Payment Gateway
 
@@ -202,7 +202,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MIGR-02 | Phase 11 | Complete |
 | MIGR-03 | Phase 11 | Complete |
 | MIGR-04 | Phase 11 | Complete |
-| MIGR-05 | Phase 11 | Pending |
+| MIGR-05 | Phase 11 | Complete |
 | RELS-01 | Phase 12 | Pending |
 | RELS-02 | Phase 12 | Pending |
 | RELS-03 | Phase 12 | Pending |

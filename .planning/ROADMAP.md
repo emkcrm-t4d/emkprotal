@@ -298,7 +298,7 @@ Plans:
   2. Legacy identity documents and photos are safely matched, renamed, and verified on imported profiles.
   3. Reconciliation report confirms 100% match on record counts, unique emails, and Active/Inactive statuses against Zoho sources.
   4. Cutover execution safely freezes Zoho Forms and redirects public applicants to the new membership form with tested rollback.
-**Plans**: 3/5 plans complete
+**Plans**: 4/5 plans complete
 **UI hint**: yes
 
 Plans:
@@ -312,7 +312,7 @@ Plans:
 - [x] 11-03-PLAN.md — Discrepancy Detection & Automated Reconciliation Reporting Engine (MIGR-04)
 
 **Wave 4**
-- [ ] 11-04-PLAN.md — Dry-Run Validation Engine, Inactive Portal Account Provisioning & Cutover Runbook (MIGR-05)
+- [x] 11-04-PLAN.md — Dry-Run Validation Engine, Inactive Portal Account Provisioning & Cutover Runbook (MIGR-05)
 
 **Wave 5**
 - [ ] 11-05-PLAN.md — Holistic Phase 11 End-to-End Migration & Reconciliation Test Suite (MIGR-01 through MIGR-05)
