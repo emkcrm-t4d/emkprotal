@@ -264,7 +264,7 @@
                         </svg>
                         TLS 1.3 Encrypted
                     </span>
-                    <span class="text-slate-500 font-mono text-[10px]">guard: web</span>
+                    <span class="sr-only">guard: web</span>
                 </div>
             </div>
 

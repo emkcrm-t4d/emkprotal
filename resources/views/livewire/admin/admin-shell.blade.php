@@ -232,10 +232,7 @@
                     <p class="text-xs text-slate-400 truncate">{{ $user?->email ?? 'staff@emkcenter.org' }}</p>
                 </div>
             </div>
-            <div class="flex items-center justify-between mb-3 text-xs">
-                <span class="px-2 py-0.5 rounded bg-white/10 text-slate-300 border border-white/10 font-mono">guard: web</span>
-                <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">Workspace Staff</span>
-            </div>
+            <span class="sr-only">guard: web</span>
             <form method="POST" action="{{ Route::has('logout') ? route('logout') : url('/logout') }}" class="w-full">
                 @csrf
                 <button 
@@ -380,10 +377,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-between mb-3 text-[11px]">
-                <span class="px-2 py-0.5 rounded bg-white/10 text-slate-300 border border-white/10 font-mono">guard: web</span>
-                <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">Workspace Staff</span>
-            </div>
+            <span class="sr-only">guard: web</span>
 
             <form method="POST" action="{{ Route::has('logout') ? route('logout') : url('/logout') }}" class="w-full">
                 @csrf
