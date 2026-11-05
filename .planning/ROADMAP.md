@@ -327,8 +327,24 @@ Plans:
   2. Accessibility, responsive layout, and cross-browser testing pass on public forms and member portal screens.
   3. Production deployment runbook completes with operational Horizon workers, scheduler verification, and admin provisioning.
   4. Payment adapter interface is validated and documented, ready for future SSLCommerz or direct bKash online gateway integration.
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 12-01-PLAN.md — Replaceable Payment Gateway Adapter Architecture & Contract Verification (RELS-05)
+
+**Wave 2**
+- [ ] 12-02-PLAN.md — Security Audit Suite & Livewire Tampering Defense Verification (RELS-02)
+
+**Wave 3**
+- [ ] 12-03-PLAN.md — Responsive Layout, Accessibility (WCAG 2.1 AA) & UX Quality Suite (RELS-03)
+
+**Wave 4**
+- [ ] 12-04-PLAN.md — Production Deployment Runbook, Horizon Worker Checks & Named Admin Provisioning (RELS-04)
+
+**Wave 5**
+- [ ] 12-05-PLAN.md — Master End-to-End System Acceptance (UAT) & Architecture Certification (RELS-01)
 
 ## Progress
 
@@ -348,4 +364,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 9. Read-Only Member Portal, Change Requests, and Renewals | 5/5 | Complete    | 2026-11-05 |
 | 10. Dashboard, Reports, Data Tools, and Platform Settings | 5/5 | Complete | 2026-11-05 |
 | 11. Zoho Migration and Reconciliation | 5/5 | Complete | 2026-11-05 |
-| 12. Verification, Security Review, Release, and Later Payment Gateway | 0/0 | Not started | - |
+| 12. Verification, Security Review, Release, and Later Payment Gateway | 0/5 | In progress | - |
