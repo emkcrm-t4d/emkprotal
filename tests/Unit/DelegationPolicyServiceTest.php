@@ -42,7 +42,7 @@ class DelegationPolicyServiceTest extends TestCase
         }
     }
 
-    public function test_strictly_non_delegable_contains_sixteen_managerial_actions(): void
+    public function test_strictly_non_delegable_contains_eighteen_managerial_actions(): void
     {
         $expected = [
             'forms.publish',
