@@ -86,9 +86,10 @@ test('all workspace livewire components implement ValidatesWorkspaceOnHydration 
             $relativePath = str_replace([$dir . DIRECTORY_SEPARATOR, '.php'], '', $file->getPathname());
             $className = 'App\\Livewire\\' . str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath);
 
-            // Exclude public forms, portal member components, and navigation shell
+            // Exclude public forms, portal member components, auth entrypoints, and navigation shell
             if (
                 str_starts_with($className, 'App\\Livewire\\Portal\\') ||
+                str_starts_with($className, 'App\\Livewire\\Auth\\') ||
                 $className === 'App\\Livewire\\Forms\\PublicMembershipForm' ||
                 $className === 'App\\Livewire\\Admin\\AdminShell'
             ) {

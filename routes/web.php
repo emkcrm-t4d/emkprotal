@@ -35,9 +35,25 @@ Route::get('/healthz', function () {
 Route::get('/workspaces/{workspace}/documents/{attachment}', [DocumentDownloadController::class, 'download'])
     ->name('documents.download');
 
-Route::get('/login', function () {
-    return response('Login required', 200);
-})->name('login');
+Route::get('/login', \App\Livewire\Auth\StaffLogin::class)
+    ->name('login')
+    ->middleware('guest:web');
+
+Route::match(['get', 'post'], '/logout', function () {
+    \Illuminate\Support\Facades\Auth::guard('web')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login');
+})->name('logout');
+
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if (! $user) {
+        return redirect()->route('login');
+    }
+    $workspace = $user->workspace_id ?: 'ws-emk-dhaka';
+    return redirect()->route('crm.dashboard', $workspace);
+})->name('dashboard')->middleware('auth:web');
 
 Route::get('/password/reset-required', function () {
     return response('Password reset required', 200);
