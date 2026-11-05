@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             DefaultMembershipFormSeeder::class,
             EmailTemplateSeeder::class,
             WorkflowRuleSeeder::class,
+            MemberDemoSeeder::class,
         ]);
     }
 }
