@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Domain\Reports\Services\CsvExportService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -628,5 +631,188 @@ class SecurityAuditAndTamperingTest extends TestCase
             'id' => $logId,
             'reason' => 'Immutable audit benchmark log',
         ]);
+    }
+
+    /**
+     * Test File Upload Security: magic bytes validation rejects disguised executable scripts.
+     */
+    public function test_file_upload_rejects_disguised_executable_scripts_and_spoofed_mime_types(): void
+    {
+        // 1. PHP script disguised with a .jpg extension (detected MIME: text/x-php)
+        $fakeJpg = UploadedFile::fake()->create('shell.jpg', 10)->mimeType('text/x-php');
+
+        $rules = [
+            'photo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:4096'],
+        ];
+
+        $validator = Validator::make(['photo' => $fakeJpg], $rules);
+        $this->assertTrue($validator->fails(), 'File disguised with .jpg extension containing PHP script must fail MIME validation.');
+        $this->assertArrayHasKey('photo', $validator->errors()->toArray());
+
+        // 2. Shellcode / bash script disguised with a .png extension (detected MIME: application/x-sh)
+        $fakePng = UploadedFile::fake()->create('exploit.php.png', 10)->mimeType('application/x-sh');
+
+        $validatorPng = Validator::make(['photo' => $fakePng], $rules);
+        $this->assertTrue($validatorPng->fails(), 'Double-extension executable disguised as png must fail MIME validation.');
+        $this->assertArrayHasKey('photo', $validatorPng->errors()->toArray());
+    }
+
+    /**
+     * Test File Upload Security: SVG executable script uploads are strictly blocked per OWASP ASVS Level 1.
+     */
+    public function test_file_upload_blocks_svg_executable_script_uploads(): void
+    {
+        // SVG with embedded XSS script payload
+        $maliciousSvg = UploadedFile::fake()->createWithContent(
+            'payload.svg',
+            '<svg xmlns="http://www.w3.org/2000/svg"><script>alert("XSS")</script></svg>'
+        );
+
+        // Application photo rule: strictly only raster images (jpg, jpeg, png)
+        $photoRules = ['photo' => ['required', 'file', 'mimes:jpg,jpeg,png']];
+        $validatorPhoto = Validator::make(['photo' => $maliciousSvg], $photoRules);
+        $this->assertTrue($validatorPhoto->fails(), 'SVG files must be blocked on photo upload fields.');
+
+        // Application identity document rule: mimes:pdf,jpg,jpeg,doc,docx,png (SVG disbarred)
+        $docRules = ['doc' => ['required', 'file', 'mimes:pdf,jpg,jpeg,doc,docx,png']];
+        $validatorDoc = Validator::make(['doc' => $maliciousSvg], $docRules);
+        $this->assertTrue($validatorDoc->fails(), 'SVG files must be blocked on identity document fields.');
+    }
+
+    /**
+     * Test Document Download Controller: path traversal sequences are rejected and confined to storage root.
+     */
+    public function test_document_download_path_traversal_is_blocked_and_confined_to_storage_root(): void
+    {
+        $this->actingAs($this->dhakaManager, 'web');
+
+        // 1. Direct path traversal via HTTP route parameters
+        $traversalAttempts = [
+            '../../etc/passwd',
+            '..%2F..%2Fetc%2Fpasswd',
+            '..\\..\\Windows\\win.ini',
+            '....//....//etc/passwd',
+        ];
+
+        foreach ($traversalAttempts as $attempt) {
+            $response = $this->get('/workspaces/ws-emk-dhaka/documents/' . urlencode($attempt));
+            $this->assertTrue(
+                in_array($response->status(), [400, 403, 404], true),
+                "Path traversal attempt [{$attempt}] must be rejected with 400, 403, or 404."
+            );
+        }
+
+        // 2. Assert DocumentStorageService / Flysystem blocks retrieval outside storage root
+        $caught = false;
+        try {
+            $this->storageService->get('../../etc/passwd');
+        } catch (\Throwable $e) {
+            $caught = true;
+            $this->assertTrue(
+                str_contains($e->getMessage(), 'Path traversal') ||
+                str_contains($e->getMessage(), 'not found')
+            );
+        }
+        $this->assertTrue($caught, 'Path traversal attempt must be caught and blocked.');
+    }
+
+    /**
+     * Test CSV Formula Injection Defense (CWE-1236): formula triggers are escaped with single apostrophe.
+     */
+    public function test_csv_export_neutralizes_formula_injection_triggers_cwe_1236(): void
+    {
+        /** @var CsvExportService $csvService */
+        $csvService = app(CsvExportService::class);
+
+        // 1. Unit test formula injection neutralization across all OWASP formula triggers
+        $dangerousTriggers = [
+            '=1+1' => "'=1+1",
+            '@SUM(A1:A10)' => "'@SUM(A1:A10)",
+            "-cmd|' /C calc'!A0" => "'-cmd|' /C calc'!A0",
+            '+test' => "'+test",
+            "\t@calc" => "'@calc",
+            "\r=cmd" => "'=cmd",
+            "   =HYPERLINK(\"http://evil.com\")" => "'=HYPERLINK(\"http://evil.com\")",
+        ];
+
+        foreach ($dangerousTriggers as $input => $expected) {
+            $sanitized = $csvService->sanitizeCsvCell($input);
+            $this->assertSame(
+                $expected,
+                $sanitized,
+                "Formula trigger [{$input}] was not properly sanitized. Got [{$sanitized}]."
+            );
+        }
+
+        // Safe benign text values remain unmodified
+        $this->assertSame('Rahim Ahmed', $csvService->sanitizeCsvCell('Rahim Ahmed'));
+        $this->assertSame('Dhaka 1213', $csvService->sanitizeCsvCell('Dhaka 1213'));
+        $this->assertSame('', $csvService->sanitizeCsvCell(null));
+
+        // 2. Integration test: Lead export with formula injection fields
+        Lead::withoutGlobalScopes()->create([
+            'uuid' => (string) Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'target_space_code' => 'EMK-DHK',
+            'status' => 'approved',
+            'bkash_txid' => 'TXIDFORM01',
+            'first_name' => '=cmd|calc!A0',
+            'last_name' => '@SUM(A1:B10)',
+            'email' => 'malicious.csv@example.com',
+            'contact_number' => '+8801700000099',
+            'date_of_birth' => '1995-01-01',
+            'age_at_submission' => 31,
+            'sex' => 'male',
+            'address_house_no' => '-cmd',
+            'address_area' => 'Dhanmondi',
+            'address_zip_code' => '1209',
+            'address_division' => 'Dhaka',
+            'address_district' => 'Dhaka',
+            'occupation' => '+admin',
+            'institution_study' => 'BUET',
+            'highest_certification' => 'Bachelor',
+            'area_of_subject' => 'CS',
+            'submitted_at' => now(),
+        ]);
+
+        $this->actingAs($this->dhakaManager, 'web');
+        $response = $csvService->exportLeads('ws-emk-dhaka');
+        $this->assertSame(200, $response->getStatusCode());
+
+        ob_start();
+        $response->sendContent();
+        $streamedCsv = ob_get_clean();
+
+        $this->assertNotEmpty($streamedCsv);
+        // Assert formula characters in data rows are escaped with leading single apostrophe
+        $this->assertStringContainsString("'=cmd|calc!A0", $streamedCsv);
+        $this->assertStringContainsString("'@SUM(A1:B10)", $streamedCsv);
+    }
+
+    /**
+     * Test HTTP Security Headers and Session Cookie Security configuration per OWASP ASVS.
+     */
+    public function test_http_security_headers_and_session_cookie_flags_enforced(): void
+    {
+        // 1. Assert HTTP Security Headers on web response
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+
+        $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
+        $response->assertHeader('X-Content-Type-Options', 'nosniff');
+        $response->assertHeader('X-XSS-Protection', '1; mode=block');
+        $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+        // 2. Assert Session Cookie configuration per OWASP ASVS V3
+        $this->assertTrue(
+            config('session.http_only'),
+            'Session cookies must have HttpOnly enabled to prevent XSS credential theft.'
+        );
+
+        $this->assertContains(
+            config('session.same_site'),
+            ['lax', 'strict'],
+            'Session cookies must enforce SameSite=lax or SameSite=strict per ASVS V3.'
+        );
     }
 }

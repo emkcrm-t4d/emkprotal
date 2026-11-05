@@ -526,13 +526,19 @@ class WorkspaceDataExportService
         }
 
         $str = is_bool($value) ? ($value ? 'Yes' : 'No') : (string) $value;
-        $str = trim($str);
 
-        if (strlen($str) > 0 && in_array($str[0], ['=', '+', '-', '@'], true)) {
+        // Check if string contains leading whitespace/tab/CR followed by formula triggers
+        $ltrimmed = ltrim($str, " \t\r\n");
+        if (strlen($ltrimmed) > 0 && in_array($ltrimmed[0], ['=', '+', '-', '@'], true)) {
+            return "'" . $ltrimmed;
+        }
+
+        // Direct leading trigger check (including tab and CR)
+        if (strlen($str) > 0 && in_array($str[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
             return "'" . $str;
         }
 
-        return $str;
+        return trim($str);
     }
 }
 

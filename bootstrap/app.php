@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn (Request $request) => $request->is('portal*') ? route('portal.login') : route('login'));
 
+        $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
+        ]);
+
         $middleware->alias([
             'workspace.access' => \App\Http\Middleware\VerifyWorkspaceAccess::class,
             'password.reset' => \App\Http\Middleware\EnsurePasswordReset::class,
