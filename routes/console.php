@@ -32,3 +32,7 @@ Schedule::command('crm:mailbox-sync')->everyFiveMinutes();
 // Process daily membership renewal window and post-expiry status transitions
 Schedule::command('crm:process-membership-milestones')->dailyAt('01:00');
 
+// Automated daily encrypted platform backup per DASH-05 and GAP-P1-06
+Schedule::command('crm:backup:create')->dailyAt('02:00');
+
+
