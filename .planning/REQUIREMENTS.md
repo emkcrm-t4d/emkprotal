@@ -89,7 +89,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DASH-01**: Build workspace-scoped operational dashboards for membership counts, lead pipeline, card issuance, and revenue metrics.
 - [ ] **DASH-02**: Enforce cross-workspace dashboard view restrictions (Managers see own Space; only Admin/Superadmin view global data).
 - [ ] **DASH-03**: Provide authorized CSV/Excel export tools scoped to workspace data with full audit event logging.
-- [ ] **DASH-04**: Provide administrative configuration screens for user management, role assignments, email templates, and system parameters.
+- [x] **DASH-04**: Provide administrative configuration screens for user management, role assignments, email templates, and system parameters.
 - [ ] **DASH-05**: Implement automated and manual database/file backup procedures with encryption and restore verification runbook.
 
 ### Zoho Migration & Cutover
@@ -195,8 +195,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PORT-05 | Phase 9 | Complete |
 | DASH-01 | Phase 10 | Pending |
 | DASH-02 | Phase 10 | Pending |
-| DASH-03 | Phase 10 | Pending |
-| DASH-04 | Phase 10 | Pending |
+| DASH-03 | Phase 10 | Complete |
+| DASH-04 | Phase 10 | Complete |
 | DASH-05 | Phase 10 | Pending |
 | MIGR-01 | Phase 11 | Pending |
 | MIGR-02 | Phase 11 | Pending |
