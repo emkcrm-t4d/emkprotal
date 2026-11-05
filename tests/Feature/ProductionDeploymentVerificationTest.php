@@ -259,6 +259,29 @@ class ProductionDeploymentVerificationTest extends TestCase
             ->expectsOutputToContain('Disposable email domain [mailinator.com] is prohibited')
             ->assertExitCode(1);
     }
+
+    /**
+     * Test error message sanitization redacts username-less and user-password URIs.
+     */
+    public function test_health_checker_sanitizes_redis_credentials_without_username(): void
+    {
+        $checker = new class(app('db'), app('redis'), app('files')) extends SystemHealthChecker {
+            public function exposeSanitize(string $msg): string
+            {
+                return $this->sanitizeErrorMessage($msg);
+            }
+        };
+
+        $this->assertEquals(
+            'Connection refused to redis://[REDACTED_AUTH]@127.0.0.1:6379',
+            $checker->exposeSanitize('Connection refused to redis://:secretpass@127.0.0.1:6379')
+        );
+
+        $this->assertEquals(
+            'Connection refused to redis://[REDACTED_AUTH]@127.0.0.1:6379',
+            $checker->exposeSanitize('Connection refused to redis://default:secretpass@127.0.0.1:6379')
+        );
+    }
 }
 
 

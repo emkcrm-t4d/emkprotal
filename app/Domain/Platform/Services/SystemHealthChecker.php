@@ -418,8 +418,8 @@ class SystemHealthChecker
         // Redact passwords and credentials matching patterns like password=..., auth=...
         $sanitized = preg_replace('/(password|pwd|secret|key|token)=([^;&\s]+)/i', '$1=[REDACTED]', $message);
 
-        // Redact URLs containing credentials like redis://user:password@host
-        $sanitized = preg_replace('/\/\/[^:]+:[^@]+@/', '//[REDACTED_AUTH]@', (string) $sanitized);
+        // Redact URLs containing credentials like redis://user:password@host or redis://:password@host
+        $sanitized = preg_replace('/\/\/([^:]*:)?([^@]+)@/', '//[REDACTED_AUTH]@', (string) $sanitized);
 
         return (string) $sanitized;
     }
