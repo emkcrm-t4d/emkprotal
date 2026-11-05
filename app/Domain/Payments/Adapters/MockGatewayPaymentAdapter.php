@@ -42,15 +42,16 @@ class MockGatewayPaymentAdapter implements PaymentAdapterInterface, PaymentGatew
     public function verifyPayment(PaymentVerificationRequest $request): PaymentVerificationResult
     {
         $txid = Str::upper(trim($request->paymentReference ?: $request->transactionId));
+        $gateway = (string) ($this->config['gateway'] ?? 'mock');
 
         $evidencePayload = [
             'stream' => 'payment',
             'status' => 'verified',
-            'gateway' => 'mock',
+            'gateway' => $gateway,
             'transaction_id' => $txid,
             'amount_received_bdt' => $request->amountBdt,
             'expected_amount_bdt' => $request->amountBdt,
-            'payment_method' => 'mock',
+            'payment_method' => $gateway,
             'verified_at' => now()->toIso8601String(),
             'reviewer_user_id' => $request->reviewerUserId,
             'notes' => $request->notes ?? 'Automated mock gateway verification simulation.',
