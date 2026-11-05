@@ -103,7 +103,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Release Verification & Payment Gateway
 
 - [ ] **RELS-01**: Conduct end-to-end UAT verification of multi-workspace isolation, conversion invariants, and permission boundaries.
-- [ ] **RELS-02**: Perform security review addressing Livewire authorization tampering, route security, file upload security, and audit immutability.
+- [x] **RELS-02**: Perform security review addressing Livewire authorization tampering, route security, file upload security, and audit immutability.
 - [ ] **RELS-03**: Execute accessibility, responsive layout, and cross-browser validation across public forms and member portal.
 - [ ] **RELS-04**: Implement production deployment runbook, database migration verification, Horizon worker checks, and named admin provisioning.
 - [x] **RELS-05**: Implement payment gateway adapter interface preparing for seamless future SSLCommerz or bKash direct online payments.
@@ -204,7 +204,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MIGR-04 | Phase 11 | Complete |
 | MIGR-05 | Phase 11 | Complete |
 | RELS-01 | Phase 12 | Pending |
-| RELS-02 | Phase 12 | Pending |
+| RELS-02 | Phase 12 | Complete |
 | RELS-03 | Phase 12 | Pending |
 | RELS-04 | Phase 12 | Pending |
 | RELS-05 | Phase 12 | Complete |
