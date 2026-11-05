@@ -204,3 +204,4 @@ All 50 tests passed cleanly with 282 assertions.
 - [x] Invariant 3: Dashboard route protected by `can:migration.reconcile_data` and 403 on cross-workspace access
 - [x] Invariant 4: Immutable audit logs recorded on reconciliation run and report export
 - [x] Invariant 5: No global `route()` helpers used in `App\Domain`
+

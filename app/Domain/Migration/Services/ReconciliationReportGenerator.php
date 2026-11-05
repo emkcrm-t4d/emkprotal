@@ -216,3 +216,4 @@ HTML;
         return (string) $value;
     }
 }
+
