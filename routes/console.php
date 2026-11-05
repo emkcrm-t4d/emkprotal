@@ -35,4 +35,9 @@ Schedule::command('crm:process-membership-milestones')->dailyAt('01:00');
 // Automated daily encrypted platform backup per DASH-05 and GAP-P1-06
 Schedule::command('crm:backup:create')->dailyAt('02:00');
 
+// Application scheduler heartbeat for production health check diagnostics
+Schedule::call(function () {
+    \Illuminate\Support\Facades\Cache::put('crm:scheduler:heartbeat', now()->toIso8601String(), 300);
+})->everyMinute()->name('crm-scheduler-heartbeat');
+
 
