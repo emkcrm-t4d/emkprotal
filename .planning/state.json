@@ -61,13 +61,13 @@
     {
       "number": "12",
       "name": "Verification, Security Review, Release, and Later Payment Gateway",
-      "status": "in_progress"
+      "status": "complete"
     }
   ],
   "next": {
-    "command": "/gsd-progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 12 of 12 · 92% · executing"
+    "command": "/gsd-new-milestone",
+    "label": "Start a new milestone",
+    "reason": "All phases complete — start a new milestone"
   },
-  "updated_at": "2026-11-05T09:16:53.684Z"
+  "updated_at": "2026-11-05T10:20:40.536Z"
 }
