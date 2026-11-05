@@ -32,7 +32,14 @@ class MemberDirectoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([
+            \Database\Seeders\SpaceAndWorkspaceSeeder::class,
+            \Database\Seeders\MembershipTermSeeder::class,
+            \Database\Seeders\RolesAndPermissionsSeeder::class,
+            \Database\Seeders\DefaultMembershipFormSeeder::class,
+            \Database\Seeders\EmailTemplateSeeder::class,
+            \Database\Seeders\WorkflowRuleSeeder::class,
+        ]);
 
         // Ensure other workspace exists for cross-workspace tests
         $ctgSpace = \Illuminate\Support\Facades\DB::table('spaces')->where('code', 'CR-CTG')->first();

@@ -15,28 +15,27 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b13] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
-    <!-- Atmospheric Fitted EMK Background Canvas (Auto-Adjusts per Device Screen & Never Crops) -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20 bg-[#070b13]" aria-hidden="true">
-        <!-- Ambient Extended Glow Underlay to seamlessly fill any aspect-ratio borders without clipping -->
-        <img 
-            src="{{ asset('images/emk-bg.webp') }}" 
-            alt="" 
-            class="absolute inset-0 w-full h-full object-cover object-center filter blur-2xl opacity-25 scale-110"
-            aria-hidden="true"
-        >
-        <!-- Uncropped Fit Layer: Intact 100% of the image, auto-adjusts based on viewport pixels -->
-        <img 
-            src="{{ asset('images/emk-bg.webp') }}" 
-            alt="EMK Center Interior" 
-            class="absolute inset-0 w-full h-full object-contain object-center filter blur-[1px] opacity-40 brightness-95 contrast-105"
-        >
-        <!-- Minimalist Dark Glass Scrim with Subtle Vignette -->
-        <div class="absolute inset-0 bg-[#070b13]/65 backdrop-blur-xs"></div>
-        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b13]/40 to-[#070b13]/85"></div>
-        <!-- Ambient lighting highlights -->
-        <div class="absolute top-12 left-1/3 w-[30rem] h-[30rem] bg-amber-500/10 rounded-full blur-[140px]"></div>
-        <div class="absolute -bottom-24 right-1/4 w-[32rem] h-[32rem] bg-indigo-500/10 rounded-full blur-[150px]"></div>
+<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b12] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
+    <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20 flex items-center justify-center bg-[#070b12]" aria-hidden="true">
+        <picture class="w-full h-full flex items-center justify-center">
+            <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
+            <img 
+                src="{{ asset('images/emk-bg.jpg') }}" 
+                alt="EMK Center Background" 
+                class="w-full h-full object-contain object-center opacity-30 brightness-95 contrast-110 pointer-events-none select-none transition-opacity duration-500"
+                loading="eager"
+                fetchpriority="high"
+            >
+        </picture>
+        <!-- Soft Vignette & Atmospheric Contrast Scrim -->
+        <div class="absolute inset-0 bg-[#070b12]/60 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/40 to-[#070b12]/95"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12] via-transparent to-[#070b12]/80"></div>
+        <!-- Ambient Warm Pendant Lamp Glow -->
+        <div class="absolute top-12 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[130px]"></div>
+        <div class="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-[130px]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] opacity-30"></div>
     </div>
 
     <!-- Skip to main content link for accessibility -->

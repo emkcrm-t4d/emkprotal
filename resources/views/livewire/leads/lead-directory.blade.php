@@ -1,68 +1,68 @@
 <div class="space-y-6">
-    <!-- Breadcrumbs & Directory Header -->
-    <div class="sm:flex sm:items-center sm:justify-between pb-4 border-b border-slate-200">
+    <!-- Breadcrumbs & Directory Header with Glass Blur View -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-white">
         <div>
-            <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                <a href="/crm/{{ $workspace }}/leads" class="hover:text-indigo-600 transition-colors">CRM</a>
-                <span>/</span>
-                <span class="text-slate-900 font-semibold">Leads Directory</span>
+            <nav class="flex items-center gap-2 text-xs text-slate-400 mb-1.5">
+                <a href="/crm/{{ $workspace }}/leads" class="hover:text-amber-400 transition-colors">CRM</a>
+                <span class="text-slate-600">/</span>
+                <span class="text-slate-200 font-semibold">Leads Directory</span>
             </nav>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Inbound Leads & Applications</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-800 border border-slate-200">
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Inbound Leads & Applications</h1>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-xl text-xs font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">
                     {{ $workspace }}
                 </span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">
+            <p class="mt-1 text-sm text-slate-300">
                 Workspace-isolated applicant intake, tri-state verification review, and admissions queue per DEC-01.
             </p>
         </div>
 
-        <div class="mt-4 sm:mt-0 flex items-center gap-3">
+        <div class="mt-2 sm:mt-0 flex items-center gap-3">
             <button
                 type="button"
                 wire:click="resetFilters"
-                class="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 shadow-xs transition-colors"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-xs font-semibold text-slate-200 hover:text-white shadow-xs transition-colors cursor-pointer"
                 id="btn-reset-filters-top"
             >
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-                Reset Filters
+                <span>Reset Filters</span>
             </button>
         </div>
     </div>
 
-    <!-- Summary Metrics Cards -->
+    <!-- Summary Metrics Cards in 3D Frosted Glass -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Leads</p>
-            <p class="text-2xl font-bold text-slate-900 mt-1">{{ number_format($metrics['total']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-white/10 shadow-lg">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Leads</p>
+            <p class="text-2xl font-black text-white mt-1">{{ number_format($metrics['total']) }}</p>
         </div>
 
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-blue-600 uppercase tracking-wider">Submitted</p>
-            <p class="text-2xl font-bold text-blue-700 mt-1">{{ number_format($metrics['submitted']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-blue-500/20 shadow-lg">
+            <p class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Submitted</p>
+            <p class="text-2xl font-black text-blue-300 mt-1">{{ number_format($metrics['submitted']) }}</p>
         </div>
 
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-indigo-600 uppercase tracking-wider">Under Review</p>
-            <p class="text-2xl font-bold text-indigo-700 mt-1">{{ number_format($metrics['under_review']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-indigo-500/20 shadow-lg">
+            <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Under Review</p>
+            <p class="text-2xl font-black text-indigo-300 mt-1">{{ number_format($metrics['under_review']) }}</p>
         </div>
 
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-amber-600 uppercase tracking-wider">Missing Items</p>
-            <p class="text-2xl font-bold text-amber-700 mt-1">{{ number_format($metrics['missing_items']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-amber-500/20 shadow-lg">
+            <p class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Missing Items</p>
+            <p class="text-2xl font-black text-amber-300 mt-1">{{ number_format($metrics['missing_items']) }}</p>
         </div>
 
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-emerald-600 uppercase tracking-wider">Approved</p>
-            <p class="text-2xl font-bold text-emerald-700 mt-1">{{ number_format($metrics['approved']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-emerald-500/20 shadow-lg">
+            <p class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Approved</p>
+            <p class="text-2xl font-black text-emerald-300 mt-1">{{ number_format($metrics['approved']) }}</p>
         </div>
 
-        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-            <p class="text-xs font-medium text-purple-600 uppercase tracking-wider">Converted</p>
-            <p class="text-2xl font-bold text-purple-700 mt-1">{{ number_format($metrics['converted']) }}</p>
+        <div class="bg-slate-900/70 backdrop-blur-2xl p-4 rounded-2xl border border-purple-500/20 shadow-lg">
+            <p class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Converted</p>
+            <p class="text-2xl font-black text-purple-300 mt-1">{{ number_format($metrics['converted']) }}</p>
         </div>
     </div>
 

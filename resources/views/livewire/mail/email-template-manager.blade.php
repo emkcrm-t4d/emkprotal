@@ -1,4 +1,4 @@
-<div class="w-full space-y-6">
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-6">
     <!-- Top Bar: Glass Blur View per User Specification -->
     <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
