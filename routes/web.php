@@ -92,17 +92,17 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.id_cards.index')
             ->middleware(['can:members.manage_cards']);
 
-        Route::get('/reports', function ($workspace) {
-            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
-                ? $workspace->id
-                : (string) $workspace;
+        Route::get('/reports', \App\Livewire\Reports\OperationalDashboard::class)
+            ->name('crm.reports')
+            ->middleware(['can:dashboard_reports.view_dashboard']);
 
-            return response()->json([
-                'status' => 'ok',
-                'workspace' => $workspaceId,
-                'module' => 'reports',
-            ]);
-        })->name('crm.reports');
+        Route::get('/dashboard', \App\Livewire\Reports\OperationalDashboard::class)
+            ->name('crm.dashboard')
+            ->middleware(['can:dashboard_reports.view_dashboard']);
+
+        Route::get('/dashboard_reports', \App\Livewire\Reports\OperationalDashboard::class)
+            ->name('crm.dashboard_reports')
+            ->middleware(['can:dashboard_reports.view_dashboard']);
 
         Route::get('/forms', \App\Livewire\Forms\FormIndex::class)
             ->name('crm.forms.index');
