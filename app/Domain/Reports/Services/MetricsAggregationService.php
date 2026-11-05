@@ -38,14 +38,30 @@ class MetricsAggregationService
         if ($useCache) {
             $this->trackCacheKey($workspaceId, $cacheKey);
 
-            return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($workspaceId, $normalizedDateFrom, $normalizedDateTo) {
-                return $this->computeMetrics($workspaceId, $normalizedDateFrom, $normalizedDateTo);
-            });
+            $cached = Cache::get($cacheKey);
+
+            if ($cached instanceof OperationalMetricsDTO) {
+                return $cached;
+            }
+
+            if (is_array($cached)) {
+                return OperationalMetricsDTO::fromArray($cached);
+            }
+
+            // If corrupt, incomplete class, or missing from cache, recompute and cache as array
+            if ($cached !== null) {
+                Cache::forget($cacheKey);
+            }
+
+            $metrics = $this->computeMetrics($workspaceId, $normalizedDateFrom, $normalizedDateTo);
+            Cache::put($cacheKey, $metrics->toArray(), self::CACHE_TTL_SECONDS);
+
+            return $metrics;
         }
 
         $metrics = $this->computeMetrics($workspaceId, $normalizedDateFrom, $normalizedDateTo);
         $this->trackCacheKey($workspaceId, $cacheKey);
-        Cache::put($cacheKey, $metrics, self::CACHE_TTL_SECONDS);
+        Cache::put($cacheKey, $metrics->toArray(), self::CACHE_TTL_SECONDS);
 
         return $metrics;
     }

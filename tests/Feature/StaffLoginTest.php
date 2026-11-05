@@ -86,4 +86,16 @@ class StaffLoginTest extends TestCase
         $response->assertRedirect(route('login'));
         $this->assertFalse(Auth::guard('web')->check());
     }
+
+    public function test_authenticated_admin_can_view_operational_dashboard(): void
+    {
+        $user = User::where('email', 'admin@emk.test')->first();
+        $this->actingAs($user, 'web');
+
+        $response = $this->get('/crm/ws-emk-dhaka/dashboard');
+        $response->assertStatus(200);
+        $response->assertSeeLivewire(\App\Livewire\Reports\OperationalDashboard::class);
+        $response->assertSee('Operational Metrics');
+    }
 }
+
