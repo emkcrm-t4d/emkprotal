@@ -120,9 +120,9 @@
     <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-200 text-left text-sm" id="table-members">
-                <thead class="bg-slate-50 text-slate-600 font-semibold text-xs uppercase tracking-wider">
+                <thead class="bg-white/5 backdrop-blur-md text-slate-200 font-semibold text-xs uppercase tracking-wider">
                     <tr>
-                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-slate-100" wire:click="sortBy('member_id')">
+                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('member_id')">
                             <div class="flex items-center gap-1.5">
                                 <span>Member ID</span>
                                 @if ($sortField === 'member_id')
@@ -130,7 +130,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-slate-100" wire:click="sortBy('first_name')">
+                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('first_name')">
                             <div class="flex items-center gap-1.5">
                                 <span>Member Name</span>
                                 @if ($sortField === 'first_name')
@@ -141,7 +141,7 @@
                         <th scope="col" class="px-6 py-3.5">
                             Contact Info
                         </th>
-                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-slate-100" wire:click="sortBy('status')">
+                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('status')">
                             <div class="flex items-center gap-1.5">
                                 <span>Status</span>
                                 @if ($sortField === 'status')
@@ -150,9 +150,9 @@
                             </div>
                         </th>
                         <th scope="col" class="px-6 py-3.5">
-                            Term & Duration
+                            Term &amp; Duration
                         </th>
-                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-slate-100" wire:click="sortBy('expiry_date')">
+                        <th scope="col" class="px-6 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('expiry_date')">
                             <div class="flex items-center gap-1.5">
                                 <span>Validity Dates</span>
                                 @if ($sortField === 'expiry_date')
@@ -165,48 +165,48 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 text-slate-700">
+                <tbody class="divide-y divide-white/10 text-slate-200">
                     @forelse ($members as $member)
-                        <tr class="hover:bg-slate-50 transition-colors" wire:key="member-{{ $member->id }}">
+                        <tr class="hover:bg-white/5 transition-colors" wire:key="member-{{ $member->id }}">
                             <!-- Member ID -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-mono text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-800 rounded border border-slate-200">
+                                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-950/80 text-white border border-white/20 shadow-inner tracking-wide">
                                     {{ $member->member_id }}
                                 </span>
                             </td>
 
                             <!-- Full Name -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="font-medium text-slate-900">{{ $member->full_name }}</div>
-                                <div class="text-xs text-slate-500 capitalize">{{ $member->occupation ?? 'N/A' }}</div>
+                                <div class="font-bold text-white">{{ $member->full_name }}</div>
+                                <div class="text-xs text-slate-400 capitalize">{{ $member->occupation ?? 'N/A' }}</div>
                             </td>
 
                             <!-- Contact Info -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-slate-900 text-xs">{{ $member->email }}</div>
-                                <div class="text-slate-500 font-mono text-xs">{{ $member->contact_number }}</div>
+                                <div class="text-white text-xs font-medium">{{ $member->email }}</div>
+                                <div class="text-slate-300 font-mono text-xs mt-0.5">{{ $member->contact_number }}</div>
                             </td>
 
                             <!-- Status Pill -->
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($member->status === 'active')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-xs">
                                         Active
                                     </span>
                                 @elseif ($member->status === 'inactive')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/10 text-slate-300 border border-white/15 shadow-xs">
                                         Inactive
                                     </span>
                                 @elseif ($member->status === 'restricted')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-xs">
                                         Restricted
                                     </span>
                                 @elseif ($member->status === 'revoked')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-xs">
                                         Revoked
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/10 text-slate-300 border border-white/15">
                                         {{ ucfirst($member->status) }}
                                     </span>
                                 @endif
@@ -214,21 +214,21 @@
 
                             <!-- Term & Duration -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-slate-900 text-xs font-medium">
+                                <div class="text-white text-xs font-semibold">
                                     {{ $member->term?->name ?? 'Standard' }}
                                 </div>
-                                <div class="text-slate-500 text-xs">
+                                <div class="text-slate-400 text-xs">
                                     {{ $member->term?->duration_months ?? 12 }} Months
                                 </div>
                             </td>
 
                             <!-- Validity Dates -->
                             <td class="px-6 py-4 whitespace-nowrap text-xs">
-                                <div class="text-slate-600">
-                                    <span class="font-medium text-slate-800">Start:</span> {{ $member->start_date ? $member->start_date->format('Y-m-d') : 'N/A' }}
+                                <div class="text-slate-300">
+                                    <span class="font-medium text-slate-400">Start:</span> <span class="text-white font-medium">{{ $member->start_date ? $member->start_date->format('Y-m-d') : 'N/A' }}</span>
                                 </div>
-                                <div class="text-slate-600 mt-0.5">
-                                    <span class="font-medium text-slate-800">Expires:</span> {{ $member->expiry_date ? $member->expiry_date->format('Y-m-d') : 'N/A' }}
+                                <div class="text-slate-300 mt-0.5">
+                                    <span class="font-medium text-slate-400">Expires:</span> <span class="text-white font-medium">{{ $member->expiry_date ? $member->expiry_date->format('Y-m-d') : 'N/A' }}</span>
                                 </div>
                             </td>
 

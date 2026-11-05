@@ -123,14 +123,16 @@
         }
 
         /* Luminous Frosted Status Badges (replaces white-paper pastel badges) */
-        main .bg-purple-50 {
+        main .bg-purple-50,
+        main .bg-purple-100 {
             background-color: rgba(168, 85, 247, 0.22) !important;
             border: 1px solid rgba(168, 85, 247, 0.5) !important;
             color: #f3e8ff !important;
             box-shadow: 0 2px 8px rgba(168, 85, 247, 0.25) !important;
             font-weight: 700 !important;
         }
-        main .bg-emerald-50 {
+        main .bg-emerald-50,
+        main .bg-emerald-100 {
             background-color: rgba(16, 185, 129, 0.22) !important;
             border: 1px solid rgba(16, 185, 129, 0.5) !important;
             color: #d1fae5 !important;
@@ -138,14 +140,17 @@
             font-weight: 700 !important;
         }
         main .bg-blue-50,
-        main .bg-sky-50 {
+        main .bg-sky-50,
+        main .bg-blue-100,
+        main .bg-sky-100 {
             background-color: rgba(14, 165, 233, 0.22) !important;
             border: 1px solid rgba(14, 165, 233, 0.5) !important;
             color: #e0f2fe !important;
             box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25) !important;
             font-weight: 700 !important;
         }
-        main .bg-indigo-50:not(a) {
+        main .bg-indigo-50:not(a),
+        main .bg-indigo-100:not(a) {
             background-color: rgba(99, 102, 241, 0.22) !important;
             border: 1px solid rgba(99, 102, 241, 0.5) !important;
             color: #e0e7ff !important;
@@ -160,20 +165,93 @@
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25) !important;
             font-weight: 700 !important;
         }
-        main .bg-rose-50 {
+        main .bg-rose-50,
+        main .bg-rose-100 {
             background-color: rgba(244, 63, 94, 0.22) !important;
             border: 1px solid rgba(244, 63, 94, 0.5) !important;
             color: #ffe4e6 !important;
             box-shadow: 0 2px 8px rgba(244, 63, 94, 0.25) !important;
             font-weight: 700 !important;
         }
-        main .bg-pink-50 {
+        main .bg-pink-50,
+        main .bg-pink-100 {
             background-color: rgba(236, 72, 153, 0.22) !important;
             border: 1px solid rgba(236, 72, 153, 0.5) !important;
             color: #fce7f3 !important;
             box-shadow: 0 2px 8px rgba(236, 72, 153, 0.25) !important;
             font-weight: 700 !important;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        }
+
+        /* Glass Badges & Tags (Overriding Tailwind light-mode slate-100/200 on dark glass) */
+        main span.bg-slate-100,
+        main span.bg-slate-200,
+        main [class*="bg-slate-100"]:not(a):not(input):not(select):not(textarea),
+        main [class*="bg-slate-200"]:not(a):not(input):not(select):not(textarea) {
+            background-color: rgba(15, 23, 42, 0.75) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #f8fafc !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* Member ID & Identifier Mono Badges: High Contrast 3D Dark Glass Pods */
+        main td span.font-mono,
+        main span.font-mono {
+            background-color: rgba(10, 16, 30, 0.8) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+            border-radius: 0.5rem !important;
+            padding: 0.25rem 0.65rem !important;
+            display: inline-block !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        /* Workspace Pill Badges */
+        main [id="badge-workspace"],
+        main span[class*="font-mono"][class*="bg-amber"],
+        main span[class*="font-mono"]:is([class*="bg-amber-400"]) {
+            background-color: rgba(245, 158, 11, 0.18) !important;
+            border: 1px solid rgba(245, 158, 11, 0.45) !important;
+            color: #fde68a !important;
+            font-weight: 700 !important;
+        }
+
+        /* Prevent Table Headers from Turning Solid White on Hover */
+        main table thead th,
+        main table thead th[class*="hover:bg-slate-100"] {
+            background-color: transparent !important;
+            transition: background-color 0.15s ease, color 0.15s ease !important;
+        }
+        main table thead th:hover,
+        main table thead th[class*="hover:bg-slate-100"]:hover,
+        main table thead th:hover * {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            color: #fbbf24 !important;
+        }
+
+        /* Metric Numbers in Light Mode Views */
+        main [id^="metric-"] {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+        }
+        main [id="metric-paid"] {
+            color: #34d399 !important;
+        }
+        main [id="metric-unpaid"] {
+            color: #fbbf24 !important;
+        }
+        main [id="metric-voided"],
+        main [id="metric-revoked"] {
+            color: #f87171 !important;
+        }
+        main [id="metric-reversed"] {
+            color: #c084fc !important;
+        }
+        main [id="metric-revenue"] {
+            color: #818cf8 !important;
         }
 
         /* Stark White/Cream Pill Action Buttons (Sample Image Style) */

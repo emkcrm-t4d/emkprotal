@@ -1,34 +1,34 @@
 <div class="space-y-6">
-    <!-- Breadcrumbs & Directory Header -->
-    <div class="sm:flex sm:items-center sm:justify-between pb-4 border-b border-slate-200">
+    <!-- Breadcrumbs & Directory Header in 3D Frosted Glass -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-white">
         <div>
-            <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                <a href="/crm/{{ $workspace }}/invoices" class="hover:text-indigo-600 transition-colors">CRM</a>
-                <span>/</span>
-                <span class="text-slate-900 font-semibold">Invoices & Billing</span>
+            <nav class="flex items-center gap-2 text-xs text-slate-400 mb-1.5">
+                <a href="/crm/{{ $workspace }}/invoices" class="hover:text-amber-400 transition-colors">CRM</a>
+                <span class="text-slate-600">/</span>
+                <span class="text-slate-200 font-semibold">Invoices &amp; Billing</span>
             </nav>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Billing &amp; Invoice Records</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-800 border border-slate-200">
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Billing &amp; Invoice Records</h1>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-xl text-xs font-mono font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">
                     {{ $workspace }}
                 </span>
             </div>
-            <p class="mt-1 text-sm text-slate-500">
+            <p class="mt-1 text-sm text-slate-300">
                 Official post-conversion and renewal invoices, bKash reconciliation, and billing ledgers.
             </p>
         </div>
 
-        <div class="mt-4 sm:mt-0 flex items-center gap-3">
+        <div class="mt-2 sm:mt-0 flex items-center gap-3">
             <button
                 type="button"
                 wire:click="resetFilters"
-                class="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 shadow-xs transition-colors"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-xs font-semibold text-slate-200 hover:text-white shadow-xs transition-colors cursor-pointer"
                 id="btn-reset-filters"
             >
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
-                Reset
+                <span>Reset</span>
             </button>
 
             @can('invoices.export')
@@ -36,7 +36,7 @@
                 type="button"
                 wire:click="exportCsv"
                 wire:loading.attr="disabled"
-                class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors disabled:opacity-50"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full text-xs font-bold shadow-md shadow-emerald-500/20 transition-all disabled:opacity-50 cursor-pointer"
                 id="btn-export-csv"
             >
                 <span wire:loading.remove wire:target="exportCsv" class="flex items-center gap-1.5">
@@ -155,10 +155,10 @@
     <!-- Invoices Data Table -->
     <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
-                <thead class="bg-slate-50 text-slate-600 font-semibold text-xs uppercase tracking-wider">
+            <table class="min-w-full divide-y divide-white/10 text-left text-sm">
+                <thead class="bg-white/5 backdrop-blur-md text-slate-200 font-semibold text-xs uppercase tracking-wider">
                     <tr>
-                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition-colors" wire:click="sortBy('invoice_number')">
+                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('invoice_number')">
                             <div class="flex items-center gap-1.5">
                                 <span>Invoice Number</span>
                                 @if($sortField === 'invoice_number')
@@ -167,7 +167,7 @@
                             </div>
                         </th>
                         <th scope="col" class="px-4 py-3.5">Member Particulars</th>
-                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition-colors" wire:click="sortBy('amount_bdt')">
+                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('amount_bdt')">
                             <div class="flex items-center gap-1.5">
                                 <span>Amount (BDT)</span>
                                 @if($sortField === 'amount_bdt')
@@ -176,7 +176,7 @@
                             </div>
                         </th>
                         <th scope="col" class="px-4 py-3.5">bKash Transaction ID</th>
-                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition-colors" wire:click="sortBy('status')">
+                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('status')">
                             <div class="flex items-center gap-1.5">
                                 <span>Status</span>
                                 @if($sortField === 'status')
@@ -184,7 +184,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-slate-100 transition-colors" wire:click="sortBy('paid_at')">
+                        <th scope="col" class="px-4 py-3.5 cursor-pointer hover:bg-white/10 hover:text-amber-400 transition-colors" wire:click="sortBy('paid_at')">
                             <div class="flex items-center gap-1.5">
                                 <span>Payment Date</span>
                                 @if($sortField === 'paid_at')
@@ -195,58 +195,58 @@
                         <th scope="col" class="px-4 py-3.5 text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-200 bg-white" id="invoices-table-body">
+                <tbody class="divide-y divide-white/10 text-slate-200" id="invoices-table-body">
                     @forelse($invoices as $invoice)
-                        <tr class="hover:bg-slate-50 transition-colors" wire:key="inv-{{ $invoice->id }}">
-                            <td class="px-4 py-3 font-mono font-medium text-slate-900 whitespace-nowrap">
+                        <tr class="hover:bg-white/5 transition-colors" wire:key="inv-{{ $invoice->id }}">
+                            <td class="px-4 py-3 font-mono font-bold text-white whitespace-nowrap">
                                 {{ $invoice->invoice_number }}
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 @if($invoice->member)
-                                    <div class="font-medium text-slate-900">{{ $invoice->member->full_name }}</div>
-                                    <div class="text-xs font-mono text-slate-500">{{ $invoice->member->member_id }}</div>
+                                    <div class="font-bold text-white">{{ $invoice->member->full_name }}</div>
+                                    <div class="text-xs font-mono text-slate-300">{{ $invoice->member->member_id }}</div>
                                 @else
                                     <span class="text-xs text-slate-400 italic">No Member Associated</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 font-semibold text-slate-900 whitespace-nowrap">
+                            <td class="px-4 py-3 font-bold text-amber-300 whitespace-nowrap">
                                 ৳ {{ number_format((float) $invoice->amount_bdt, 2) }}
                             </td>
-                            <td class="px-4 py-3 font-mono text-xs text-slate-700 whitespace-nowrap">
-                                <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span class="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/20 text-white font-mono text-xs font-semibold shadow-inner">
                                     {{ $invoice->payment_reference }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 @if($invoice->status === 'paid')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-xs">
                                         Paid
                                     </span>
                                 @elseif($invoice->status === 'unpaid')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-xs">
                                         Unpaid
                                     </span>
                                 @elseif($invoice->status === 'voided')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 shadow-xs">
                                         Voided
                                     </span>
                                 @elseif($invoice->status === 'void_reversed')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 shadow-xs">
                                         Void Reversed
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/10 text-slate-300 border border-white/15">
                                         {{ ucfirst($invoice->status) }}
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-slate-600 text-xs whitespace-nowrap">
+                            <td class="px-4 py-3 text-slate-300 text-xs whitespace-nowrap">
                                 {{ $invoice->paid_at ? $invoice->paid_at->format('Y-m-d H:i') : '—' }}
                             </td>
                             <td class="px-4 py-3 text-right whitespace-nowrap">
                                 <a
                                     href="/crm/{{ $workspace }}/invoices/{{ $invoice->id }}/receipt"
-                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-medium text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 border border-indigo-200 transition-colors"
+                                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-950 hover:bg-amber-400 hover:text-slate-950 shadow-md shadow-white/10 transition-all cursor-pointer"
                                     title="View Printable Receipt"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
