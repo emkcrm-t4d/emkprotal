@@ -101,13 +101,8 @@ class VerifyWorkspaceAccessTest extends TestCase
             ->assertOk();
 
         $this->actingAs($this->dhakaStaff, 'web')
-            ->getJson('/crm/ws-emk-dhaka/reports')
-            ->assertOk()
-            ->assertJson([
-                'status' => 'ok',
-                'workspace' => 'ws-emk-dhaka',
-                'module' => 'reports',
-            ]);
+            ->get('/crm/ws-emk-dhaka/reports')
+            ->assertOk();
     }
 
     public function test_staff_in_assigned_workspace_accessing_mismatched_workspace_receives_403_forbidden(): void

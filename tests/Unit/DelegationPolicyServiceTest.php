@@ -61,9 +61,11 @@ class DelegationPolicyServiceTest extends TestCase
             'platform_services.manage_users',
             'platform_services.delegate_roles',
             'platform_services.view_audit_logs',
+            'migration.import_zoho',
+            'migration.export_zoho',
         ];
 
-        $this->assertCount(16, DelegationPolicyService::STRICTLY_NON_DELEGABLE);
+        $this->assertCount(18, DelegationPolicyService::STRICTLY_NON_DELEGABLE);
 
         foreach ($expected as $action) {
             $this->assertTrue($this->service->isStrictlyNonDelegable($action), "Action {$action} should be strictly non-delegable");

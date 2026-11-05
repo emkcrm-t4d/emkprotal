@@ -68,10 +68,10 @@ test('isActionRegistered returns true for valid action tokens and false for unkn
         ->and($this->registry->isActionRegistered(''))->toBeFalse();
 });
 
-test('isStrictlyNonDelegable correctly identifies 16 managerial actions per T-01-07', function () {
+test('isStrictlyNonDelegable correctly identifies 18 managerial actions per T-01-07', function () {
     $nonDelegable = ModuleRegistry::STRICTLY_NON_DELEGABLE;
 
-    expect(count($nonDelegable))->toBe(16);
+    expect(count($nonDelegable))->toBe(18);
 
     foreach ($nonDelegable as $token) {
         expect($this->registry->isStrictlyNonDelegable($token))->toBeTrue()

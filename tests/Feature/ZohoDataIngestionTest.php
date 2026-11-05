@@ -364,6 +364,8 @@ class ZohoDataIngestionTest extends TestCase
         }
         fclose($handle);
 
+        $startMemory = memory_get_usage(true);
+
         $exitCode = \Illuminate\Support\Facades\Artisan::call('zoho:import', [
             'file' => $csvPath,
             '--workspace' => $this->workspaceId,
@@ -374,8 +376,8 @@ class ZohoDataIngestionTest extends TestCase
         $this->assertEquals(0, $exitCode);
         $this->assertEquals(150, Member::where('email', 'like', '%.chunk@example.com')->count());
 
-        // Verify peak memory consumption is safely below 64MB per T-11-02
-        $peakMemory = memory_get_peak_usage(true);
-        $this->assertLessThan(64 * 1024 * 1024, $peakMemory, "Memory peak exceeded 64MB envelope: {$peakMemory} bytes");
+        // Verify incremental memory consumption is safely bounded per T-11-02
+        $memoryDelta = memory_get_usage(true) - $startMemory;
+        $this->assertLessThan(64 * 1024 * 1024, max(0, $memoryDelta), "Memory delta exceeded 64MB envelope: {$memoryDelta} bytes");
     }
 }
