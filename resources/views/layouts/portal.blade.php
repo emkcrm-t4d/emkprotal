@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#0b0f17]">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#0a0f1d]">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,18 +14,54 @@
 
     @livewireStyles
     @stack('styles')
+
+    <style>
+        /* 3D Liquid Frosted Glass Theme for Member Portal */
+        main .bg-white,
+        main [class*="bg-slate-900/60"],
+        main [class*="bg-slate-900/70"],
+        main [class*="bg-slate-900/80"],
+        main [class*="bg-slate-900/85"],
+        main .rounded-3xl,
+        main .rounded-2xl {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(15, 23, 42, 0.55) 100%), rgba(10, 16, 30, 0.65) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+            border-radius: 1.5rem !important;
+            color: #f8fafc !important;
+        }
+        main .text-slate-900 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        main .text-slate-800 {
+            color: #f8fafc !important;
+            font-weight: 600 !important;
+        }
+        main .text-slate-700 {
+            color: #e2e8f0 !important;
+        }
+        main .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        main .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+    </style>
 </head>
 @php
     $isLoginPage = request()->routeIs('portal.login');
 @endphp
 <body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#070b12]" aria-hidden="true">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#0a0f1d]" aria-hidden="true">
         <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
         <img 
             src="{{ asset('images/emk-bg.jpg') }}" 
             alt="" 
-            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-50 scale-110 pointer-events-none"
+            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-60 scale-110 pointer-events-none"
             aria-hidden="true"
         >
 
@@ -36,17 +72,16 @@
                 <img 
                     src="{{ asset('images/emk-bg.jpg') }}" 
                     alt="EMK Center Background" 
-                    class="w-full h-full object-contain object-center opacity-80 brightness-95 contrast-105 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
+                    class="w-full h-full object-contain object-center opacity-90 brightness-100 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
                     loading="eager"
                     fetchpriority="high"
                 >
             </picture>
         </div>
 
-        <!-- Atmospheric Dark Glass Scrim (Permits photography to be clearly visible, center clear, edges soft) -->
-        <div class="absolute inset-0 bg-[#070b12]/45 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/15 to-[#070b12]/75"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12]/80 via-transparent to-[#070b12]/60"></div>
+        <!-- Atmospheric Liquid Glass Scrim (Permits warm photography to illuminate page with subtle depth) -->
+        <div class="absolute inset-0 bg-[#0a0f1d]/35"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/40 via-transparent to-[#0a0f1d]/75"></div>
     </div>
     <!-- Skip to main content link for keyboard & screen reader accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:p-4 focus:bg-indigo-600 focus:text-white focus:z-50 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Skip to main content</a>

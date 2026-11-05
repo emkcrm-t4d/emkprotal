@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#070b12]">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#0a0f1d]">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,24 +16,29 @@
     @stack('styles')
 
     <style>
-        /* 3D Frosted Glass Theme for Staff Login */
-        main .bg-white {
-            background-color: rgba(15, 23, 42, 0.78) !important;
-            backdrop-filter: blur(24px) !important;
-            -webkit-backdrop-filter: blur(24px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+        /* 3D Liquid Frosted Glass Theme for Staff Login */
+        main .bg-white,
+        main [class*="bg-slate-900"],
+        main .rounded-3xl,
+        main .rounded-2xl {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(15, 23, 42, 0.6) 100%), rgba(10, 16, 30, 0.7) !important;
+            backdrop-filter: blur(28px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.22) !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+            border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
         main .bg-slate-50 {
-            background-color: rgba(2, 6, 23, 0.6) !important;
+            background-color: rgba(10, 16, 30, 0.6) !important;
             backdrop-filter: blur(16px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
             color: #cbd5e1 !important;
         }
         main .text-slate-900,
         main .text-slate-800 {
             color: #ffffff !important;
+            font-weight: 700 !important;
         }
         main .text-slate-700,
         main .text-slate-600 {
@@ -46,28 +51,33 @@
         main .border-slate-200,
         main .border-slate-300,
         main [class*="border-slate-200"] {
-            border-color: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
         }
         main input:not([type="checkbox"]):not([type="radio"]) {
-            background-color: rgba(2, 6, 23, 0.65) !important;
-            border-color: rgba(255, 255, 255, 0.18) !important;
+            background-color: rgba(10, 16, 30, 0.65) !important;
+            backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-radius: 0.85rem !important;
             color: #ffffff !important;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35) !important;
+            transition: all 0.2s ease !important;
         }
         main input:focus {
-            border-color: #f59e0b !important;
+            background-color: rgba(10, 16, 30, 0.85) !important;
+            border-color: #fbbf24 !important;
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25) !important;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25) !important;
         }
     </style>
 </head>
 <body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#070b12]" aria-hidden="true">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#0a0f1d]" aria-hidden="true">
         <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
         <img 
             src="{{ asset('images/emk-bg.jpg') }}" 
             alt="" 
-            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-50 scale-110 pointer-events-none"
+            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-60 scale-110 pointer-events-none"
             aria-hidden="true"
         >
 
@@ -78,17 +88,16 @@
                 <img 
                     src="{{ asset('images/emk-bg.jpg') }}" 
                     alt="EMK Center Background" 
-                    class="w-full h-full object-contain object-center opacity-80 brightness-95 contrast-105 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
+                    class="w-full h-full object-contain object-center opacity-90 brightness-100 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
                     loading="eager"
                     fetchpriority="high"
                 >
             </picture>
         </div>
 
-        <!-- Atmospheric Dark Glass Scrim (Permits photography to be clearly visible, center clear, edges soft) -->
-        <div class="absolute inset-0 bg-[#070b12]/45 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/15 to-[#070b12]/75"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12]/80 via-transparent to-[#070b12]/60"></div>
+        <!-- Atmospheric Liquid Glass Scrim (Permits warm photography to illuminate page with subtle depth) -->
+        <div class="absolute inset-0 bg-[#0a0f1d]/35"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/40 via-transparent to-[#0a0f1d]/75"></div>
     </div>
 
     <!-- Skip to main content link for accessibility -->
