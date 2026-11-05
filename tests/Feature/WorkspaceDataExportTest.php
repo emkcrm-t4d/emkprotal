@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Domain\Audit\Models\AuditLog;
 use App\Domain\Forms\Models\MembershipTerm;
 use App\Domain\Invoices\Models\Invoice;
 use App\Domain\Leads\Models\Lead;
 use App\Domain\Members\Models\Member;
 use App\Domain\Reports\Services\WorkspaceDataExportService;
 use App\Domain\Workspaces\Models\Workspace;
+use App\Livewire\Reports\DataExportCenter;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class WorkspaceDataExportTest extends TestCase
@@ -23,6 +26,7 @@ class WorkspaceDataExportTest extends TestCase
 
     protected User $manager;
     protected User $staffWithoutPermission;
+    protected User $unprivilegedStaff;
     protected User $superAdmin;
     protected MembershipTerm $term;
 
@@ -57,6 +61,17 @@ class WorkspaceDataExportTest extends TestCase
             'must_reset_password' => false,
         ]);
         $this->staffWithoutPermission->assignRole('delegated_staff');
+
+        // Unprivileged user without dashboard_reports.view_dashboard
+        $this->unprivilegedStaff = User::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'name' => 'Unprivileged User',
+            'email' => 'staff.unprivileged.' . Str::random(6) . '@emk.test',
+            'password' => bcrypt('secret123'),
+            'guard' => 'web',
+            'is_active' => true,
+            'must_reset_password' => false,
+        ]);
 
         // Superadmin
         $this->superAdmin = User::where('email', 'admin@emk.test')->first()
@@ -242,6 +257,152 @@ class WorkspaceDataExportTest extends TestCase
         $this->assertStringContainsString('"Total Leads"', $content);
         $this->assertStringContainsString('"Total Revenue (BDT)"', $content);
         $this->assertStringContainsString('ws-emk-dhaka', $content);
+    }
+
+    public function test_member_export_writes_immutable_audit_log_per_dec_11(): void
+    {
+        $this->seedMember('active', 'AuditTestFirst', 'AuditTestLast', 'audit.member@example.com');
+
+        $this->actingAs($this->manager)
+            ->get('/crm/ws-emk-dhaka/exports/members?status=active');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => 'ws-emk-dhaka',
+            'actor_id' => $this->manager->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_MEMBERS_EXPORTED,
+            'auditable_type' => Member::class,
+        ]);
+
+        $log = AuditLog::where('event_type', AuditLog::EVENT_MEMBERS_EXPORTED)->latest()->first();
+        $this->assertNotNull($log);
+        $this->assertEquals(1, $log->new_values['exported_rows']);
+        $this->assertStringContainsString('members-export-ws-emk-dhaka-', $log->new_values['filename']);
+        $this->assertSame('active', $log->new_values['filters']['status'] ?? null);
+        $this->assertNotEmpty($log->ip_address);
+        $this->assertStringContainsString('Exported 1 records from workspace ws-emk-dhaka', $log->reason);
+    }
+
+    public function test_lead_export_writes_immutable_audit_log_per_dec_11(): void
+    {
+        $this->seedLead('submitted', 'LeadAuditFirst', 'LeadAuditLast', 'audit.lead@example.com', 'TX99887766');
+
+        $this->actingAs($this->manager)
+            ->get('/crm/ws-emk-dhaka/exports/leads');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => 'ws-emk-dhaka',
+            'actor_id' => $this->manager->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_LEADS_EXPORTED,
+            'auditable_type' => Lead::class,
+        ]);
+
+        $log = AuditLog::where('event_type', AuditLog::EVENT_LEADS_EXPORTED)->latest()->first();
+        $this->assertNotNull($log);
+        $this->assertEquals(1, $log->new_values['exported_rows']);
+        $this->assertStringContainsString('leads-export-ws-emk-dhaka-', $log->new_values['filename']);
+    }
+
+    public function test_invoice_export_writes_immutable_audit_log_per_dec_11(): void
+    {
+        $member = $this->seedMember('active', 'InvAuditFirst', 'InvAuditLast', 'audit.inv@example.com');
+        $this->seedInvoice($member->id, 'INV-2026-AUDIT', 2500.00, 'paid');
+
+        $this->actingAs($this->manager)
+            ->get('/crm/ws-emk-dhaka/exports/invoices');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => 'ws-emk-dhaka',
+            'actor_id' => $this->manager->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_INVOICES_EXPORTED,
+            'auditable_type' => Invoice::class,
+        ]);
+
+        $log = AuditLog::where('event_type', AuditLog::EVENT_INVOICES_EXPORTED)->latest()->first();
+        $this->assertNotNull($log);
+        $this->assertEquals(1, $log->new_values['exported_rows']);
+        $this->assertStringContainsString('invoices-export-ws-emk-dhaka-', $log->new_values['filename']);
+    }
+
+    public function test_metrics_export_writes_immutable_audit_log_per_dec_11(): void
+    {
+        $this->actingAs($this->manager)
+            ->get('/crm/ws-emk-dhaka/exports/metrics');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => 'ws-emk-dhaka',
+            'actor_id' => $this->manager->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_METRICS_EXPORTED,
+            'auditable_type' => Workspace::class,
+        ]);
+    }
+
+    public function test_data_export_center_component_renders_and_updates_estimated_counts(): void
+    {
+        $this->seedMember('active', 'MemberOne', 'Active', 'm1@example.com');
+        $this->seedMember('active', 'MemberTwo', 'Active', 'm2@example.com');
+        $this->seedMember('inactive', 'MemberThree', 'Inactive', 'm3@example.com');
+
+        $this->seedLead('submitted', 'LeadOne', 'Sub', 'l1@example.com', 'TX11111111');
+        $this->seedLead('submitted', 'LeadTwo', 'Sub', 'l2@example.com', 'TX22222222');
+        $this->seedLead('approved', 'LeadThree', 'App', 'l3@example.com', 'TX33333333');
+
+        $member = Member::where('email', 'm1@example.com')->first();
+        $this->seedInvoice($member->id, 'INV-TEST-01', 500.00, 'paid');
+
+        Livewire::actingAs($this->manager)
+            ->test(DataExportCenter::class, ['workspace' => 'ws-emk-dhaka'])
+            ->assertSee('Data Export Center')
+            ->assertSee('All export operations are logged to the immutable system audit trail per DEC-11.')
+            ->assertSee('Records matching criteria:')
+            // Default entity: members, all statuses -> 3 members
+            ->assertSet('entity', 'members')
+            ->assertSet('estimatedCount', 3)
+            // Filter by active -> 2 members
+            ->set('statusFilter', 'active')
+            ->assertSet('estimatedCount', 2)
+            // Switch to leads -> 6 leads total (3 converted from members + 3 newly created)
+            ->set('entity', 'leads')
+            ->assertSet('statusFilter', 'all')
+            ->assertSet('estimatedCount', 6)
+            // Filter leads by approved -> 1 lead
+            ->set('statusFilter', 'approved')
+            ->assertSet('estimatedCount', 1)
+            // Switch to invoices -> 1 invoice
+            ->set('entity', 'invoices')
+            ->assertSet('estimatedCount', 1)
+            // Switch to metrics -> 1 summary report
+            ->set('entity', 'metrics')
+            ->assertSet('estimatedCount', 1);
+    }
+
+    public function test_data_export_center_trigger_export_dispatches_download(): void
+    {
+        Livewire::actingAs($this->manager)
+            ->test(DataExportCenter::class, ['workspace' => 'ws-emk-dhaka'])
+            ->set('entity', 'members')
+            ->call('triggerExport')
+            ->assertDispatched('start-export-download');
+    }
+
+    public function test_unprivileged_staff_cannot_access_data_export_screen(): void
+    {
+        $response = $this->actingAs($this->unprivilegedStaff)
+            ->get('/crm/ws-emk-dhaka/data-export');
+
+        $response->assertStatus(403);
+    }
+
+    public function test_delegated_staff_cannot_trigger_member_export_in_export_center(): void
+    {
+        Livewire::actingAs($this->staffWithoutPermission)
+            ->test(DataExportCenter::class, ['workspace' => 'ws-emk-dhaka'])
+            ->set('entity', 'members')
+            ->call('triggerExport')
+            ->assertForbidden();
     }
 
     protected function seedMember(

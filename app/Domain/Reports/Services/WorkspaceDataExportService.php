@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\Reports\Services;
 
+use App\Domain\Audit\Models\AuditLog;
 use App\Domain\Invoices\Models\Invoice;
 use App\Domain\Leads\Models\Lead;
 use App\Domain\Members\Models\Member;
 use App\Domain\Reports\Services\MetricsAggregationService;
+use App\Domain\Workspaces\Models\Workspace;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
@@ -32,6 +34,48 @@ class WorkspaceDataExportService
         if (!$isSuperadmin && (string) $user->workspace_id !== $workspaceId) {
             App::abort(403, 'Unauthorized workspace access.');
         }
+    }
+
+    /**
+     * Record an immutable audit log entry for this export operation per DEC-11 (D-11).
+     *
+     * @param  string  $workspaceId  Target workspace identifier
+     * @param  string  $eventType  AuditLog event constant
+     * @param  string  $auditableType  Class string of exported domain model
+     * @param  int  $rowCount  Count of exported records
+     * @param  array<string, mixed>  $filters  Filters applied to query
+     * @param  string  $format  File format
+     * @param  string  $filename  Generated export filename
+     */
+    protected function recordExportAudit(
+        string $workspaceId,
+        string $eventType,
+        string $auditableType,
+        int $rowCount,
+        array $filters,
+        string $format,
+        string $filename
+    ): void {
+        $user = Auth::user();
+
+        AuditLog::create([
+            'workspace_id' => $workspaceId,
+            'actor_id' => $user?->id,
+            'actor_guard' => 'web',
+            'event_type' => $eventType,
+            'auditable_type' => $auditableType,
+            'auditable_id' => null,
+            'old_values' => null,
+            'new_values' => [
+                'filters' => $filters,
+                'exported_rows' => $rowCount,
+                'format' => $format,
+                'filename' => $filename,
+            ],
+            'reason' => "Exported {$rowCount} records from workspace {$workspaceId}",
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
     }
 
     /**
@@ -75,7 +119,19 @@ class WorkspaceDataExportService
 
         $query->orderBy('id', 'asc');
 
+        $rowCount = (clone $query)->count();
         $filename = "members-export-{$workspaceId}-" . now()->format('Ymd-His') . ".csv";
+
+        // Record immutable audit log per DEC-11 (D-11)
+        $this->recordExportAudit(
+            $workspaceId,
+            AuditLog::EVENT_MEMBERS_EXPORTED,
+            Member::class,
+            $rowCount,
+            $filters,
+            $format,
+            $filename
+        );
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
@@ -183,7 +239,19 @@ class WorkspaceDataExportService
 
         $query->orderBy('id', 'asc');
 
+        $rowCount = (clone $query)->count();
         $filename = "leads-export-{$workspaceId}-" . now()->format('Ymd-His') . ".csv";
+
+        // Record immutable audit log per DEC-11 (D-11)
+        $this->recordExportAudit(
+            $workspaceId,
+            AuditLog::EVENT_LEADS_EXPORTED,
+            Lead::class,
+            $rowCount,
+            $filters,
+            $format,
+            $filename
+        );
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
@@ -282,7 +350,19 @@ class WorkspaceDataExportService
 
         $query->orderBy('id', 'asc');
 
+        $rowCount = (clone $query)->count();
         $filename = "invoices-export-{$workspaceId}-" . now()->format('Ymd-His') . ".csv";
+
+        // Record immutable audit log per DEC-11 (D-11)
+        $this->recordExportAudit(
+            $workspaceId,
+            AuditLog::EVENT_INVOICES_EXPORTED,
+            Invoice::class,
+            $rowCount,
+            $filters,
+            $format,
+            $filename
+        );
 
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
@@ -359,6 +439,38 @@ class WorkspaceDataExportService
 
         $filename = "metrics-export-{$workspaceId}-" . now()->format('Ymd-His') . ".csv";
 
+        $metricRows = [
+            ['Overview', 'Total Members', (string) $metrics->totalMembers],
+            ['Overview', 'Total Leads', (string) $metrics->totalLeads],
+            ['Overview', 'Conversion Rate (%)', (string) $metrics->conversionRate],
+            ['Overview', 'Total ID Cards', (string) $metrics->totalIdCards],
+            ['Overview', 'Total Revenue (BDT)', number_format($metrics->totalRevenueBdt, 2, '.', '')],
+            ['Overview', 'Paid Invoices Count', (string) $metrics->paidInvoicesCount],
+        ];
+
+        foreach ($metrics->memberStatusBreakdown as $status => $count) {
+            $metricRows[] = ['Member Status', ucfirst((string) $status), (string) $count];
+        }
+
+        foreach ($metrics->leadPipelineBreakdown as $stage => $count) {
+            $metricRows[] = ['Lead Pipeline', ucfirst(str_replace('_', ' ', (string) $stage)), (string) $count];
+        }
+
+        foreach ($metrics->idCardStatusBreakdown as $cardStatus => $count) {
+            $metricRows[] = ['ID Card Status', ucfirst(str_replace('_', ' ', (string) $cardStatus)), (string) $count];
+        }
+
+        // Record immutable audit log per DEC-11 (D-11)
+        $this->recordExportAudit(
+            $workspaceId,
+            AuditLog::EVENT_METRICS_EXPORTED,
+            Workspace::class,
+            count($metricRows),
+            $filters,
+            'csv',
+            $filename
+        );
+
         $headers = [
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
@@ -367,7 +479,7 @@ class WorkspaceDataExportService
             'Expires' => '0',
         ];
 
-        return new StreamedResponse(function () use ($metrics, $workspaceId) {
+        return new StreamedResponse(function () use ($metricRows, $workspaceId) {
             $handle = fopen('php://output', 'w');
             if ($handle === false) {
                 return;
@@ -386,27 +498,6 @@ class WorkspaceDataExportService
             ]);
 
             $nowStr = now()->toIso8601String();
-
-            $metricRows = [
-                ['Overview', 'Total Members', (string) $metrics->totalMembers],
-                ['Overview', 'Total Leads', (string) $metrics->totalLeads],
-                ['Overview', 'Conversion Rate (%)', (string) $metrics->conversionRate],
-                ['Overview', 'Total ID Cards', (string) $metrics->totalIdCards],
-                ['Overview', 'Total Revenue (BDT)', number_format($metrics->totalRevenueBdt, 2, '.', '')],
-                ['Overview', 'Paid Invoices Count', (string) $metrics->paidInvoicesCount],
-            ];
-
-            foreach ($metrics->memberStatusBreakdown as $status => $count) {
-                $metricRows[] = ['Member Status', ucfirst((string) $status), (string) $count];
-            }
-
-            foreach ($metrics->leadPipelineBreakdown as $stage => $count) {
-                $metricRows[] = ['Lead Pipeline', ucfirst(str_replace('_', ' ', (string) $stage)), (string) $count];
-            }
-
-            foreach ($metrics->idCardStatusBreakdown as $cardStatus => $count) {
-                $metricRows[] = ['ID Card Status', ucfirst(str_replace('_', ' ', (string) $cardStatus)), (string) $count];
-            }
 
             foreach ($metricRows as $row) {
                 fputcsv($handle, [

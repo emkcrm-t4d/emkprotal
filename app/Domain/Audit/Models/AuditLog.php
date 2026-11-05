@@ -38,6 +38,9 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_MEMBERSHIP_TERM_CREATED = 'membership_term_created';
     public const EVENT_MEMBERSHIP_TERM_UPDATED = 'membership_term_updated';
     public const EVENT_MEMBERSHIP_RENEWED = 'membership_renewed';
+    public const EVENT_MEMBERS_EXPORTED = 'members_exported';
+    public const EVENT_LEADS_EXPORTED = 'leads_exported';
+    public const EVENT_METRICS_EXPORTED = 'metrics_exported';
     public const EVENT_INVOICE_VOIDED = 'invoice_voided';
     public const EVENT_INVOICES_EXPORTED = 'invoices_exported';
     public const EVENT_ID_CARD_PRINTED = 'id_card_printed';

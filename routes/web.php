@@ -110,6 +110,10 @@ Route::prefix('/crm/{workspace}')
         Route::get('/exports/invoices', [WorkspaceExportController::class, 'invoices'])->name('crm.exports.invoices');
         Route::get('/exports/metrics', [WorkspaceExportController::class, 'metrics'])->name('crm.exports.metrics');
 
+        Route::get('/data-export', \App\Livewire\Reports\DataExportCenter::class)
+            ->name('crm.data_export.index')
+            ->middleware(['can:dashboard_reports.view_dashboard']);
+
         Route::get('/forms', \App\Livewire\Forms\FormIndex::class)
             ->name('crm.forms.index');
 
