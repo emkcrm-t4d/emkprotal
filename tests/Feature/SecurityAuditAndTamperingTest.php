@@ -803,6 +803,10 @@ class SecurityAuditAndTamperingTest extends TestCase
         $response->assertHeader('X-XSS-Protection', '1; mode=block');
         $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+        // Assert HSTS on secure HTTPS request
+        $secureResponse = $this->get('https://localhost/login');
+        $secureResponse->assertHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+
         // 2. Assert Session Cookie configuration per OWASP ASVS V3
         $this->assertTrue(
             config('session.http_only'),
