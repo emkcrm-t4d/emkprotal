@@ -54,6 +54,12 @@
                         </div>
                     @endif
                 </div>
+            @else
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs">
+                        {{ $workspaceId }}
+                    </span>
+                </div>
             @endif
         </div>
 

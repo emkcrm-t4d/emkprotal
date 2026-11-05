@@ -109,6 +109,39 @@ class OperationalDashboard extends Component
     }
 
     /**
+     * Intercept Livewire property updates on selectedWorkspaceScope to prevent unauthorized tampering.
+     */
+    public function updatingSelectedWorkspaceScope(mixed $value): void
+    {
+        $user = Auth::user();
+        if (!$this->canSwitchScope || ($user && method_exists($user, 'hasRole') && !$user->hasRole(['superadmin', 'global_admin']))) {
+            App::abort(403, 'Unauthorized: Switching workspace scope requires Superadmin privileges.');
+        }
+    }
+
+    /**
+     * Intercept Livewire property updates on isGlobalView to prevent unauthorized tampering.
+     */
+    public function updatingIsGlobalView(mixed $value): void
+    {
+        $user = Auth::user();
+        if (!$this->canSwitchScope || ($user && method_exists($user, 'hasRole') && !$user->hasRole(['superadmin', 'global_admin']))) {
+            App::abort(403, 'Unauthorized: Multi-workspace aggregation requires Superadmin privileges.');
+        }
+    }
+
+    /**
+     * Intercept Livewire property updates on workspaceId to prevent unauthorized tampering.
+     */
+    public function updatingWorkspaceId(mixed $value): void
+    {
+        $user = Auth::user();
+        if (!$this->canSwitchScope || ($user && method_exists($user, 'hasRole') && !$user->hasRole(['superadmin', 'global_admin']))) {
+            App::abort(403, 'Unauthorized workspace access.');
+        }
+    }
+
+    /**
      * Apply a predefined date preset (7_days, 30_days, 90_days, year, all, custom).
      */
     public function applyDatePreset(string $preset): void
