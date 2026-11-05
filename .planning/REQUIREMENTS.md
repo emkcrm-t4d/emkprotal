@@ -106,7 +106,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **RELS-02**: Perform security review addressing Livewire authorization tampering, route security, file upload security, and audit immutability.
 - [ ] **RELS-03**: Execute accessibility, responsive layout, and cross-browser validation across public forms and member portal.
 - [ ] **RELS-04**: Implement production deployment runbook, database migration verification, Horizon worker checks, and named admin provisioning.
-- [ ] **RELS-05**: Implement payment gateway adapter interface preparing for seamless future SSLCommerz or bKash direct online payments.
+- [x] **RELS-05**: Implement payment gateway adapter interface preparing for seamless future SSLCommerz or bKash direct online payments.
 
 ## v2 Requirements
 
@@ -207,7 +207,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELS-02 | Phase 12 | Pending |
 | RELS-03 | Phase 12 | Pending |
 | RELS-04 | Phase 12 | Pending |
-| RELS-05 | Phase 12 | Pending |
+| RELS-05 | Phase 12 | Complete |
 
 **Coverage:**
 - v1 requirements: 65 total
