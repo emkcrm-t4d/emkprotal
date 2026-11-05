@@ -279,20 +279,8 @@ class ZohoDataIngestionService
             return;
         }
 
-        // 1. Provision User credential entity
-        $user = User::where('email', $mapped['email'])->first();
-        if (!$user) {
-            $user = User::create([
-                'workspace_id' => $workspaceId,
-                'name' => trim(($mapped['first_name'] ?? '') . ' ' . ($mapped['last_name'] ?? '')),
-                'email' => $mapped['email'],
-                'password' => null,
-                'guard' => 'member',
-                'is_active' => false,
-                'must_reset_password' => true,
-                'zoho_id' => $zohoId,
-            ]);
-        }
+        // 1. Associate User credential entity if already existing; otherwise leave unprovisioned
+        $user = !empty($mapped['email']) ? User::where('email', $mapped['email'])->first() : null;
 
         // 2. Provision or associate Lead
         $lead = null;
@@ -370,7 +358,7 @@ class ZohoDataIngestionService
             'member_id' => $memberId,
             'workspace_id' => $workspaceId,
             'lead_id' => $lead->id,
-            'user_id' => $user->id,
+            'user_id' => $user?->id,
             'membership_term_id' => $mapped['membership_term_id'],
             'status' => $mapped['status'] ?? 'active',
             'first_name' => $mapped['first_name'],
