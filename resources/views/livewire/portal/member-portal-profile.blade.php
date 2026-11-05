@@ -38,18 +38,18 @@
                             </span>
 
                             @if ($member->status === 'active')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" role="status" aria-label="Membership Status: Active Member">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true"></span>
                                     Active Member
                                 </span>
                             @elseif ($member->status === 'inactive')
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30" role="status" aria-label="Membership Status: Inactive or Expired">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true"></span>
                                     Inactive / Expired
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30" role="status" aria-label="Membership Status: {{ ucfirst($member->status) }}">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-400" aria-hidden="true"></span>
                                     {{ ucfirst($member->status) }}
                                 </span>
                             @endif
@@ -153,7 +153,7 @@
             <div class="p-4 sm:p-5 sm:col-span-2 md:col-span-1">
                 <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">Physical ID Card</span>
                 <div class="mt-1 flex items-center gap-2">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $this->idCardStatusColor }}">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $this->idCardStatusColor }}" role="status" aria-label="Physical ID Card Status: {{ $this->idCardStatusLabel }}">
                         {{ $this->idCardStatusLabel }}
                     </span>
                 </div>
@@ -409,7 +409,7 @@
 
             @if ($attachments->isEmpty())
                 <div class="p-12 text-center">
-                    <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3" aria-hidden="true">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -418,69 +418,79 @@
                     <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Uploaded identity cards and photographs will appear here.</p>
                 </div>
             @else
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @foreach ($attachments as $doc)
-                        @php
-                            $label = match ($doc->document_type) {
-                                'identity_document' => 'Identity Document (NID / Passport / Birth Certificate)',
-                                'studio_photo' => 'Studio Identification Photograph',
-                                'parental_consent' => 'Youth / Parental Consent Form',
-                                default => ucfirst(str_replace('_', ' ', (string) $doc->document_type)),
-                            };
-                            $isPhoto = $doc->document_type === 'studio_photo';
-                        @endphp
-                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50/50 flex flex-col justify-between hover:border-indigo-300 transition-colors">
-                            <div>
-                                <div class="flex items-start justify-between gap-3 mb-2">
-                                    <div class="flex items-center gap-2.5">
-                                        <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                                            @if ($isPhoto)
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                            @else
-                                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                                </svg>
-                                            @endif
+                <div class="overflow-x-auto -mx-6 sm:mx-0">
+                    <table class="min-w-full divide-y divide-slate-200 text-left text-xs" aria-label="Member Uploaded Documents Table">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider">
+                            <tr>
+                                <th scope="col" class="py-3 px-4">Document Type</th>
+                                <th scope="col" class="py-3 px-4">File Name</th>
+                                <th scope="col" class="py-3 px-4">Size & Format</th>
+                                <th scope="col" class="py-3 px-4">Verification</th>
+                                <th scope="col" class="py-3 px-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                            @foreach ($attachments as $doc)
+                                @php
+                                    $label = match ($doc->document_type) {
+                                        'identity_document' => 'Identity Document (NID / Passport / Birth Certificate)',
+                                        'studio_photo' => 'Studio Identification Photograph',
+                                        'parental_consent' => 'Youth / Parental Consent Form',
+                                        default => ucfirst(str_replace('_', ' ', (string) $doc->document_type)),
+                                    };
+                                    $isPhoto = $doc->document_type === 'studio_photo';
+                                @endphp
+                                <tr class="hover:bg-slate-50/75 transition-colors">
+                                    <td class="py-3.5 px-4 font-semibold text-slate-900">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0" aria-hidden="true">
+                                                @if ($isPhoto)
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                @else
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                    </svg>
+                                                @endif
+                                            </div>
+                                            <span>{{ $label }}</span>
                                         </div>
-                                        <div>
-                                            <p class="text-xs font-bold text-slate-900">{{ $label }}</p>
-                                            <p class="text-[11px] text-slate-500 truncate max-w-[200px]" title="{{ $doc->original_filename }}">
-                                                {{ $doc->original_filename }}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    @if ($doc->youth_protection)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                                            Minor Protected
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="text-[11px] text-slate-400 mt-2 flex items-center gap-3">
-                                    <span>Size: {{ number_format($doc->size_bytes / 1024, 1) }} KB</span>
-                                    <span>•</span>
-                                    <span>Type: {{ $doc->mime_type }}</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between">
-                                <span class="text-[11px] text-slate-500">Verified</span>
-                                <a
-                                    href="{{ route('portal.documents.download', ['attachment' => $doc->id]) }}"
-                                    target="_blank"
-                                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 hover:text-indigo-900 bg-white hover:bg-indigo-50 border border-indigo-200 transition-colors"
-                                >
-                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                    <span>Download</span>
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
+                                    </td>
+                                    <td class="py-3.5 px-4 text-slate-600 font-mono text-[11px] truncate max-w-[200px]" title="{{ $doc->original_filename }}">
+                                        {{ $doc->original_filename }}
+                                    </td>
+                                    <td class="py-3.5 px-4 text-slate-500 text-[11px]">
+                                        {{ number_format($doc->size_bytes / 1024, 1) }} KB ({{ $doc->mime_type }})
+                                    </td>
+                                    <td class="py-3.5 px-4">
+                                        @if ($doc->youth_protection)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                                Minor Protected
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                Verified
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3.5 px-4 text-right">
+                                        <a
+                                            href="{{ route('portal.documents.download', ['attachment' => $doc->id]) }}"
+                                            target="_blank"
+                                            aria-label="Download {{ $label }}: {{ $doc->original_filename }}"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[44px] rounded-lg text-xs font-semibold text-indigo-700 hover:text-indigo-900 bg-white hover:bg-indigo-50 border border-indigo-200 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                            <span>Download</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             @endif
         </div>

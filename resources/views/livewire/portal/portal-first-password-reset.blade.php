@@ -22,7 +22,7 @@
                 <!-- Current Password Field -->
                 <div>
                     <label for="current_password" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                        Current / Temporary Password
+                        Current / Temporary Password <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
                         <input
@@ -31,13 +31,15 @@
                             wire:model="current_password"
                             autocomplete="current-password"
                             placeholder="Enter current password"
-                            class="w-full px-3.5 py-2.5 rounded-xl border @error('current_password') border-rose-300 focus:border-rose-500 focus:ring-rose-500 @else border-slate-300 focus:border-indigo-600 focus:ring-indigo-600 @enderror text-sm shadow-xs transition-colors placeholder:text-slate-400"
+                            aria-required="true"
+                            @error('current_password') aria-invalid="true" aria-describedby="current_password-error" @enderror
+                            class="w-full px-3.5 py-2.5 rounded-xl border @error('current_password') border-rose-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-500 @else border-slate-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 @enderror text-sm shadow-xs transition-colors placeholder:text-slate-400"
                             required
                         >
                     </div>
                     @error('current_password')
-                        <p class="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <p id="current_password-error" class="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1" role="alert">
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
                             <span>{{ $message }}</span>
@@ -49,7 +51,7 @@
             <!-- New Permanent Password Field -->
             <div>
                 <label for="password" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                    New Permanent Password
+                    New Permanent Password <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative">
                     <input
@@ -58,13 +60,16 @@
                         wire:model="password"
                         autocomplete="new-password"
                         placeholder="At least 8 characters"
-                        class="w-full px-3.5 py-2.5 rounded-xl border @error('password') border-rose-300 focus:border-rose-500 focus:ring-rose-500 @else border-slate-300 focus:border-indigo-600 focus:ring-indigo-600 @enderror text-sm shadow-xs transition-colors placeholder:text-slate-400"
+                        aria-required="true"
+                        aria-describedby="password-rules @error('password') password-error @enderror"
+                        @error('password') aria-invalid="true" @enderror
+                        class="w-full px-3.5 py-2.5 rounded-xl border @error('password') border-rose-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-500 @else border-slate-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 @enderror text-sm shadow-xs transition-colors placeholder:text-slate-400"
                         required
                     >
                 </div>
                 @error('password')
-                    <p class="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <p id="password-error" class="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1" role="alert">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                         </svg>
                         <span>{{ $message }}</span>
@@ -75,7 +80,7 @@
             <!-- Confirm Permanent Password Field -->
             <div>
                 <label for="password_confirmation" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                    Confirm Permanent Password
+                    Confirm Permanent Password <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative">
                     <input
@@ -84,16 +89,18 @@
                         wire:model="password_confirmation"
                         autocomplete="new-password"
                         placeholder="Re-type new password"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-600 focus:ring-indigo-600 text-sm shadow-xs transition-colors placeholder:text-slate-400"
+                        aria-required="true"
+                        aria-describedby="password-rules"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 text-sm shadow-xs transition-colors placeholder:text-slate-400"
                         required
                     >
                 </div>
             </div>
 
             <!-- Password Requirements Guidance -->
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
+            <div id="password-rules" role="region" aria-label="Password Requirements" class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
                 <span class="font-semibold text-slate-700">Password Checklist:</span>
-                <ul class="list-disc list-inside space-y-0.5 text-slate-500 text-[11px]">
+                <ul class="list-disc list-inside space-y-0.5 text-slate-600 text-[11px]">
                     <li>Minimum 8 characters</li>
                     <li>Different from your temporary password</li>
                     <li>Mix of letters, numbers, and symbols recommended</li>
@@ -105,11 +112,12 @@
                 <button
                     type="submit"
                     wire:loading.attr="disabled"
-                    class="w-full py-2.5 px-4 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    aria-label="Save Password and Access Portal"
+                    class="w-full py-2.5 px-4 min-h-[44px] rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                     <span wire:loading.remove>Save Password & Access Portal</span>
                     <span wire:loading class="flex items-center gap-2">
-                        <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
