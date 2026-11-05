@@ -25,8 +25,8 @@
             <div class="flex items-center justify-between h-20">
                 <!-- Branding -->
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-700 via-blue-600 to-sky-500 flex items-center justify-center text-white shadow-md font-bold text-lg tracking-wider" aria-hidden="true">
-                        AS
+                    <div class="w-12 h-12 rounded-full border-2 border-indigo-600/70 bg-white shadow-md p-0.5 flex items-center justify-center overflow-hidden shrink-0" aria-hidden="true">
+                        <img src="{{ asset('images/emk-logo.png') }}" alt="EMK Center Logo" class="w-full h-full object-contain rounded-full">
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
@@ -81,8 +81,8 @@
                 <div>
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-800 mb-3">Contact & Support</h2>
                     <ul class="space-y-1.5 text-xs text-slate-600">
-                        <li>Email: <a href="mailto:membership@emk.com.bd" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">membership@emk.com.bd</a></li>
-                        <li>Information Desk: +880 1977-109012</li>
+                        <li>Email: <a href="mailto:info@emkcenter.org" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">info@emkcenter.org</a></li>
+                        <li>Information Desk: <a href="tel:+8809606513103" class="hover:underline">+8809606513103</a> | <a href="tel:+8801926666995" class="hover:underline">+8801926666995</a></li>
                         <li>Hours: Saturday – Thursday, 9:30 AM – 6:00 PM</li>
                         <li>Official Website: <a href="https://www.emk.com.bd" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">www.emk.com.bd</a></li>
                     </ul>
@@ -98,7 +98,7 @@
             </div>
 
             <nav aria-label="Footer Legal Links" class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <p>&copy; {{ date('Y') }} Edward M. Kennedy Center for Public Service and the Arts. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} EMK Center. All rights reserved.•T4D </p>
                 <div class="flex items-center gap-4">
                     <span>Privacy Notice</span>
                     <span aria-hidden="true">•</span>

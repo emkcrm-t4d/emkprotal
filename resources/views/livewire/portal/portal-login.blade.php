@@ -63,7 +63,7 @@
                                     wire:model="identifier"
                                     autocomplete="username"
                                     placeholder="e.g. EMK-2026-00001 or member@emk.test"
-                                    class="w-full px-4 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] border @error('identifier') border-rose-400 focus:border-rose-400 focus:ring-rose-400/25 @else border-emerald-400/25 focus:border-amber-400 focus:ring-amber-400/25 @enderror text-white placeholder-emerald-100/40 text-sm shadow-inner backdrop-blur-sm transition-all focus:outline-none focus:ring-2"
+                                    class="w-full px-4 py-3.5 min-h-[48px] rounded-xl bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] border @error('identifier') border-rose-400 focus:border-rose-400 focus:ring-rose-400/25 @else border-emerald-400/25 focus:border-amber-400 focus:ring-amber-400/25 @enderror text-white placeholder-emerald-100/40 text-base sm:text-sm shadow-inner backdrop-blur-sm transition-all focus:outline-none focus:ring-2"
                                     required
                                     autofocus
                                 >
@@ -90,7 +90,7 @@
                                     wire:model="password"
                                     autocomplete="current-password"
                                     placeholder="••••••••••••"
-                                    class="w-full px-4 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] border @error('password') border-rose-400 focus:border-rose-400 focus:ring-rose-400/25 @else border-emerald-400/25 focus:border-amber-400 focus:ring-amber-400/25 @enderror text-white placeholder-emerald-100/40 text-sm shadow-inner backdrop-blur-sm transition-all focus:outline-none focus:ring-2"
+                                    class="w-full px-4 py-3.5 min-h-[48px] rounded-xl bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] border @error('password') border-rose-400 focus:border-rose-400 focus:ring-rose-400/25 @else border-emerald-400/25 focus:border-amber-400 focus:ring-amber-400/25 @enderror text-white placeholder-emerald-100/40 text-base sm:text-sm shadow-inner backdrop-blur-sm transition-all focus:outline-none focus:ring-2"
                                     required
                                 >
                             </div>
@@ -105,27 +105,27 @@
                         </div>
 
                         <!-- Options Row: Remember Me & Forgot Password -->
-                        <div class="flex items-center justify-between pt-1">
-                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <div class="flex items-center justify-between pt-1 min-h-[44px]">
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
                                 <input
                                     type="checkbox"
                                     wire:model="remember"
-                                    class="w-4 h-4 rounded text-amber-500 bg-white/10 border-white/20 focus:ring-amber-400 cursor-pointer"
+                                    class="w-5 h-5 rounded text-amber-500 bg-white/10 border-white/20 focus:ring-amber-400 cursor-pointer"
                                 >
                                 <span class="text-xs text-emerald-100/80">Remember this device</span>
                             </label>
 
-                            <a href="mailto:membership@emk.com.bd?subject=Password%20Assistance%20Request" class="text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors">
+                            <a href="mailto:info@emkcenter.org?subject=Password%20Assistance%20Request" class="text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors p-1">
                                 Forgot Password?
                             </a>
                         </div>
 
-                        <!-- Golden LOGIN Action Button (Reference Accent) -->
+                        <!-- Golden LOGIN Action Button (Reference Accent, Finger Sized) -->
                         <div class="pt-3">
                             <button
                                 type="submit"
                                 wire:loading.attr="disabled"
-                                class="w-full py-3.5 px-6 rounded-xl text-sm font-extrabold uppercase tracking-widest text-slate-950 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 active:scale-[0.99] disabled:opacity-60 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-300/60"
+                                class="w-full py-4 px-6 min-h-[50px] rounded-xl text-sm sm:text-base font-extrabold uppercase tracking-widest text-slate-950 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 active:scale-[0.99] disabled:opacity-60 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer border border-amber-300/60"
                             >
                                 <span wire:loading.remove>LOGIN</span>
                                 <span wire:loading class="flex items-center gap-2">
@@ -143,8 +143,10 @@
                 <!-- Bottom Front Desk Assistance Notice -->
                 <div class="mt-6 pt-4 border-t border-white/10 text-center">
                     <p class="text-xs text-emerald-200/70 leading-relaxed">
-                        Need help or first time logging in? Contact the front desk at
-                        <a href="mailto:membership@emk.com.bd" class="text-amber-300 font-semibold hover:underline">membership@emk.com.bd</a>
+                        Need help or first time logging in? Contact:
+                        <a href="tel:+8809606513103" class="text-amber-300 font-semibold hover:underline">+8809606513103</a>
+                        <span class="text-white/30">•</span>
+                        <a href="mailto:info@emkcenter.org" class="text-amber-300 font-semibold hover:underline">info@emkcenter.org</a>
                     </p>
                 </div>
             </div>
@@ -185,10 +187,12 @@
                     <path d="M 120 600 C 140 450, 180 340, 280 310 C 360 280, 380 220, 370 180 C 350 130, 390 60, 520 20 C 560 5, 600 0, 600 0 L 600 600 Z" fill="url(#emkGoldWave)" filter="url(#waveShadow)" />
                 </svg>
 
-                <!-- Floating Glass Accent Badges -->
-                <div class="absolute top-6 right-6 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-xs font-semibold shadow-lg">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>EMK Center Network</span>
+                <!-- Floating Glass Accent Badge with Exact Circle-Bordered EMK Logo (Right-side Corner) -->
+                <div class="absolute top-6 right-6 z-20 flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-xs font-semibold shadow-xl">
+                    <div class="w-6 h-6 rounded-full border border-amber-400/90 bg-white p-0.5 overflow-hidden shadow-xs flex items-center justify-center shrink-0" aria-hidden="true">
+                        <img src="{{ asset('images/emk-logo.png') }}" alt="EMK Center Logo" class="w-full h-full object-contain rounded-full">
+                    </div>
+                    <span class="tracking-wide">EMK Center Network</span>
                 </div>
 
                 <!-- High-Resolution Clean 3D Member Character Illustration -->
