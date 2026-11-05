@@ -15,7 +15,19 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-900 bg-slate-50 flex flex-col justify-between">
+@php
+    $isLoginPage = request()->routeIs('portal.login');
+@endphp
+<body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased {{ $isLoginPage ? 'text-slate-100 bg-[#061d16] selection:bg-amber-400 selection:text-slate-950' : 'text-slate-900 bg-slate-50' }} flex flex-col justify-between relative overflow-x-hidden">
+    @if ($isLoginPage)
+        <!-- Ambient Glass Theme Backdrop Lighting -->
+        <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+            <div class="absolute -top-32 -left-32 w-[34rem] h-[34rem] bg-emerald-500/20 rounded-full blur-[130px]"></div>
+            <div class="absolute top-1/4 -right-24 w-[36rem] h-[36rem] bg-amber-500/15 rounded-full blur-[150px]"></div>
+            <div class="absolute -bottom-32 left-1/3 w-[38rem] h-[38rem] bg-teal-600/15 rounded-full blur-[160px]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
+        </div>
+    @endif
     <!-- Skip to main content link for keyboard & screen reader accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:p-4 focus:bg-indigo-600 focus:text-white focus:z-50 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Skip to main content</a>
 
@@ -49,7 +61,7 @@
     </div>
 
     <!-- Portal Navigation Bar -->
-    <header role="banner" class="bg-white border-b border-slate-200 shadow-xs sticky top-0 z-40">
+    <header role="banner" class="{{ $isLoginPage ? 'bg-slate-950/40 backdrop-blur-xl border-b border-white/10 shadow-lg text-white' : 'bg-white border-b border-slate-200 shadow-xs' }} sticky top-0 z-40 transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Portal Branding -->
@@ -61,7 +73,7 @@
                         :aria-expanded="mobileMenuOpen.toString()"
                         aria-controls="mobile-navigation-menu"
                         aria-label="Toggle mobile navigation menu"
-                        class="md:hidden inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+                        class="md:hidden inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2 rounded-lg {{ $isLoginPage ? 'text-slate-300 hover:text-white hover:bg-white/10' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }} focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
                     >
                         <span class="sr-only">Toggle navigation menu</span>
                         <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -73,19 +85,19 @@
                     </button>
 
                     <a href="{{ route('portal.profile') }}" class="flex items-center gap-3.5 group">
-                        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-indigo-700 via-blue-600 to-sky-500 flex items-center justify-center text-white shadow-sm font-bold text-base tracking-wider group-hover:shadow-md transition-shadow" aria-hidden="true">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr {{ $isLoginPage ? 'from-amber-400 to-yellow-500 text-slate-950 font-black shadow-amber-500/20' : 'from-indigo-700 via-blue-600 to-sky-500 text-white font-bold' }} flex items-center justify-center shadow-sm text-base tracking-wider group-hover:shadow-md transition-shadow" aria-hidden="true">
                             EMK
                         </div>
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                                <span class="text-[10px] font-bold uppercase tracking-wider {{ $isLoginPage ? 'text-amber-300 bg-amber-400/10 border-amber-400/20' : 'text-blue-700 bg-blue-50 border-blue-200' }} px-2 py-0.5 rounded-full border">
                                     Member Portal
                                 </span>
                             </div>
-                            <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-1.5 mt-0.5">
+                            <h1 class="text-base sm:text-lg font-bold {{ $isLoginPage ? 'text-white' : 'text-slate-900' }} tracking-tight flex items-center gap-1.5 mt-0.5">
                                 EMK Center
-                                <span class="text-slate-300 font-normal" aria-hidden="true">|</span>
-                                <span class="text-slate-600 font-medium text-xs sm:text-sm">American Spaces</span>
+                                <span class="{{ $isLoginPage ? 'text-white/30' : 'text-slate-300' }} font-normal" aria-hidden="true">|</span>
+                                <span class="{{ $isLoginPage ? 'text-emerald-200/90' : 'text-slate-600' }} font-medium text-xs sm:text-sm">American Spaces</span>
                             </h1>
                         </div>
                     </a>
@@ -123,8 +135,8 @@
                             </form>
                         </div>
                     @else
-                        <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-full text-xs font-medium" role="status" aria-label="Security Status: Secure Member Gateway">
-                            <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <div class="flex items-center gap-2 {{ $isLoginPage ? 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300 backdrop-blur-md' : 'bg-emerald-50 border-emerald-200 text-emerald-800' }} border px-3 py-1 rounded-full text-xs font-medium" role="status" aria-label="Security Status: Secure Member Gateway">
+                            <svg class="w-3.5 h-3.5 {{ $isLoginPage ? 'text-emerald-400' : 'text-emerald-600' }} shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
                             </svg>
                             <span>Secure Member Gateway</span>
@@ -240,26 +252,26 @@
     </div>
 
     <!-- Main Content Body -->
-    <main id="main-content" role="main" class="flex-1 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
+    <main id="main-content" role="main" class="flex-1 py-6 sm:py-10 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div class="{{ $isLoginPage ? 'max-w-5xl' : 'max-w-4xl' }} mx-auto w-full">
             {{ $slot ?? '' }}
             @yield('content')
         </div>
     </main>
 
     <!-- Portal Footer -->
-    <footer role="contentinfo" class="bg-white border-t border-slate-200 py-8 text-slate-600 text-xs">
+    <footer role="contentinfo" class="{{ $isLoginPage ? 'bg-slate-950/40 backdrop-blur-xl border-t border-white/10 text-slate-400' : 'bg-white border-t border-slate-200 text-slate-600' }} py-8 text-xs transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2 text-slate-500">
+                <div class="flex items-center gap-2 {{ $isLoginPage ? 'text-slate-400' : 'text-slate-500' }}">
                     <span>&copy; {{ date('Y') }} EMK Center. All rights reserved.</span>
                     <span aria-hidden="true">•</span>
                     <span>American Spaces Bangladesh</span>
                 </div>
-                <div class="flex items-center gap-4 text-slate-500">
+                <div class="flex items-center gap-4 {{ $isLoginPage ? 'text-slate-400' : 'text-slate-500' }}">
                     <span>Help Desk: +880 1977-109012</span>
                     <span aria-hidden="true">•</span>
-                    <a href="mailto:membership@emk.com.bd" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">membership@emk.com.bd</a>
+                    <a href="mailto:membership@emk.com.bd" class="{{ $isLoginPage ? 'text-amber-300 hover:text-amber-200 font-medium' : 'text-indigo-600 hover:underline' }} focus:outline-none focus:ring-2 focus:ring-amber-400 rounded">membership@emk.com.bd</a>
                 </div>
             </div>
         </div>
