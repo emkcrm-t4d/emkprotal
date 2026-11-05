@@ -3,6 +3,7 @@
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Controllers\Invoices\InvoiceReceiptController;
 use App\Http\Controllers\Portal\PortalDocumentDownloadController;
+use App\Http\Controllers\Reports\WorkspaceExportController;
 use App\Livewire\Portal\MemberPortalProfile;
 use Illuminate\Support\Facades\Route;
 
@@ -103,6 +104,11 @@ Route::prefix('/crm/{workspace}')
         Route::get('/dashboard_reports', \App\Livewire\Reports\OperationalDashboard::class)
             ->name('crm.dashboard_reports')
             ->middleware(['can:dashboard_reports.view_dashboard']);
+
+        Route::get('/exports/members', [WorkspaceExportController::class, 'members'])->name('crm.exports.members');
+        Route::get('/exports/leads', [WorkspaceExportController::class, 'leads'])->name('crm.exports.leads');
+        Route::get('/exports/invoices', [WorkspaceExportController::class, 'invoices'])->name('crm.exports.invoices');
+        Route::get('/exports/metrics', [WorkspaceExportController::class, 'metrics'])->name('crm.exports.metrics');
 
         Route::get('/forms', \App\Livewire\Forms\FormIndex::class)
             ->name('crm.forms.index');
