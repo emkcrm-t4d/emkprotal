@@ -378,6 +378,7 @@
                     </div>
                     <button
                         type="button"
+                        wire:click="$dispatch('openSubmitProfileChangeRequestModal')"
                         class="px-4 py-2 text-xs font-semibold rounded-xl text-indigo-700 bg-white border border-indigo-200 hover:bg-indigo-50 shadow-2xs transition-colors shrink-0 cursor-pointer"
                     >
                         Submit Change Request
