@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Platform;
 
 use App\Domain\Platform\Services\PlatformSettingsService;
+use App\Domain\Tenancy\Traits\ValidatesWorkspaceOnHydration;
 use App\Domain\Workspaces\Models\Workspace;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
@@ -16,6 +17,8 @@ use Livewire\Component;
 #[Layout('layouts.admin')]
 class PlatformSettingsHub extends Component
 {
+    use ValidatesWorkspaceOnHydration;
+
     public string $workspaceId = '';
     public string $workspace = '';
 

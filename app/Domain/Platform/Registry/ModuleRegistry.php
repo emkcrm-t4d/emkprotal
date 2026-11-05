@@ -87,7 +87,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'forms.publish' => new ActionDefinition('forms.publish', 'forms', 'Publish Form', 'Deploy form to live public URL', false, true),
                 'forms.archive' => new ActionDefinition('forms.archive', 'forms', 'Archive Form', 'Deactivate form from public access', false, true),
                 'forms.view_entries' => new ActionDefinition('forms.view_entries', 'forms', 'View Entries', 'Inspect raw unmoderated form submissions', false, false),
-            ]
+            ],
+            defaultRoute: 'crm.forms.index',
         ));
 
         // 2. leads
@@ -109,7 +110,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'leads.reject' => new ActionDefinition('leads.reject', 'leads', 'Reject Lead', 'Issue formal application rejection', false, true),
                 'leads.convert' => new ActionDefinition('leads.convert', 'leads', 'Convert Lead', 'Execute 10-step atomic Lead-to-Member conversion per DEC-03', false, true),
                 'leads.reverse_conversion' => new ActionDefinition('leads.reverse_conversion', 'leads', 'Reverse Conversion', 'Roll back conversion within 30 days per DEC-04', false, true),
-            ]
+            ],
+            defaultRoute: 'crm.leads',
         ));
 
         // 3. members
@@ -126,7 +128,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'members.export_csv' => new ActionDefinition('members.export_csv', 'members', 'Export Members CSV', 'Export workspace members to CSV', true, false),
                 'members.export_excel' => new ActionDefinition('members.export_excel', 'members', 'Export Members Excel', 'Export workspace members to Excel', true, false),
                 'members.manage_cards' => new ActionDefinition('members.manage_cards', 'members', 'Manage ID Cards', 'Advance badge lifecycle (Printing, Ready, Delivered)', false, false),
-            ]
+            ],
+            defaultRoute: 'crm.members',
         ));
 
         // 4. member_portal
@@ -140,7 +143,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'member_portal.request_change' => new ActionDefinition('member_portal.request_change', 'member_portal', 'Request Profile Change', 'Submit change request for staff review', false, false),
                 'member_portal.request_email_change' => new ActionDefinition('member_portal.request_email_change', 'member_portal', 'Request Email Change', 'Submit dedicated email change request per DEC-07', false, false),
                 'member_portal.request_renewal' => new ActionDefinition('member_portal.request_renewal', 'member_portal', 'Request Renewal', 'Submit term renewal application and payment', false, false),
-            ]
+            ],
+            defaultRoute: 'portal.profile',
         ));
 
         // 5. invoices
@@ -154,7 +158,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'invoices.generate' => new ActionDefinition('invoices.generate', 'invoices', 'Generate Invoice', 'Trigger ad-hoc invoice generation', false, true),
                 'invoices.verify_payment' => new ActionDefinition('invoices.verify_payment', 'invoices', 'Verify Invoice Payment', 'Reconcile renewal fee payment', false, true),
                 'invoices.export' => new ActionDefinition('invoices.export', 'invoices', 'Export Invoices', 'Export invoice lists and receipts to CSV/PDF', true, false),
-            ]
+            ],
+            defaultRoute: 'crm.invoices',
         ));
 
         // 6. dashboard_reports
@@ -167,7 +172,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'dashboard_reports.view_dashboard' => new ActionDefinition('dashboard_reports.view_dashboard', 'dashboard_reports', 'View Dashboard', 'Access operational KPI dashboard', false, false),
                 'dashboard_reports.generate_reports' => new ActionDefinition('dashboard_reports.generate_reports', 'dashboard_reports', 'Generate Reports', 'Compile custom pipeline and demographic reports', true, false),
                 'dashboard_reports.export_metrics' => new ActionDefinition('dashboard_reports.export_metrics', 'dashboard_reports', 'Export Metrics', 'Export operational summaries and charts', true, false),
-            ]
+            ],
+            defaultRoute: 'crm.reports',
         ));
 
         // 7. platform_services
@@ -182,7 +188,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'platform_services.delegate_roles' => new ActionDefinition('platform_services.delegate_roles', 'platform_services', 'Delegate Roles', 'Assign permitted operational roles to staff per DISC-04', false, true),
                 'platform_services.view_audit_logs' => new ActionDefinition('platform_services.view_audit_logs', 'platform_services', 'View Audit Logs', 'Inspect append-only security logs per DEC-11', false, true),
                 'platform_services.manage_backups' => new ActionDefinition('platform_services.manage_backups', 'platform_services', 'Manage Backups', 'Trigger backup snapshots and health checks', false, false),
-            ]
+            ],
+            defaultRoute: 'crm.settings.index',
         ));
 
         // 8. migration
@@ -195,7 +202,8 @@ class ModuleRegistry implements ModuleRegistryInterface
                 'migration.import_zoho' => new ActionDefinition('migration.import_zoho', 'migration', 'Import Zoho Data', 'Execute legacy Zoho data ingestion pipeline', false, false),
                 'migration.export_zoho' => new ActionDefinition('migration.export_zoho', 'migration', 'Export Zoho Data', 'Export rollback datasets in Zoho format', false, false),
                 'migration.reconcile_data' => new ActionDefinition('migration.reconcile_data', 'migration', 'Reconcile Data', 'Run automated reconciliation scripts', false, false),
-            ]
+            ],
+            defaultRoute: null,
         ));
     }
 
@@ -272,5 +280,25 @@ class ModuleRegistry implements ModuleRegistryInterface
         }
 
         return true;
+    }
+
+    /**
+     * Resolve the canonical web path for a given module and workspace identifier.
+     */
+    public function getModulePath(string $moduleKey, string $workspaceId): string
+    {
+        return match ($moduleKey) {
+            'dashboard_reports' => "/crm/{$workspaceId}/reports",
+            'platform_services' => "/crm/{$workspaceId}/settings",
+            default => "/crm/{$workspaceId}/{$moduleKey}",
+        };
+    }
+
+    /**
+     * Resolve the canonical route name for a given module.
+     */
+    public function getModuleRouteName(string $moduleKey): ?string
+    {
+        return $this->modules[$moduleKey]->defaultRoute ?? null;
     }
 }

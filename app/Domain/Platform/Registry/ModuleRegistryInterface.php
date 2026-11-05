@@ -49,4 +49,14 @@ interface ModuleRegistryInterface
      * Check if a module is enabled for a specific workspace.
      */
     public function isModuleEnabledForWorkspace(string $moduleKey, ?string $workspaceId): bool;
+
+    /**
+     * Resolve the canonical web path for a given module and workspace identifier.
+     */
+    public function getModulePath(string $moduleKey, string $workspaceId): string;
+
+    /**
+     * Resolve the canonical route name for a given module.
+     */
+    public function getModuleRouteName(string $moduleKey): ?string;
 }

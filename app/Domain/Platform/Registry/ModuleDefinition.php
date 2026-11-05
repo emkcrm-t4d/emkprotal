@@ -15,5 +15,6 @@ readonly class ModuleDefinition
         public string $domainNamespace,
         public string $description,
         public array $actions = [],
+        public ?string $defaultRoute = null,
     ) {}
 }

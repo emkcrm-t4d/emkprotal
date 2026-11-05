@@ -83,10 +83,19 @@
             </div>
             @foreach ($modules as $module)
                 @php
-                    $isActive = ($activeModule === $module->key);
+                    $modulePath = match ($module->key) {
+                        'dashboard_reports' => "/crm/{$workspace['id']}/reports",
+                        'platform_services' => "/crm/{$workspace['id']}/settings",
+                        default => "/crm/{$workspace['id']}/{$module->key}",
+                    };
+                    $isActive = ($activeModule === $module->key) || match ($module->key) {
+                        'dashboard_reports' => request()->is("crm/{$workspace['id']}/reports*") || request()->is("crm/{$workspace['id']}/dashboard*") || request()->is("crm/{$workspace['id']}/exports*") || request()->is("crm/{$workspace['id']}/data-export*"),
+                        'platform_services' => request()->is("crm/{$workspace['id']}/settings*") || request()->is("crm/{$workspace['id']}/platform_services*") || request()->is("crm/{$workspace['id']}/audit-logs*") || request()->is("crm/{$workspace['id']}/staff*"),
+                        default => request()->is("crm/{$workspace['id']}/{$module->key}*"),
+                    };
                 @endphp
                 <a 
-                    href="/crm/{{ $workspace['id'] }}/{{ $module->key }}" 
+                    href="{{ $modulePath }}" 
                     class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $isActive ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
                 >
                     <span class="w-2 h-2 rounded-full {{ $isActive ? 'bg-white' : 'bg-slate-500 group-hover:bg-indigo-400' }}"></span>
@@ -151,10 +160,19 @@
 
             @foreach ($modules as $module)
                 @php
-                    $isActive = ($activeModule === $module->key);
+                    $modulePath = match ($module->key) {
+                        'dashboard_reports' => "/crm/{$workspace['id']}/reports",
+                        'platform_services' => "/crm/{$workspace['id']}/settings",
+                        default => "/crm/{$workspace['id']}/{$module->key}",
+                    };
+                    $isActive = ($activeModule === $module->key) || match ($module->key) {
+                        'dashboard_reports' => request()->is("crm/{$workspace['id']}/reports*") || request()->is("crm/{$workspace['id']}/dashboard*") || request()->is("crm/{$workspace['id']}/exports*") || request()->is("crm/{$workspace['id']}/data-export*"),
+                        'platform_services' => request()->is("crm/{$workspace['id']}/settings*") || request()->is("crm/{$workspace['id']}/platform_services*") || request()->is("crm/{$workspace['id']}/audit-logs*") || request()->is("crm/{$workspace['id']}/staff*"),
+                        default => request()->is("crm/{$workspace['id']}/{$module->key}*"),
+                    };
                 @endphp
                 <a 
-                    href="/crm/{{ $workspace['id'] }}/{{ $module->key }}" 
+                    href="{{ $modulePath }}" 
                     class="group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $isActive ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}"
                 >
                     <div class="flex items-center gap-2.5 min-w-0">

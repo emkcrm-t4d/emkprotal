@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Platform;
 
 use App\Domain\Platform\Services\BackupService;
+use App\Domain\Tenancy\Traits\ValidatesWorkspaceOnHydration;
 use App\Domain\Workspaces\Models\Workspace;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
@@ -17,6 +18,8 @@ use Throwable;
 #[Layout('layouts.admin')]
 class BackupManager extends Component
 {
+    use ValidatesWorkspaceOnHydration;
+
     public string $workspaceId = '';
     public string $workspace = '';
     public bool $isBackingUp = false;
