@@ -14,28 +14,81 @@
 
     @livewireStyles
     @stack('styles')
+
+    <style>
+        /* 3D Frosted Glass Theme for Staff Login */
+        main .bg-white {
+            background-color: rgba(15, 23, 42, 0.78) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+            color: #f8fafc !important;
+        }
+        main .bg-slate-50 {
+            background-color: rgba(2, 6, 23, 0.6) !important;
+            backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #cbd5e1 !important;
+        }
+        main .text-slate-900,
+        main .text-slate-800 {
+            color: #ffffff !important;
+        }
+        main .text-slate-700,
+        main .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        main .text-slate-500,
+        main .text-slate-400 {
+            color: #94a3b8 !important;
+        }
+        main .border-slate-200,
+        main .border-slate-300,
+        main [class*="border-slate-200"] {
+            border-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        main input:not([type="checkbox"]):not([type="radio"]) {
+            background-color: rgba(2, 6, 23, 0.65) !important;
+            border-color: rgba(255, 255, 255, 0.18) !important;
+            color: #ffffff !important;
+        }
+        main input:focus {
+            border-color: #f59e0b !important;
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25) !important;
+        }
+    </style>
 </head>
-<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b12] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
+<body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20 flex items-center justify-center bg-[#070b12]" aria-hidden="true">
-        <picture class="w-full h-full flex items-center justify-center">
-            <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
-            <img 
-                src="{{ asset('images/emk-bg.jpg') }}" 
-                alt="EMK Center Background" 
-                class="w-full h-full object-contain object-center opacity-30 brightness-95 contrast-110 pointer-events-none select-none transition-opacity duration-500"
-                loading="eager"
-                fetchpriority="high"
-            >
-        </picture>
-        <!-- Soft Vignette & Atmospheric Contrast Scrim -->
-        <div class="absolute inset-0 bg-[#070b12]/60 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/40 to-[#070b12]/95"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12] via-transparent to-[#070b12]/80"></div>
-        <!-- Ambient Warm Pendant Lamp Glow -->
-        <div class="absolute top-12 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[130px]"></div>
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-[130px]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] opacity-30"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#070b12]" aria-hidden="true">
+        <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
+        <img 
+            src="{{ asset('images/emk-bg.jpg') }}" 
+            alt="" 
+            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-50 scale-110 pointer-events-none"
+            aria-hidden="true"
+        >
+
+        <!-- Uncropped Fit Layer: Intact 100%, 0% cropped, responsive to device pixels -->
+        <div class="absolute inset-0 flex items-center justify-center">
+            <picture class="w-full h-full flex items-center justify-center">
+                <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
+                <img 
+                    src="{{ asset('images/emk-bg.jpg') }}" 
+                    alt="EMK Center Background" 
+                    class="w-full h-full object-contain object-center opacity-75 brightness-95 contrast-105 pointer-events-none select-none transition-opacity duration-500"
+                    loading="eager"
+                    fetchpriority="high"
+                >
+            </picture>
+        </div>
+
+        <!-- Atmospheric Dark Glass Scrim (Permits photography to be clearly visible, center clear, edges soft) -->
+        <div class="absolute inset-0 bg-[#070b12]/45 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/15 to-[#070b12]/75"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12]/80 via-transparent to-[#070b12]/60"></div>
     </div>
 
     <!-- Skip to main content link for accessibility -->
@@ -73,7 +126,7 @@
     </header>
 
     <!-- Main Content Canvas -->
-    <main id="main-content" role="main" class="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
+    <main id="main-content" role="main" class="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 relative z-10">
         {{ $slot }}
     </main>
 

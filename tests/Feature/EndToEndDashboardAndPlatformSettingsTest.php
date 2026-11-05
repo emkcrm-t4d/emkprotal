@@ -55,7 +55,14 @@ class EndToEndDashboardAndPlatformSettingsTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([
+            \Database\Seeders\SpaceAndWorkspaceSeeder::class,
+            \Database\Seeders\MembershipTermSeeder::class,
+            \Database\Seeders\RolesAndPermissionsSeeder::class,
+            \Database\Seeders\DefaultMembershipFormSeeder::class,
+            \Database\Seeders\EmailTemplateSeeder::class,
+            \Database\Seeders\WorkflowRuleSeeder::class,
+        ]);
 
         // 1. Primary workspace: EMK Center Dhaka
         $this->workspaceDhaka = Workspace::firstOrCreate(

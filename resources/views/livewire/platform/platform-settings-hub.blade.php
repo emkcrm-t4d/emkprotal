@@ -1,42 +1,46 @@
 <div class="space-y-6">
-    <!-- Breadcrumbs & Header -->
-    <div class="sm:flex sm:items-center sm:justify-between pb-4 border-b border-slate-200">
-        <div>
-            <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                <a href="/crm/{{ $workspaceId }}/dashboard" class="hover:text-indigo-600 transition-colors">CRM</a>
-                <span>/</span>
-                <span class="text-slate-500">Platform Services</span>
-                <span>/</span>
-                <span class="text-slate-900 font-semibold">Settings Hub</span>
-            </nav>
-            <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Platform Settings Hub</h1>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-indigo-50 text-indigo-700 border border-indigo-200" id="badge-workspace">
-                    {{ $workspaceId }}
-                </span>
+    <!-- Breadcrumbs & Header Card (3D Frosted Glass) -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-7 shadow-2xl">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <div>
+                <nav class="flex items-center gap-2 text-xs text-amber-400/90 font-medium mb-2.5">
+                    <a href="/crm/{{ $workspaceId }}/dashboard" class="hover:text-amber-300 transition-colors">CRM</a>
+                    <span class="text-white/30">/</span>
+                    <span class="text-slate-400">Platform Services</span>
+                    <span class="text-white/30">/</span>
+                    <span class="text-white font-semibold">Settings Hub</span>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
+                        Platform Settings Hub
+                    </h1>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-400/10 text-amber-300 border border-amber-400/20" id="badge-workspace">
+                        {{ $workspaceId }}
+                    </span>
+                </div>
+                <p class="mt-1.5 text-sm text-slate-300 max-w-3xl leading-relaxed">
+                    Unified operational parameter configuration, credential management, and platform service administration per DASH-04 and ASVS V8.2.
+                </p>
             </div>
-            <p class="mt-1 text-sm text-slate-500">
-                Unified operational parameter configuration, credential management, and platform service administration per DASH-04 and ASVS V8.2.
-            </p>
-        </div>
 
-        <div class="mt-4 sm:mt-0 flex items-center gap-3">
-            <button
-                type="button"
-                wire:click="saveSettings"
-                wire:loading.attr="disabled"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-xs transition-colors disabled:opacity-50"
-                id="btn-save-settings-top"
-            >
-                <svg wire:loading.remove wire:target="saveSettings" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <svg wire:loading wire:target="saveSettings" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>Save Changes</span>
-            </button>
+            <div class="mt-4 sm:mt-0 flex items-center gap-3">
+                <button
+                    type="button"
+                    wire:click="saveSettings"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
+                    id="btn-save-settings-top"
+                >
+                    <svg wire:loading.remove wire:target="saveSettings" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <svg wire:loading wire:target="saveSettings" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Save Changes</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -52,30 +56,30 @@
         </div>
     @endif
 
-    <!-- Sub-Navigation Modules Bar -->
-    <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-        <div class="px-4 py-3 bg-slate-50 border-b border-slate-200">
-            <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Administration & Platform Modules</h2>
+    <!-- Sub-Navigation Modules Bar (Frosted 3D Glass) -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="px-5 py-3.5 bg-slate-950/60 border-b border-white/10">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-amber-300">Administration & Platform Modules</h2>
         </div>
-        <div class="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+        <div class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
             <a
                 href="{{ route('crm.settings.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-indigo-50 border-indigo-200 text-indigo-700 shadow-xs"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border-amber-400/40 text-amber-300 shadow-md group"
                 id="subnav-parameters"
             >
-                <svg class="w-5 h-5 mb-1.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg>
                 <span class="text-xs font-semibold">System Parameters</span>
-                <span class="text-[10px] text-indigo-500 font-mono mt-0.5">Active</span>
+                <span class="text-[10px] text-amber-400 font-mono mt-0.5">Active</span>
             </a>
 
             <a
                 href="{{ route('crm.terms.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-terms"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span class="text-xs font-semibold">Membership Terms</span>
@@ -84,10 +88,10 @@
 
             <a
                 href="{{ route('crm.staff.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-staff"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
                 <span class="text-xs font-semibold">Staff & Delegations</span>
@@ -96,10 +100,10 @@
 
             <a
                 href="{{ route('crm.email_templates.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-templates"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span class="text-xs font-semibold">Email Templates</span>
@@ -108,10 +112,10 @@
 
             <a
                 href="{{ route('crm.email_delivery.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-delivery"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span class="text-xs font-semibold">Delivery Monitor</span>
@@ -120,10 +124,10 @@
 
             <a
                 href="{{ route('crm.workflow_rules.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-workflow"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 <span class="text-xs font-semibold">Workflow Rules</span>
@@ -132,10 +136,10 @@
 
             <a
                 href="{{ route('crm.backups.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-backups"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
                 <span class="text-xs font-semibold">Backups & Health</span>
@@ -144,10 +148,10 @@
 
             <a
                 href="{{ route('crm.audit_logs.index', $workspaceId) }}"
-                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                class="flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all bg-white/5 border-white/10 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 group"
                 id="subnav-audit"
             >
-                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 mb-1.5 text-slate-400 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
                 <span class="text-xs font-semibold">Audit Logs</span>
@@ -156,14 +160,48 @@
         </div>
     </div>
 
-    <!-- Parameter Tabs & Editor Card -->
-    <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
+    <!-- Parameter Tabs & Editor Card (Frosted 3D Glass) -->
+    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
         <!-- Tab Navigation Bar -->
-        <div class="border-b border-slate-200 bg-slate-50 px-4 sm:px-6">
+        <div class="border-b border-white/10 bg-slate-950/60 px-4 sm:px-6">
             <nav class="-mb-px flex space-x-6" aria-label="Settings Tabs">
                 <button
                     type="button"
                     wire:click="switchTab('general')"
+                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'general' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    id="tab-general"
+                >
+                    General Parameters
+                </button>
+
+                <button
+                    type="button"
+                    wire:click="switchTab('membership')"
+                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'membership' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    id="tab-membership"
+                >
+                    Membership Rules
+                </button>
+
+                <button
+                    type="button"
+                    wire:click="switchTab('payments')"
+                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'payments' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    id="tab-payments"
+                >
+                    Payment Credentials
+                </button>
+
+                <button
+                    type="button"
+                    wire:click="switchTab('security')"
+                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'security' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    id="tab-security"
+                >
+                    Security & Sessions
+                </button>
+            </nav>
+        </div>
                     class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'general' ? 'border-indigo-600 text-indigo-600 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
                     id="tab-general"
                 >
@@ -471,15 +509,15 @@
             @endif
 
             <!-- Bottom Save Bar -->
-            <div class="pt-6 border-t border-slate-200 flex items-center justify-between">
-                <span class="text-xs text-slate-500">
+            <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                <span class="text-xs text-slate-400">
                     Modifications will be immutably recorded in workspace audit logs per ASVS V8.2.
                 </span>
 
                 <button
                     type="submit"
                     wire:loading.attr="disabled"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-xs transition-colors disabled:opacity-50"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
                     id="btn-save-settings"
                 >
                     <svg wire:loading.remove wire:target="saveSettings" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

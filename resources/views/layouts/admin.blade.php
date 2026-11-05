@@ -80,27 +80,35 @@
         }
     </style>
 </head>
-<body class="min-h-full font-sans antialiased text-slate-100 bg-[#070b12] selection:bg-amber-400 selection:text-slate-950 flex flex-col justify-between relative overflow-x-hidden">
+<body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-20 flex items-center justify-center bg-[#070b12]" aria-hidden="true">
-        <picture class="w-full h-full flex items-center justify-center">
-            <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
-            <img 
-                src="{{ asset('images/emk-bg.jpg') }}" 
-                alt="EMK Center Background" 
-                class="w-full h-full object-contain object-center opacity-30 brightness-95 contrast-110 pointer-events-none select-none transition-opacity duration-500"
-                loading="eager"
-                fetchpriority="high"
-            >
-        </picture>
-        <!-- Soft Vignette & Atmospheric Contrast Scrim -->
-        <div class="absolute inset-0 bg-[#070b12]/60 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/40 to-[#070b12]/95"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12] via-transparent to-[#070b12]/80"></div>
-        <!-- Ambient Warm Pendant Lamp Glow -->
-        <div class="absolute top-12 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-[130px]"></div>
-        <div class="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-[130px]"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] opacity-30"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#070b12]" aria-hidden="true">
+        <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
+        <img 
+            src="{{ asset('images/emk-bg.jpg') }}" 
+            alt="" 
+            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-50 scale-110 pointer-events-none"
+            aria-hidden="true"
+        >
+
+        <!-- Uncropped Fit Layer: Intact 100%, 0% cropped, responsive to device pixels -->
+        <div class="absolute inset-0 flex items-center justify-center">
+            <picture class="w-full h-full flex items-center justify-center">
+                <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
+                <img 
+                    src="{{ asset('images/emk-bg.jpg') }}" 
+                    alt="EMK Center Background" 
+                    class="w-full h-full object-contain object-center opacity-75 brightness-95 contrast-105 pointer-events-none select-none transition-opacity duration-500"
+                    loading="eager"
+                    fetchpriority="high"
+                >
+            </picture>
+        </div>
+
+        <!-- Atmospheric Dark Glass Scrim (Permits photography to be clearly visible, center clear, edges soft) -->
+        <div class="absolute inset-0 bg-[#070b12]/45 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-radial-[at_center] from-transparent via-[#070b12]/15 to-[#070b12]/75"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#070b12]/80 via-transparent to-[#070b12]/60"></div>
     </div>
 
     <!-- Notification & Toast Slot Container -->
@@ -133,7 +141,7 @@
     </div>
 
     <!-- Administrative Shell Layout Structure (Full Window Fluid Canvas) -->
-    <div class="min-h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col relative z-10">
         <!-- Livewire Reactive Admin Shell Component -->
         <livewire:admin.admin-shell :activeModule="$activeModule ?? null" />
 
