@@ -96,7 +96,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **MIGR-01**: Implement repeatable data import pipeline for Zoho Leads, Contacts/Members, form entries, documents, and photos.
 - [x] **MIGR-02**: Map legacy fields, terms, and statuses while preserving Zoho record IDs for audit traceability.
-- [ ] **MIGR-03**: Safely associate legacy documents and photos with imported member profiles under secure naming conventions.
+- [x] **MIGR-03**: Safely associate legacy documents and photos with imported member profiles under secure naming conventions.
 - [ ] **MIGR-04**: Generate reconciliation reports verifying record counts, active/inactive statuses, unique emails, and dates against Zoho source data.
 - [ ] **MIGR-05**: Execute dry-run verification, import portal accounts in inactive state, and establish cutover/rollback procedures.
 
@@ -200,7 +200,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-05 | Phase 10 | Complete |
 | MIGR-01 | Phase 11 | Complete |
 | MIGR-02 | Phase 11 | Complete |
-| MIGR-03 | Phase 11 | Pending |
+| MIGR-03 | Phase 11 | Complete |
 | MIGR-04 | Phase 11 | Pending |
 | MIGR-05 | Phase 11 | Pending |
 | RELS-01 | Phase 12 | Pending |
