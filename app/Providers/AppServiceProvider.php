@@ -44,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
             $this->commands([
                 \App\Domain\Migration\Commands\ZohoImportCommand::class,
                 \App\Domain\Migration\Commands\ZohoImportAttachmentsCommand::class,
+                \App\Domain\Migration\Commands\ZohoReconcileCommand::class,
             ]);
         }
     }

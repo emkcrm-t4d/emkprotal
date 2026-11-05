@@ -56,6 +56,7 @@ class RolesAndPermissionsSeeder extends Seeder
                     ->orWhere('name', 'like', 'members.%')
                     ->orWhere('name', 'like', 'invoices.%')
                     ->orWhere('name', 'like', 'dashboard_reports.%')
+                    ->orWhere('name', 'like', 'migration.%')
                     ->orWhereIn('name', [
                         'platform_services.manage_settings',
                         'platform_services.manage_users',

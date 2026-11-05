@@ -12,14 +12,19 @@ use App\Domain\Members\Models\Member;
 use App\Domain\Migration\DTOs\ReconciliationReportDTO;
 use App\Domain\Migration\Models\ZohoImportBatch;
 use App\Domain\Migration\Models\ZohoStagingRecord;
+use App\Domain\Migration\Services\ReconciliationReportGenerator;
 use App\Domain\Migration\Services\ZohoReconciliationService;
 use App\Domain\Workspaces\Models\Workspace;
+use App\Livewire\Migration\ReconciliationDashboard;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Livewire\Livewire;
 use Tests\TestCase;
 
 class ZohoReconciliationReportTest extends TestCase
@@ -27,8 +32,10 @@ class ZohoReconciliationReportTest extends TestCase
     use RefreshDatabase;
 
     protected ZohoReconciliationService $reconciliationService;
+    protected ReconciliationReportGenerator $reportGenerator;
     protected string $workspaceId = 'ws-emk-dhaka';
     protected MembershipTerm $term;
+    protected string $tempDir;
 
     protected function setUp(): void
     {
@@ -37,7 +44,13 @@ class ZohoReconciliationReportTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->reconciliationService = app(ZohoReconciliationService::class);
+        $this->reportGenerator = app(ReconciliationReportGenerator::class);
         Storage::fake('private');
+
+        $this->tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'zoho_recon_' . uniqid();
+        if (!is_dir($this->tempDir)) {
+            mkdir($this->tempDir, 0777, true);
+        }
 
         $this->term = MembershipTerm::where('workspace_id', $this->workspaceId)->first()
             ?? MembershipTerm::create([
@@ -47,6 +60,15 @@ class ZohoReconciliationReportTest extends TestCase
                 'fee_bdt' => 1000.00,
                 'is_active' => true,
             ]);
+    }
+
+    protected function tearDown(): void
+    {
+        if (is_dir($this->tempDir)) {
+            File::deleteDirectory($this->tempDir);
+        }
+
+        parent::tearDown();
     }
 
     protected function createMemberWithLead(
@@ -493,4 +515,209 @@ class ZohoReconciliationReportTest extends TestCase
             'auditable_type' => Workspace::class,
         ]);
     }
+
+    public function test_formula_injection_defense_prepends_quote_to_formula_triggers(): void
+    {
+        $this->assertEquals("'=SUM(A1:A10)", $this->reportGenerator->sanitizeCsvCell('=SUM(A1:A10)'));
+        $this->assertEquals("'+12345", $this->reportGenerator->sanitizeCsvCell('+12345'));
+        $this->assertEquals("'-12345", $this->reportGenerator->sanitizeCsvCell('-12345'));
+        $this->assertEquals("'@cmd", $this->reportGenerator->sanitizeCsvCell('@cmd'));
+        $this->assertEquals("SafeText", $this->reportGenerator->sanitizeCsvCell('SafeText'));
+
+        $report = new ReconciliationReportDTO(
+            batchUuid: 'batch-test',
+            workspaceId: $this->workspaceId,
+            generatedAt: now()->toIso8601String(),
+            sourceRecordCount: 1,
+            importedRecordCount: 1,
+            discrepancyCount: 1,
+            sourceStatusCounts: [],
+            importedStatusCounts: [],
+            sourceUniqueEmails: 1,
+            importedUniqueEmails: 1,
+            duplicateEmails: [],
+            dateMismatchCount: 0,
+            expectedAttachments: 0,
+            actualAttachments: 0,
+            missingAttachments: 0,
+            discrepancies: [
+                [
+                    'zoho_id' => '=HYPERLINK("http://evil.com")',
+                    'entity' => '+calc',
+                    'field' => '-cmd',
+                    'expected' => '@exploit',
+                    'actual' => 'safe_val',
+                    'severity' => 'critical',
+                    'message' => 'Formula test',
+                ],
+            ]
+        );
+
+        $csv = $this->reportGenerator->toCsv($report);
+
+        $this->assertStringContainsString("'=HYPERLINK", $csv);
+        $this->assertStringContainsString("'+calc", $csv);
+        $this->assertStringContainsString("'-cmd", $csv);
+        $this->assertStringContainsString("'@exploit", $csv);
+    }
+
+    public function test_html_report_generator_produces_valid_and_xss_escaped_html(): void
+    {
+        $report = new ReconciliationReportDTO(
+            batchUuid: 'batch-<script>alert("xss")</script>',
+            workspaceId: $this->workspaceId,
+            generatedAt: now()->toIso8601String(),
+            sourceRecordCount: 1,
+            importedRecordCount: 1,
+            discrepancyCount: 1,
+            sourceStatusCounts: [],
+            importedStatusCounts: [],
+            sourceUniqueEmails: 1,
+            importedUniqueEmails: 1,
+            duplicateEmails: [],
+            dateMismatchCount: 0,
+            expectedAttachments: 0,
+            actualAttachments: 0,
+            missingAttachments: 0,
+            discrepancies: [
+                [
+                    'zoho_id' => '<img src=x onerror=alert(1)>',
+                    'entity' => 'member',
+                    'field' => '<b>bold</b>',
+                    'expected' => 'expected_val',
+                    'actual' => 'actual_val',
+                    'severity' => 'warning',
+                    'message' => 'Status mismatch',
+                ],
+            ]
+        );
+
+        $html = $this->reportGenerator->toHtml($report);
+
+        $this->assertStringContainsString('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', $html);
+        $this->assertStringNotContainsString('<script>alert("xss")</script>', $html);
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;', $html);
+        $this->assertStringNotContainsString('<img src=x onerror=alert(1)>', $html);
+        $this->assertStringContainsString('&lt;b&gt;bold&lt;/b&gt;', $html);
+    }
+
+    public function test_artisan_zoho_reconcile_command_outputs_console_table(): void
+    {
+        $exitCode = Artisan::call('zoho:reconcile', [
+            '--workspace' => $this->workspaceId,
+            '--format' => 'console',
+        ]);
+
+        $this->assertEquals(0, $exitCode);
+        $output = Artisan::output();
+        $this->assertStringContainsString('Zoho Migration Reconciliation Report', $output);
+        $this->assertStringContainsString('Workspace', $output);
+        $this->assertStringContainsString($this->workspaceId, $output);
+    }
+
+    public function test_artisan_zoho_reconcile_command_generates_csv_and_html_files(): void
+    {
+        $csvPath = $this->tempDir . DIRECTORY_SEPARATOR . 'cli_report.csv';
+        $htmlPath = $this->tempDir . DIRECTORY_SEPARATOR . 'cli_report.html';
+
+        $exitCodeCsv = Artisan::call('zoho:reconcile', [
+            '--workspace' => $this->workspaceId,
+            '--format' => 'csv',
+            '--output' => $csvPath,
+        ]);
+        $this->assertEquals(0, $exitCodeCsv);
+        $this->assertFileExists($csvPath);
+        $csvContent = file_get_contents($csvPath);
+        $this->assertStringContainsString('zoho_id,entity,field,expected_value,actual_value,severity,message', $csvContent);
+
+        $exitCodeHtml = Artisan::call('zoho:reconcile', [
+            '--workspace' => $this->workspaceId,
+            '--format' => 'html',
+            '--output' => $htmlPath,
+        ]);
+        $this->assertEquals(0, $exitCodeHtml);
+        $this->assertFileExists($htmlPath);
+        $htmlContent = file_get_contents($htmlPath);
+        $this->assertStringContainsString('Zoho Migration Reconciliation Report', $htmlContent);
+    }
+
+    public function test_authenticated_workspace_manager_can_access_reconciliation_dashboard(): void
+    {
+        $manager = User::create([
+            'name' => 'Dhaka Manager',
+            'email' => 'dhaka.manager@emk.test',
+            'password' => bcrypt('Password123!'),
+            'workspace_id' => $this->workspaceId,
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $manager->assignRole('workspace_manager');
+
+        $response = $this->actingAs($manager, 'web')
+            ->get("/crm/{$this->workspaceId}/migration/reconciliation");
+
+        $response->assertStatus(200);
+        $response->assertSee('Zoho Migration Reconciliation & Data Fidelity', false);
+
+        Livewire::actingAs($manager, 'web')
+            ->test(ReconciliationDashboard::class, ['workspace' => $this->workspaceId])
+            ->assertOk()
+            ->assertSee('Zoho Migration Reconciliation & Data Fidelity', false);
+    }
+
+    public function test_cross_workspace_manager_receives_403_forbidden(): void
+    {
+        // Seed foreign workspace
+        $foreignWorkspace = Workspace::create([
+            'id' => 'ws-chattogram',
+            'space_id' => 1,
+            'name' => 'Chattogram Corner',
+            'is_active' => true,
+        ]);
+
+        $foreignManager = User::create([
+            'name' => 'Chattogram Manager',
+            'email' => 'ctg.manager@emk.test',
+            'password' => bcrypt('Password123!'),
+            'workspace_id' => $foreignWorkspace->id,
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $foreignManager->assignRole('workspace_manager');
+
+        $response = $this->actingAs($foreignManager, 'web')
+            ->get("/crm/{$this->workspaceId}/migration/reconciliation");
+
+        $response->assertStatus(403);
+    }
+
+    public function test_dashboard_export_streams_csv_and_html_with_audit_log(): void
+    {
+        $manager = User::create([
+            'name' => 'Dhaka Manager 2',
+            'email' => 'dhaka.manager2@emk.test',
+            'password' => bcrypt('Password123!'),
+            'workspace_id' => $this->workspaceId,
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $manager->assignRole('workspace_manager');
+
+        Livewire::actingAs($manager, 'web')
+            ->test(ReconciliationDashboard::class, ['workspace' => $this->workspaceId])
+            ->call('exportCsv')
+            ->assertFileDownloaded();
+
+        $this->assertDatabaseHas('audit_logs', [
+            'workspace_id' => $this->workspaceId,
+            'actor_id' => $manager->id,
+            'event_type' => AuditLog::EVENT_ZOHO_RECONCILIATION_EXPORTED,
+        ]);
+
+        Livewire::actingAs($manager, 'web')
+            ->test(ReconciliationDashboard::class, ['workspace' => $this->workspaceId])
+            ->call('exportHtml')
+            ->assertFileDownloaded();
+    }
 }
+

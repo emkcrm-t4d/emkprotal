@@ -217,7 +217,7 @@ class ZohoReconciliationService
                 || !empty($raw['has_attachment'])
                 || (isset($raw['expected_attachments']) && (int) $raw['expected_attachments'] > 0);
 
-            $attachments = $lead ? LeadAttachment::where('lead_id', $lead->id)->get() : collect();
+            $attachments = $lead ? LeadAttachment::where('lead_id', $lead->id)->get() : new Collection();
 
             if ($hasExplicitExpected && $attachments->isEmpty()) {
                 $expectedAttachments++;

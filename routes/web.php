@@ -114,6 +114,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.data_export.index')
             ->middleware(['can:dashboard_reports.view_dashboard']);
 
+        Route::get('/migration/reconciliation', \App\Livewire\Migration\ReconciliationDashboard::class)
+            ->name('crm.migration.reconciliation')
+            ->middleware(['can:migration.reconcile_data']);
+
         Route::get('/forms', \App\Livewire\Forms\FormIndex::class)
             ->name('crm.forms.index');
 
