@@ -49,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
                 \App\Domain\Migration\Commands\ZohoProvisionPortalAccountsCommand::class,
                 \App\Domain\Migration\Commands\ZohoExportHubDeltaCommand::class,
                 \App\Console\Commands\SystemHealthCheckCommand::class,
+                \App\Console\Commands\ProvisionAdminCommand::class,
             ]);
         }
     }

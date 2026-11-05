@@ -73,6 +73,8 @@ class AuditLog extends Model implements TenantEntityInterface
     public const EVENT_ZOHO_RECONCILIATION_EXPORTED = 'zoho_reconciliation_exported';
     public const EVENT_PORTAL_ACCOUNT_STAGED_INACTIVE = 'portal_account_staged_inactive';
     public const EVENT_HUB_DELTA_EXPORTED = 'hub_delta_exported';
+    public const EVENT_ADMIN_PROVISIONED = 'admin_provisioned';
+    public const EVENT_PASSWORD_ROTATED = 'password_rotated';
 
     protected $table = 'audit_logs';
 
