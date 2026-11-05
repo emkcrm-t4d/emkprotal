@@ -43,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \App\Domain\Migration\Commands\ZohoImportCommand::class,
+                \App\Domain\Migration\Commands\ZohoImportAttachmentsCommand::class,
             ]);
         }
     }

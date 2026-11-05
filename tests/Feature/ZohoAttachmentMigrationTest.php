@@ -16,6 +16,7 @@ use App\Domain\Workspaces\Models\Workspace;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -367,5 +368,134 @@ class ZohoAttachmentMigrationTest extends TestCase
         $this->expectExceptionMessage('No member or lead record found for Zoho ID [ZOHO-ORPHAN-999]');
 
         $this->migrationService->migrateAttachment($pdfPath, 'ZOHO-ORPHAN-999', 'identity_document');
+    }
+
+    public function test_artisan_zoho_import_attachments_command_executes_successfully(): void
+    {
+        $lead = $this->createLeadWithZohoId('ZOHO-CLI-L1', 26);
+        $member = $this->createMemberWithZohoId('ZOHO-CLI-M1', 29);
+
+        $attachmentsDir = $this->tempDir . DIRECTORY_SEPARATOR . 'cli_files';
+        mkdir($attachmentsDir, 0777, true);
+
+        // Copy files into attachmentsDir
+        $pdfPath = $this->createSamplePdf('nid_doc.pdf', 'NID Card Content');
+        $jpgPath = $this->createSampleJpeg('member_pic.jpg');
+        copy($pdfPath, $attachmentsDir . DIRECTORY_SEPARATOR . 'nid_doc.pdf');
+        copy($jpgPath, $attachmentsDir . DIRECTORY_SEPARATOR . 'member_pic.jpg');
+
+        // Create manifest with valid, missing, and orphan rows
+        $manifestPath = $this->tempDir . DIRECTORY_SEPARATOR . 'test_manifest.csv';
+        $manifestContent = "zoho_id,filename,document_type\n" .
+            "ZOHO-CLI-L1,nid_doc.pdf,identity_document\n" .
+            "ZOHO-CLI-M1,member_pic.jpg,studio_photo\n" .
+            "ZOHO-CLI-L1,missing_doc.pdf,identity_document\n" .
+            "ZOHO-NONEXISTENT,nid_doc.pdf,identity_document\n";
+        file_put_contents($manifestPath, $manifestContent);
+
+        $exitCode = Artisan::call('zoho:import-attachments', [
+            'directory' => $attachmentsDir,
+            '--manifest' => $manifestPath,
+            '--workspace' => $this->workspaceId,
+        ]);
+
+        $output = Artisan::output();
+
+        $this->assertEquals(0, $exitCode);
+        $this->assertStringContainsString('Legacy Zoho Attachment Import Processor', $output);
+        $this->assertStringContainsString('Zoho attachment migration batch completed', $output);
+
+        // Assert 2 attachments created in database
+        $this->assertEquals(1, LeadAttachment::where('lead_id', $lead->id)->where('original_filename', 'nid_doc.pdf')->count());
+        $this->assertEquals(1, LeadAttachment::where('lead_id', $member->lead_id)->where('original_filename', 'member_pic.jpg')->count());
+
+        // Assert consolidated audit log
+        $batchAudit = AuditLog::where('event_type', AuditLog::EVENT_ZOHO_ATTACHMENTS_BATCH_IMPORTED)->first();
+        $this->assertNotNull($batchAudit);
+        $this->assertEquals(4, $batchAudit->new_values['total_manifest_rows']);
+        $this->assertEquals(2, $batchAudit->new_values['successful_imports']);
+        $this->assertEquals(1, $batchAudit->new_values['missing_files']);
+        $this->assertEquals(1, $batchAudit->new_values['orphan_attachments']);
+        $this->assertFalse($batchAudit->new_values['dry_run']);
+    }
+
+    public function test_artisan_zoho_import_attachments_command_handles_missing_manifest_or_directory(): void
+    {
+        // 1. Non-existent directory
+        $exitCode1 = Artisan::call('zoho:import-attachments', [
+            'directory' => $this->tempDir . DIRECTORY_SEPARATOR . 'non_existent_dir',
+            '--manifest' => $this->tempDir . DIRECTORY_SEPARATOR . 'dummy.csv',
+        ]);
+        $this->assertEquals(1, $exitCode1);
+        $this->assertStringContainsString('does not exist or is not readable', Artisan::output());
+
+        // 2. Non-existent manifest
+        $validDir = $this->tempDir;
+        $exitCode2 = Artisan::call('zoho:import-attachments', [
+            'directory' => $validDir,
+            '--manifest' => $this->tempDir . DIRECTORY_SEPARATOR . 'missing_manifest.csv',
+        ]);
+        $this->assertEquals(1, $exitCode2);
+        $this->assertStringContainsString('does not exist or is not readable', Artisan::output());
+
+        // 3. Manifest without .csv extension
+        $txtManifest = $this->tempDir . DIRECTORY_SEPARATOR . 'manifest.txt';
+        file_put_contents($txtManifest, 'data');
+        $exitCode3 = Artisan::call('zoho:import-attachments', [
+            'directory' => $validDir,
+            '--manifest' => $txtManifest,
+        ]);
+        $this->assertEquals(1, $exitCode3);
+        $this->assertStringContainsString('must have a .csv extension', Artisan::output());
+    }
+
+    public function test_artisan_zoho_import_attachments_dry_run_mode_does_not_persist(): void
+    {
+        $lead = $this->createLeadWithZohoId('ZOHO-DRY-01', 24);
+
+        $attachmentsDir = $this->tempDir . DIRECTORY_SEPARATOR . 'dry_files';
+        mkdir($attachmentsDir, 0777, true);
+
+        $pdfPath = $this->createSamplePdf('dry_test.pdf');
+        copy($pdfPath, $attachmentsDir . DIRECTORY_SEPARATOR . 'dry_test.pdf');
+
+        $manifestPath = $this->tempDir . DIRECTORY_SEPARATOR . 'dry_manifest.csv';
+        file_put_contents($manifestPath, "zoho_id,filename,document_type\nZOHO-DRY-01,dry_test.pdf,identity_document\n");
+
+        $exitCode = Artisan::call('zoho:import-attachments', [
+            'directory' => $attachmentsDir,
+            '--manifest' => $manifestPath,
+            '--workspace' => $this->workspaceId,
+            '--dry-run' => true,
+        ]);
+
+        $this->assertEquals(0, $exitCode);
+        $output = Artisan::output();
+        $this->assertStringContainsString('Dry Run (Validation Only)', $output);
+
+        // Verify zero LeadAttachment records created
+        $this->assertEquals(0, LeadAttachment::count());
+
+        // Verify batch audit log records dry_run = true
+        $batchAudit = AuditLog::where('event_type', AuditLog::EVENT_ZOHO_ATTACHMENTS_BATCH_IMPORTED)->first();
+        $this->assertNotNull($batchAudit);
+        $this->assertTrue($batchAudit->new_values['dry_run']);
+        $this->assertEquals(1, $batchAudit->new_values['successful_imports']);
+    }
+
+    public function test_artisan_zoho_import_attachments_rejects_missing_required_headers(): void
+    {
+        $attachmentsDir = $this->tempDir;
+        $badManifest = $this->tempDir . DIRECTORY_SEPARATOR . 'bad_headers.csv';
+        file_put_contents($badManifest, "id,file\n123,test.pdf\n");
+
+        $exitCode = Artisan::call('zoho:import-attachments', [
+            'directory' => $attachmentsDir,
+            '--manifest' => $badManifest,
+            '--workspace' => $this->workspaceId,
+        ]);
+
+        $this->assertEquals(1, $exitCode);
+        $this->assertStringContainsString('missing required headers', Artisan::output());
     }
 }
