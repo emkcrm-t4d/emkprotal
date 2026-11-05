@@ -16,19 +16,23 @@
     @stack('styles')
 
     <style>
-        /* Contextual Auto-Adjustment for Menu Content Cards based on EMK Background */
+        /* Modern 3D Premium Frosted Glass System (Vision Glass & Sample View Spec) */
         main .bg-white {
-            background-color: rgba(15, 23, 42, 0.72) !important;
-            backdrop-filter: blur(24px) !important;
-            -webkit-backdrop-filter: blur(24px) !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
+            background-color: rgba(15, 23, 42, 0.75) !important;
+            backdrop-filter: blur(32px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
+            border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
         main .bg-slate-50 {
-            background-color: rgba(2, 6, 23, 0.65) !important;
-            backdrop-filter: blur(16px) !important;
-            -webkit-backdrop-filter: blur(16px) !important;
-            border-color: rgba(255, 255, 255, 0.08) !important;
+            background-color: rgba(2, 6, 23, 0.6) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 1rem !important;
+            color: #e2e8f0 !important;
         }
         main .bg-slate-100 {
             background-color: rgba(255, 255, 255, 0.08) !important;
@@ -37,9 +41,11 @@
         }
         main .text-slate-900 {
             color: #ffffff !important;
+            font-weight: 700 !important;
         }
         main .text-slate-800 {
             color: #f8fafc !important;
+            font-weight: 600 !important;
         }
         main .text-slate-700 {
             color: #e2e8f0 !important;
@@ -52,7 +58,7 @@
         }
         main .border-slate-200,
         main .border-slate-100 {
-            border-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
         }
         main .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
         main .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
@@ -70,9 +76,21 @@
         main input:not([type="checkbox"]):not([type="radio"]),
         main select,
         main textarea {
-            background-color: rgba(2, 6, 23, 0.55) !important;
-            border-color: rgba(255, 255, 255, 0.15) !important;
+            background-color: rgba(2, 6, 23, 0.7) !important;
+            backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            border-radius: 0.75rem !important;
             color: #ffffff !important;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.2s ease !important;
+        }
+        main input:focus,
+        main select:focus,
+        main textarea:focus {
+            background-color: rgba(2, 6, 23, 0.9) !important;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
+            outline: none !important;
         }
         main input::placeholder,
         main textarea::placeholder {
@@ -98,7 +116,7 @@
                 <img 
                     src="{{ asset('images/emk-bg.jpg') }}" 
                     alt="EMK Center Background" 
-                    class="w-full h-full object-contain object-center opacity-75 brightness-95 contrast-105 pointer-events-none select-none transition-opacity duration-500"
+                    class="w-full h-full object-contain object-center opacity-80 brightness-95 contrast-105 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
                     loading="eager"
                     fetchpriority="high"
                 >

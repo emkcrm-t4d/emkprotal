@@ -78,7 +78,7 @@
                 <img 
                     src="{{ asset('images/emk-bg.jpg') }}" 
                     alt="EMK Center Background" 
-                    class="w-full h-full object-contain object-center opacity-75 brightness-95 contrast-105 pointer-events-none select-none transition-opacity duration-500"
+                    class="w-full h-full object-contain object-center opacity-80 brightness-95 contrast-105 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
                     loading="eager"
                     fetchpriority="high"
                 >

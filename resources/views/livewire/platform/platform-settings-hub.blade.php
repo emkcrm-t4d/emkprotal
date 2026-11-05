@@ -160,15 +160,15 @@
         </div>
     </div>
 
-    <!-- Parameter Tabs & Editor Card (Frosted 3D Glass) -->
+    <!-- Parameter Tabs & Editor Card (Frosted 3D Glass Shell) -->
     <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-        <!-- Tab Navigation Bar -->
-        <div class="border-b border-white/10 bg-slate-950/60 px-4 sm:px-6">
-            <nav class="-mb-px flex space-x-6" aria-label="Settings Tabs">
+        <!-- Floating Pill Tab Navigation Bar (per Sample Image Aesthetic) -->
+        <div class="border-b border-white/10 bg-slate-950/70 px-4 sm:px-6 py-4">
+            <nav class="flex flex-wrap items-center gap-2.5" aria-label="Settings Tabs">
                 <button
                     type="button"
                     wire:click="switchTab('general')"
-                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'general' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'general' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white' }}"
                     id="tab-general"
                 >
                     General Parameters
@@ -177,7 +177,7 @@
                 <button
                     type="button"
                     wire:click="switchTab('membership')"
-                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'membership' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'membership' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white' }}"
                     id="tab-membership"
                 >
                     Membership Rules
@@ -186,7 +186,7 @@
                 <button
                     type="button"
                     wire:click="switchTab('payments')"
-                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'payments' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'payments' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white' }}"
                     id="tab-payments"
                 >
                     Payment Credentials
@@ -195,44 +195,10 @@
                 <button
                     type="button"
                     wire:click="switchTab('security')"
-                    class="py-4 px-2 border-b-2 font-medium text-sm transition-all {{ $activeTab === 'security' ? 'border-amber-400 text-amber-300 font-bold' : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20' }}"
+                    class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'security' ? 'bg-white text-slate-950 shadow-lg shadow-white/20' : 'bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white' }}"
                     id="tab-security"
                 >
-                    Security & Sessions
-                </button>
-            </nav>
-        </div>
-                    class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'general' ? 'border-indigo-600 text-indigo-600 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
-                    id="tab-general"
-                >
-                    General Parameters
-                </button>
-
-                <button
-                    type="button"
-                    wire:click="switchTab('membership')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'membership' ? 'border-indigo-600 text-indigo-600 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
-                    id="tab-membership"
-                >
-                    Membership Rules
-                </button>
-
-                <button
-                    type="button"
-                    wire:click="switchTab('payments')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'payments' ? 'border-indigo-600 text-indigo-600 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
-                    id="tab-payments"
-                >
-                    Payment Credentials
-                </button>
-
-                <button
-                    type="button"
-                    wire:click="switchTab('security')"
-                    class="py-4 px-1 border-b-2 font-medium text-sm transition-colors {{ $activeTab === 'security' ? 'border-indigo-600 text-indigo-600 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
-                    id="tab-security"
-                >
-                    Security & Sessions
+                    Security &amp; Sessions
                 </button>
             </nav>
         </div>
@@ -241,62 +207,65 @@
         <form wire:submit.prevent="saveSettings" class="p-6 sm:p-8 space-y-6">
             <!-- GENERAL TAB -->
             @if ($activeTab === 'general')
-                <div class="space-y-6" id="panel-general">
-                    <div class="border-b border-slate-100 pb-4">
-                        <h3 class="text-base font-semibold text-slate-900">Organization & Branding</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Primary identification settings applied to portals, invoices, and communication templates.</p>
+                <div class="bg-slate-950/45 rounded-2xl p-6 sm:p-7 border border-white/10 backdrop-blur-xl shadow-xl space-y-6" id="panel-general">
+                    <div class="border-b border-white/10 pb-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-sm shadow-amber-400"></span>
+                            Organization &amp; Branding
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1">Primary identification settings applied to portals, invoices, and communication templates.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-5 sm:grid-cols-6">
                         <div class="sm:col-span-4">
-                            <label for="org_name" class="block text-sm font-medium text-slate-700">
-                                Organization Display Name <span class="text-rose-500">*</span>
+                            <label for="org_name" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Organization Display Name <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="org_name"
                                 wire:model.defer="settings.general.organization_name"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                                 placeholder="EMK Center"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Official legal and public-facing name for this center.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Official legal and public-facing name for this center.</p>
                             @error('settings.general.organization_name')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-4">
-                            <label for="contact_email" class="block text-sm font-medium text-slate-700">
-                                Primary Contact Email <span class="text-rose-500">*</span>
+                            <label for="contact_email" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Primary Contact Email <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="email"
                                 id="contact_email"
                                 wire:model.defer="settings.general.contact_email"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                                 placeholder="info@emkcenter.org"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Official contact email included in outgoing member notifications and reply-to headers.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Official contact email included in outgoing member notifications and reply-to headers.</p>
                             @error('settings.general.contact_email')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="default_locale" class="block text-sm font-medium text-slate-700">
-                                Default System Locale <span class="text-rose-500">*</span>
+                            <label for="default_locale" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Default System Locale <span class="text-amber-400">*</span>
                             </label>
                             <select
                                 id="default_locale"
                                 wire:model.defer="settings.general.default_locale"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                             >
                                 <option value="en">English (en)</option>
                                 <option value="bn">Bengali (bn)</option>
                             </select>
-                            <p class="mt-1 text-xs text-slate-500">Default fallback language for bilingual portal views and email dispatches.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Default fallback language for bilingual portal views and email dispatches.</p>
                             @error('settings.general.default_locale')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -305,16 +274,19 @@
 
             <!-- MEMBERSHIP TAB -->
             @if ($activeTab === 'membership')
-                <div class="space-y-6" id="panel-membership">
-                    <div class="border-b border-slate-100 pb-4">
-                        <h3 class="text-base font-semibold text-slate-900">Membership Lifecycle Rules</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Parameters controlling renewal eligibility windows, conversion reversals, and standard terms.</p>
+                <div class="bg-slate-950/45 rounded-2xl p-6 sm:p-7 border border-white/10 backdrop-blur-xl shadow-xl space-y-6" id="panel-membership">
+                    <div class="border-b border-white/10 pb-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-sm shadow-amber-400"></span>
+                            Membership Lifecycle Rules
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1">Parameters controlling renewal eligibility windows, conversion reversals, and standard terms.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-5 sm:grid-cols-6">
                         <div class="sm:col-span-3">
-                            <label for="renewal_window_days" class="block text-sm font-medium text-slate-700">
-                                Renewal Eligibility Window (Days) <span class="text-rose-500">*</span>
+                            <label for="renewal_window_days" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Renewal Eligibility Window (Days) <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="number"
@@ -322,17 +294,17 @@
                                 min="1"
                                 max="365"
                                 wire:model.defer="settings.membership.renewal_window_days"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Number of days prior to membership expiry when members may submit renewal applications (e.g. 30 days).</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Number of days prior to membership expiry when members may submit renewal applications (e.g. 30 days).</p>
                             @error('settings.membership.renewal_window_days')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="max_reversals_allowed_days" class="block text-sm font-medium text-slate-700">
-                                Max Conversion Reversal Window (Days) <span class="text-rose-500">*</span>
+                            <label for="max_reversals_allowed_days" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Max Conversion Reversal Window (Days) <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="number"
@@ -340,28 +312,28 @@
                                 min="1"
                                 max="365"
                                 wire:model.defer="settings.membership.max_reversals_allowed_days"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Maximum allowed window to reverse an accidental lead-to-member conversion per DEC-08.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Maximum allowed window to reverse an accidental lead-to-member conversion per DEC-08.</p>
                             @error('settings.membership.max_reversals_allowed_days')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-4">
-                            <label for="default_term_code" class="block text-sm font-medium text-slate-700">
-                                Default Membership Term Code <span class="text-rose-500">*</span>
+                            <label for="default_term_code" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Default Membership Term Code <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="default_term_code"
                                 wire:model.defer="settings.membership.default_term_code"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm font-mono transition-all"
                                 placeholder="STANDARD_1YR"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Initial membership term code assigned to approved public form submissions.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Initial membership term code assigned to approved public form submissions.</p>
                             @error('settings.membership.default_term_code')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -370,90 +342,93 @@
 
             <!-- PAYMENTS TAB -->
             @if ($activeTab === 'payments')
-                <div class="space-y-6" id="panel-payments">
-                    <div class="border-b border-slate-100 pb-4">
-                        <h3 class="text-base font-semibold text-slate-900">Payment Gateways & Manual bKash Configuration</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Parameters for manual mobile financial services, standard fee amounts, and encrypted gateway secrets per T-10-08.</p>
+                <div class="bg-slate-950/45 rounded-2xl p-6 sm:p-7 border border-white/10 backdrop-blur-xl shadow-xl space-y-6" id="panel-payments">
+                    <div class="border-b border-white/10 pb-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-sm shadow-amber-400"></span>
+                            Payment Gateways &amp; Manual bKash Configuration
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1">Parameters for manual mobile financial services, standard fee amounts, and encrypted gateway secrets per T-10-08.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-5 sm:grid-cols-6">
                         <div class="sm:col-span-3">
-                            <label for="bkash_merchant_number" class="block text-sm font-medium text-slate-700">
-                                Manual bKash Merchant / Agent Number <span class="text-rose-500">*</span>
+                            <label for="bkash_merchant_number" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Manual bKash Merchant / Agent Number <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="bkash_merchant_number"
                                 wire:model.defer="settings.payments.manual_bkash_merchant_number"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm font-mono transition-all"
                                 placeholder="01700000000"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Phone number displayed to applicants for manual offline payment reconciliation.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Phone number displayed to applicants for manual offline payment reconciliation.</p>
                             @error('settings.payments.manual_bkash_merchant_number')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="default_fee_bdt" class="block text-sm font-medium text-slate-700">
-                                Default Application Fee (BDT) <span class="text-rose-500">*</span>
+                            <label for="default_fee_bdt" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Default Application Fee (BDT) <span class="text-amber-400">*</span>
                             </label>
-                            <div class="mt-1 relative rounded-lg shadow-xs">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-slate-500 sm:text-sm font-bold">৳</span>
+                            <div class="mt-1 relative rounded-xl shadow-inner">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                    <span class="text-amber-400 font-bold">৳</span>
                                 </div>
                                 <input
                                     type="text"
                                     id="default_fee_bdt"
                                     wire:model.defer="settings.payments.default_application_fee_bdt"
-                                    class="block w-full pl-8 rounded-lg border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                    class="block w-full pl-8 pr-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/15 text-white shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                                     placeholder="500.00"
                                 />
                             </div>
-                            <p class="mt-1 text-xs text-slate-500">Standard application processing fee in Bangladeshi Taka.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Standard application processing fee in Bangladeshi Taka.</p>
                             @error('settings.payments.default_application_fee_bdt')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-6">
-                            <label for="instruction_text" class="block text-sm font-medium text-slate-700">
+                            <label for="instruction_text" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
                                 Payment Instruction Guide
                             </label>
                             <textarea
                                 id="instruction_text"
                                 rows="3"
                                 wire:model.defer="settings.payments.instruction_text"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                                 placeholder="Please send application fee via bKash Merchant Pay and retain Transaction ID..."
                             ></textarea>
-                            <p class="mt-1 text-xs text-slate-500">Public instructions rendered on the submission checkout step for offline verification.</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Public instructions rendered on the submission checkout step for offline verification.</p>
                             @error('settings.payments.instruction_text')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <div class="sm:col-span-6 border-t border-slate-100 pt-4">
+                        <div class="sm:col-span-6 border-t border-white/10 pt-5">
                             <div class="flex items-center justify-between mb-2">
-                                <label for="bkash_secret" class="block text-sm font-medium text-slate-700">
+                                <label for="bkash_secret" class="block text-xs font-bold uppercase tracking-wider text-slate-200">
                                     bKash Merchant API Secret Key (AES-256 Encrypted)
                                 </label>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200">
-                                    Encrypted at Rest & Masked
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-400/10 text-amber-300 border border-amber-400/20">
+                                    Encrypted at Rest &amp; Masked
                                 </span>
                             </div>
                             <input
                                 type="password"
                                 id="bkash_secret"
                                 wire:model.defer="settings.payments.bkash_secret"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm font-mono tracking-wider"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm font-mono tracking-wider transition-all"
                                 placeholder="••••••••"
                             />
-                            <p class="mt-1 text-xs text-slate-500">
-                                Protected credential. Leave as <code class="text-xs bg-slate-100 px-1 py-0.5 rounded font-mono">••••••••</code> to keep existing secret unchanged.
+                            <p class="mt-1.5 text-xs text-slate-400">
+                                Protected credential. Leave as <code class="text-xs bg-white/10 text-amber-300 px-1.5 py-0.5 rounded font-mono">••••••••</code> to keep existing secret unchanged.
                             </p>
                             @error('settings.payments.bkash_secret')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -462,16 +437,19 @@
 
             <!-- SECURITY TAB -->
             @if ($activeTab === 'security')
-                <div class="space-y-6" id="panel-security">
-                    <div class="border-b border-slate-100 pb-4">
-                        <h3 class="text-base font-semibold text-slate-900">Session Controls & Account Policies</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Parameters safeguarding administrative logins, session timeouts, and credential rotation per OWASP ASVS.</p>
+                <div class="bg-slate-950/45 rounded-2xl p-6 sm:p-7 border border-white/10 backdrop-blur-xl shadow-xl space-y-6" id="panel-security">
+                    <div class="border-b border-white/10 pb-4">
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-sm shadow-amber-400"></span>
+                            Session Controls &amp; Account Policies
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1">Parameters safeguarding administrative logins, session timeouts, and credential rotation per OWASP ASVS.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-5 sm:grid-cols-6">
                         <div class="sm:col-span-3">
-                            <label for="session_timeout_minutes" class="block text-sm font-medium text-slate-700">
-                                Session Inactivity Timeout (Minutes) <span class="text-rose-500">*</span>
+                            <label for="session_timeout_minutes" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Session Inactivity Timeout (Minutes) <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="number"
@@ -479,17 +457,17 @@
                                 min="5"
                                 max="1440"
                                 wire:model.defer="settings.security.session_timeout_minutes"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Idle duration before active web sessions are automatically invalidated (e.g. 120 minutes).</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Idle duration before active web sessions are automatically invalidated (e.g. 120 minutes).</p>
                             @error('settings.security.session_timeout_minutes')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="require_password_reset_days" class="block text-sm font-medium text-slate-700">
-                                Staff Password Rotation Interval (Days) <span class="text-rose-500">*</span>
+                            <label for="require_password_reset_days" class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1.5">
+                                Staff Password Rotation Interval (Days) <span class="text-amber-400">*</span>
                             </label>
                             <input
                                 type="number"
@@ -497,11 +475,11 @@
                                 min="1"
                                 max="365"
                                 wire:model.defer="settings.security.require_password_reset_days"
-                                class="mt-1 block w-full rounded-lg border-slate-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                                class="mt-1 block w-full rounded-xl bg-slate-950/70 border border-white/15 px-4 py-2.5 text-white placeholder-slate-500 shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 text-sm transition-all"
                             />
-                            <p class="mt-1 text-xs text-slate-500">Periodic password expiration interval requiring staff to set a new password (e.g. 90 days).</p>
+                            <p class="mt-1.5 text-xs text-slate-400">Periodic password expiration interval requiring staff to set a new password (e.g. 90 days).</p>
                             @error('settings.security.require_password_reset_days')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                                <p class="mt-1.5 text-xs text-rose-400 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
