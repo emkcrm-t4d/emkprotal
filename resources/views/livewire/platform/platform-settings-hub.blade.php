@@ -57,7 +57,7 @@
         <div class="px-4 py-3 bg-slate-50 border-b border-slate-200">
             <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Administration & Platform Modules</h2>
         </div>
-        <div class="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2">
+        <div class="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
             <a
                 href="{{ route('crm.settings.index', $workspaceId) }}"
                 class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-indigo-50 border-indigo-200 text-indigo-700 shadow-xs"
@@ -128,6 +128,18 @@
                 </svg>
                 <span class="text-xs font-semibold">Workflow Rules</span>
                 <span class="text-[10px] text-slate-400 font-mono mt-0.5">Automation</span>
+            </a>
+
+            <a
+                href="{{ route('crm.backups.index', $workspaceId) }}"
+                class="flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-colors bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                id="subnav-backups"
+            >
+                <svg class="w-5 h-5 mb-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <span class="text-xs font-semibold">Backups & Health</span>
+                <span class="text-[10px] text-slate-400 font-mono mt-0.5">Recovery</span>
             </a>
 
             <a

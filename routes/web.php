@@ -179,6 +179,51 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.workflow_rules.index')
             ->middleware(['can:platform_services.manage_settings']);
 
+        Route::get('/settings/backups', \App\Livewire\Platform\BackupManager::class)
+            ->name('crm.backups.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
+        Route::get('/settings/backups/download/{filename}', function (
+            $workspace,
+            $filename,
+            \App\Domain\Platform\Services\BackupService $service
+        ) {
+            $user = auth()->user();
+            if (! $user) {
+                abort(401, 'Unauthenticated.');
+            }
+
+            $isElevatedAdmin = method_exists($user, 'hasRole')
+                && $user->hasRole(['superadmin', 'global_admin']);
+
+            $workspaceId = $workspace instanceof \App\Domain\Workspaces\Models\Workspace
+                ? (string) $workspace->id
+                : (string) $workspace;
+
+            if (! $isElevatedAdmin && (string) $user->workspace_id !== $workspaceId) {
+                abort(403, 'Unauthorized workspace access.');
+            }
+
+            if (! $user->can('platform_services.manage_settings') && ! $isElevatedAdmin) {
+                abort(403, 'Forbidden: platform_services.manage_settings permission required.');
+            }
+
+            $cleanFilename = basename((string) $filename);
+            $backupDir = (string) (config('backup.path') ?: storage_path('app/backups'));
+            $filePath = $backupDir . DIRECTORY_SEPARATOR . $cleanFilename;
+
+            if (! file_exists($filePath)) {
+                abort(404, 'Backup archive not found.');
+            }
+
+            return response()->download($filePath, $cleanFilename, [
+                'Content-Type' => 'application/octet-stream',
+                'Content-Disposition' => "attachment; filename=\"{$cleanFilename}\"",
+            ]);
+        })->name('crm.backups.download')
+            ->middleware(['can:platform_services.manage_settings']);
+
+
         Route::get('/tracer-check', function ($workspace) {
             $user = auth()->user();
 
