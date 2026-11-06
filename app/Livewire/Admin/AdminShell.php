@@ -87,10 +87,10 @@ class AdminShell extends Component
             'members' => 2,
             'invoices' => 3,
             'dashboard_reports' => 4,
-            'platform_services' => 5,
-            'forms' => 6,
-            'member_portal' => 7,
-            'migration' => 8,
+            'forms' => 5,
+            'member_portal' => 6,
+            'migration' => 7,
+            'platform_services' => 8,
         ];
 
         $displayNames = [
