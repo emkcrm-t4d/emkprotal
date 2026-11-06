@@ -13,7 +13,7 @@ class SmtpRelay extends Model
 {
     protected $table = 'smtp_relays';
 
-    protected $guarded = [];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected function casts(): array
     {

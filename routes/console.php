@@ -17,8 +17,10 @@ Artisan::command('inspire', function () {
 |
 */
 
-// Horizon snapshot metrics every five minutes
-Schedule::command('horizon:snapshot')->everyFiveMinutes();
+// Horizon snapshot metrics every five minutes (only when Redis driver is active)
+if (env('QUEUE_CONNECTION') === 'redis' && extension_loaded('redis')) {
+    Schedule::command('horizon:snapshot')->everyFiveMinutes();
+}
 
 // Prune failed queue jobs older than 48 hours daily
 Schedule::command('queue:prune-failed --hours=48')->daily();

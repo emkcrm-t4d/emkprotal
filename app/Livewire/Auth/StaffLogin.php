@@ -49,6 +49,15 @@ class StaffLogin extends Component
 
         $cleanEmail = Str::lower(trim($this->forgotEmail));
 
+        // EMK-005: Rate limit password reset link dispatch to prevent automated spam
+        $throttleKey = 'password-reset-link|' . $cleanEmail;
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $this->addError('forgotEmail', "Too many reset requests. Please wait {$seconds} seconds before trying again.");
+            return;
+        }
+        RateLimiter::hit($throttleKey, 120);
+
         $user = User::withoutGlobalScopes()->where('email', $cleanEmail)->first();
 
         if ($user && $user->is_active) {

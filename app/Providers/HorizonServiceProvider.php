@@ -28,9 +28,15 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     protected function gate(): void
     {
         Gate::define('viewHorizon', function ($user = null) {
-            return in_array(optional($user)->email, [
-                //
-            ]);
+            // Guard Horizon access to when Redis is operational and user is an elevated administrator
+            if (config('queue.default') !== 'redis' || ! extension_loaded('redis')) {
+                return false;
+            }
+
+            return $user && (
+                (method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin())
+                || (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin']))
+            );
         });
     }
 }

@@ -714,7 +714,45 @@
         </main>
     </div>
 
+    <!-- Session Expiration Prompt Modal (EMK-019) -->
+    <div 
+        x-data="{ show: false }" 
+        x-cloak 
+        x-on:session-expired.window="show = true"
+        x-show="show" 
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+        role="dialog"
+        aria-modal="true"
+    >
+        <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center space-y-4">
+            <div class="w-14 h-14 mx-auto rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">Session Inactivity Timeout</h3>
+            <p class="text-sm text-slate-300">Your secure staff session has expired due to inactivity. Please reload to authenticate again.</p>
+            <div class="pt-2 flex justify-center gap-3">
+                <button type="button" onclick="window.location.reload()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold hover:brightness-110 shadow-lg">
+                    Authenticate Again
+                </button>
+            </div>
+        </div>
+    </div>
+
     @livewireScripts
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.hook('request', ({ fail }) => {
+                fail(({ status, preventDefault }) => {
+                    if (status === 419) {
+                        preventDefault();
+                        window.dispatchEvent(new CustomEvent('session-expired'));
+                    }
+                });
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

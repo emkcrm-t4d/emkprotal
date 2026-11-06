@@ -8,6 +8,7 @@ use App\Domain\Audit\Models\AuditLog;
 use App\Domain\Platform\Models\PlatformSetting;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 
 class PlatformSettingsService
@@ -15,30 +16,35 @@ class PlatformSettingsService
     /**
      * Retrieve setting value by key, checking workspace-specific override first,
      * then falling back to global configuration (workspace_id = null).
+     * Cached in application cache layer to eliminate repeated SQL queries (EMK-020).
      */
     public function get(string $key, ?string $workspaceId = null, mixed $default = null): mixed
     {
-        if ($workspaceId !== null) {
-            $setting = PlatformSetting::query()
-                ->where('workspace_id', $workspaceId)
+        $cacheKey = "platform_settings:single:{$workspaceId}:{$key}";
+
+        return Cache::remember($cacheKey, 3600, function () use ($key, $workspaceId, $default) {
+            if ($workspaceId !== null) {
+                $setting = PlatformSetting::query()
+                    ->where('workspace_id', $workspaceId)
+                    ->where('key', $key)
+                    ->first();
+
+                if ($setting !== null) {
+                    return $setting->value;
+                }
+            }
+
+            $globalSetting = PlatformSetting::query()
+                ->whereNull('workspace_id')
                 ->where('key', $key)
                 ->first();
 
-            if ($setting !== null) {
-                return $setting->value;
+            if ($globalSetting !== null) {
+                return $globalSetting->value;
             }
-        }
 
-        $globalSetting = PlatformSetting::query()
-            ->whereNull('workspace_id')
-            ->where('key', $key)
-            ->first();
-
-        if ($globalSetting !== null) {
-            return $globalSetting->value;
-        }
-
-        return $default;
+            return $default;
+        });
     }
 
     /**
@@ -85,6 +91,12 @@ class PlatformSettingsService
         }
 
         $setting->save();
+
+        // Invalidate settings cache per EMK-020
+        Cache::forget("platform_settings:single:{$workspaceId}:{$key}");
+        Cache::forget("platform_settings:single::{$key}");
+        Cache::forget("platform_settings:group:{$group}:{$workspaceId}");
+        Cache::forget("platform_settings:group:{$group}:");
 
         // Sensitive Token Scrubbing Layer per DEC-11 & ASVS V8.2 (T-10-08)
         $isSensitive = $isSecret || $wasSecret || $castType === 'encrypted' || $oldCastType === 'encrypted';
@@ -135,31 +147,35 @@ class PlatformSettingsService
      */
     public function getGroup(string $group, ?string $workspaceId = null): array
     {
-        $result = [];
+        $cacheKey = "platform_settings:group:{$group}:{$workspaceId}";
 
-        // 1. Load global defaults for the group
-        $globalSettings = PlatformSetting::query()
-            ->whereNull('workspace_id')
-            ->where('group', $group)
-            ->get();
+        return Cache::remember($cacheKey, 3600, function () use ($group, $workspaceId) {
+            $result = [];
 
-        foreach ($globalSettings as $setting) {
-            $result[$setting->key] = $setting->value;
-        }
-
-        // 2. Overlay workspace-specific overrides
-        if ($workspaceId !== null) {
-            $wsSettings = PlatformSetting::query()
-                ->where('workspace_id', $workspaceId)
+            // 1. Load global defaults for the group
+            $globalSettings = PlatformSetting::query()
+                ->whereNull('workspace_id')
                 ->where('group', $group)
                 ->get();
 
-            foreach ($wsSettings as $setting) {
+            foreach ($globalSettings as $setting) {
                 $result[$setting->key] = $setting->value;
             }
-        }
 
-        return $result;
+            // 2. Overlay workspace-specific overrides
+            if ($workspaceId !== null) {
+                $wsSettings = PlatformSetting::query()
+                    ->where('workspace_id', $workspaceId)
+                    ->where('group', $group)
+                    ->get();
+
+                foreach ($wsSettings as $setting) {
+                    $result[$setting->key] = $setting->value;
+                }
+            }
+
+            return $result;
+        });
     }
 
     /**

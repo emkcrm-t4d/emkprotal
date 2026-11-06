@@ -75,7 +75,7 @@ Route::get('/login', StaffLogin::class)
     ->name('login')
     ->middleware('guest:web');
 
-Route::match(['get', 'post'], '/logout', function () {
+Route::post('/logout', function () {
     Auth::guard('web')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
@@ -103,10 +103,18 @@ Route::get('/password/reset-required', function () {
 Route::post('/password/reset-required', function (Request $request) {
     $user = auth()->user();
     if ($user) {
-        $user->must_reset_password = false;
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->input('password'));
+        $throttleKey = 'password-reset-required|' . $user->id;
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            return response()->json(['status' => 'rate_limited', 'message' => 'Too many attempts. Please try again later.'], 429);
         }
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 60);
+
+        $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        ]);
+
+        $user->must_reset_password = false;
+        $user->password = bcrypt($request->input('password'));
         $user->save();
     }
 
@@ -346,7 +354,7 @@ Route::post('/apply/{slug}/submit', function (string $slug, Request $request) {
         'message' => 'Application submitted successfully.',
         'submission_uuid' => $submission->uuid,
     ], 200);
-})->name('public.forms.submit');
+})->name('public.forms.submit')->middleware('throttle:10,1');
 
 /**
  * Member Portal Authentication & Entry Routes per PORT-01, DEC-06, and DEC-11
