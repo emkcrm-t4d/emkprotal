@@ -2,6 +2,11 @@
     <!-- Main 3D Frosted Glass Login Showcase Container -->
     <div class="relative rounded-3xl bg-slate-950/85 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/80 overflow-hidden">
         
+        <!-- Top Laser Indicator during Authentication -->
+        <div wire:loading wire:target="login" class="absolute top-0 inset-x-0 h-1 overflow-hidden z-30 pointer-events-none">
+            <div class="w-full h-full bg-gradient-to-r from-amber-500 via-amber-200 to-amber-500 animate-shimmer shadow-[0_0_12px_rgba(245,158,11,0.9)]"></div>
+        </div>
+
         <!-- Subtle Ambient Background Glow inside the Card -->
         <div class="absolute -top-24 -left-24 w-72 h-72 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -144,20 +149,32 @@
                             <button
                                 type="submit"
                                 wire:loading.attr="disabled"
-                                class="w-full min-h-[48px] flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-amber-500/30 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50"
+                                wire:target="login"
+                                class="group relative w-full min-h-[50px] overflow-hidden rounded-full bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 active:scale-[0.99] text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:cursor-wait disabled:hover:translate-y-0"
                             >
-                                <span wire:loading.remove class="flex items-center gap-2">
+                                <!-- Liquid Light Shimmer Sweep across the button -->
+                                <div wire:loading wire:target="login" class="absolute inset-0 bg-gradient-to-r from-transparent via-white/45 to-transparent -translate-x-full animate-shimmer pointer-events-none"></div>
+
+                                <!-- Default Ready State -->
+                                <span wire:loading.remove wire:target="login" class="relative z-10 flex items-center justify-center gap-2.5 font-black tracking-wider">
                                     <span>Sign In</span>
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                 </span>
-                                <span wire:loading class="inline-flex items-center gap-2">
-                                    <svg class="animate-spin w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+
+                                <!-- Authenticating Loading State -->
+                                <span wire:loading wire:target="login" class="relative z-10 inline-flex items-center justify-center gap-3">
+                                    <svg class="animate-spin w-5 h-5 text-slate-950 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3.5"></circle>
+                                        <path class="opacity-95" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    <span>Authenticating...</span>
+                                    <span class="tracking-widest uppercase font-black text-xs sm:text-sm text-slate-950 select-none">Authenticating</span>
+                                    <span class="inline-flex items-center gap-1 ml-0.5" aria-hidden="true">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-bounce" style="animation-duration: 0.8s; animation-delay: 0ms;"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-bounce" style="animation-duration: 0.8s; animation-delay: 150ms;"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-bounce" style="animation-duration: 0.8s; animation-delay: 300ms;"></span>
+                                    </span>
                                 </span>
                             </button>
                         </div>
