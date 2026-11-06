@@ -64,5 +64,39 @@ class SmtpRelay extends Model
     {
         return $this->status === 'connected';
     }
+
+    /**
+     * Get a human-readable, clean diagnostic summary of the last error.
+     */
+    public function getFriendlyErrorAttribute(): ?string
+    {
+        if (empty($this->last_error_message)) {
+            return null;
+        }
+
+        $raw = (string) $this->last_error_message;
+
+        if (str_contains($raw, '535') || str_contains($raw, 'Authentication failed')) {
+            return "Authentication Rejected (Error 535): Invalid Brevo API Master Key or SMTP username for '{$this->username}'. Please verify your credentials.";
+        }
+
+        if (str_contains($raw, 'timed out') || str_contains($raw, 'Connection timed out')) {
+            return "Connection Timeout: Host '{$this->host}' did not respond on port {$this->port} within the timeout window.";
+        }
+
+        if (str_contains($raw, 'Connection refused')) {
+            return "Connection Refused: Target server '{$this->host}:{$this->port}' rejected the TCP handshake. Ensure the port is open.";
+        }
+
+        if (str_contains($raw, 'Certificate') || str_contains($raw, 'SSL') || str_contains($raw, 'TLS')) {
+            return "TLS/SSL Security Negotiation Failed: Check encryption protocol ('{$this->encryption}') and certificates.";
+        }
+
+        if (str_contains($raw, 'getaddrinfo') || str_contains($raw, 'Name or service not known')) {
+            return "DNS Lookup Failed: Hostname '{$this->host}' could not be resolved.";
+        }
+
+        return \Illuminate\Support\Str::limit($raw, 160);
+    }
 }
 

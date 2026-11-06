@@ -40,7 +40,7 @@ class TemplatedLifecycleMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            htmlString: $this->htmlContent,
+            htmlString: $this->htmlContent !== '' ? $this->htmlContent : '<p>' . e($this->textContent !== '' ? $this->textContent : $this->subjectLine) . '</p>',
         );
     }
 

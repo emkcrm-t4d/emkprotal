@@ -198,9 +198,77 @@ class SmtpRelayManagerTest extends TestCase
         $this->assertTrue($manager->hasBrokenConnection('ws-emk-dhaka'));
 
         Livewire::test(SmtpRelayManager::class, ['workspace' => 'ws-emk-dhaka'])
-            ->assertSee('Critical Warning: Email Server Connection Broken')
-            ->assertSee('535 5.7.8 Authentication failed')
-            ->assertSee('Connection Broken');
+            ->assertSee('SMTP Connection Alert:')
+            ->assertSee('Authentication Rejected')
+            ->assertSee('Error 535');
+    }
+
+    public function test_email_activity_log_tracks_sent_and_failed_messages(): void
+    {
+        $this->actingAs($this->adminUser, 'web');
+
+        $t1 = \App\Domain\Mail\Models\EmailThread::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'participant_email' => 'member.sent@example.com',
+            'subject' => 'Application Receipt Confirmation',
+            'message_count' => 1,
+        ]);
+
+        $sentMsg = \App\Domain\Mail\Models\EmailMessage::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'email_thread_id' => $t1->id,
+            'direction' => 'outbound',
+            'status' => 'sent',
+            'from_email' => 'noreply@jaago.com.bd',
+            'to_email' => 'member.sent@example.com',
+            'subject' => 'Application Receipt Confirmation',
+            'template_key' => 'application_receipt',
+            'sent_at' => now(),
+        ]);
+
+        $t2 = \App\Domain\Mail\Models\EmailThread::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'participant_email' => 'member.failed@example.com',
+            'subject' => 'Payment Receipt Notice',
+            'message_count' => 1,
+        ]);
+
+        $failedMsg = \App\Domain\Mail\Models\EmailMessage::create([
+            'uuid' => (string) \Illuminate\Support\Str::uuid(),
+            'workspace_id' => 'ws-emk-dhaka',
+            'email_thread_id' => $t2->id,
+            'direction' => 'outbound',
+            'status' => 'failed',
+            'from_email' => 'noreply@jaago.com.bd',
+            'to_email' => 'member.failed@example.com',
+            'subject' => 'Payment Receipt Notice',
+            'template_key' => 'conversion_confirmation',
+            'failure_reason' => '535 5.7.8 Authentication failed on Brevo server',
+        ]);
+
+        $component = Livewire::test(SmtpRelayManager::class, ['workspace' => 'ws-emk-dhaka'])
+            ->assertSee('Outbound Email Activity & Delivery Log')
+            ->assertSee('member.sent@example.com')
+            ->assertSee('member.failed@example.com')
+            ->assertSee('Sent')
+            ->assertSee('Failed');
+
+        // Test filtering only failed
+        $component->set('logFilter', 'failed')
+            ->assertSee('member.failed@example.com')
+            ->assertDontSee('member.sent@example.com');
+
+        // Test filtering only sent
+        $component->set('logFilter', 'sent')
+            ->assertSee('member.sent@example.com')
+            ->assertDontSee('member.failed@example.com');
+
+        // Test retry action on failed email
+        $component->call('retryEmail', $failedMsg->id);
+        $this->assertContains($failedMsg->fresh()->status, ['queued', 'sent']);
     }
 
     public function test_smtp_priority_ordering_and_workspace_fallback(): void

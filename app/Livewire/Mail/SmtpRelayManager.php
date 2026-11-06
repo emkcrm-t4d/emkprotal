@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace App\Livewire\Mail;
 
 use App\Domain\Audit\Models\AuditLog;
+use App\Domain\Mail\Models\EmailMessage;
 use App\Domain\Mail\Models\SmtpRelay;
 use App\Domain\Mail\Services\SmtpTransportManager;
 use App\Domain\Tenancy\Traits\ValidatesWorkspaceOnHydration;
+use App\Jobs\DispatchOfficialEmailJob;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 #[Layout('layouts.admin')]
 class SmtpRelayManager extends Component
 {
     use ValidatesWorkspaceOnHydration;
+    use WithPagination;
 
     public string $workspace = '';
 
@@ -25,6 +29,12 @@ class SmtpRelayManager extends Component
     public bool $showModal = false;
     public bool $showTestModal = false;
     public bool $revealPassword = false;
+    public bool $showMessageModal = false;
+
+    // Email Activity Log Tracker state
+    public string $logFilter = 'all'; // 'all', 'sent', 'failed', 'queued'
+    public string $logSearch = '';
+    public ?int $viewingMessageId = null;
 
     // Form fields (matching design specification)
     public ?int $editingRelayId = null;
@@ -314,6 +324,71 @@ class SmtpRelayManager extends Component
         return ($max !== null) ? ((int) $max + 1) : 1;
     }
 
+    public function updatedLogFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedLogSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function retryEmail(int $messageId): void
+    {
+        $this->authorizeAccess();
+
+        $message = EmailMessage::withoutGlobalScopes()
+            ->where('workspace_id', $this->workspace)
+            ->findOrFail($messageId);
+
+        if ($message->status === 'sent') {
+            session()->flash('status', "Message was already delivered to {$message->to_email}.");
+            return;
+        }
+
+        $prevStatus = $message->status;
+        $prevFailure = $message->failure_reason;
+
+        $message->update([
+            'status' => 'queued',
+            'failure_reason' => null,
+        ]);
+
+        $user = Auth::user();
+        AuditLog::create([
+            'workspace_id' => $this->workspace,
+            'actor_id' => $user?->id,
+            'actor_guard' => 'web',
+            'event_type' => AuditLog::EVENT_OFFICIAL_EMAIL_RETRIED,
+            'auditable_type' => EmailMessage::class,
+            'auditable_id' => $message->id,
+            'old_values' => ['status' => $prevStatus, 'failure_reason' => $prevFailure],
+            'new_values' => ['status' => 'queued', 'to_email' => $message->to_email],
+            'reason' => "Manually re-queued email dispatch from SMTP activity tracker.",
+            'ip_address' => request()->ip() ?? '127.0.0.1',
+            'user_agent' => request()->userAgent() ?? 'Livewire/SmtpRelayManager',
+            'created_at' => now(),
+        ]);
+
+        DispatchOfficialEmailJob::dispatch($message->id);
+
+        session()->flash('status', "Queued email retry for delivery to {$message->to_email}.");
+    }
+
+    public function inspectMessage(int $messageId): void
+    {
+        $this->authorizeAccess();
+        $this->viewingMessageId = $messageId;
+        $this->showMessageModal = true;
+    }
+
+    public function closeMessageModal(): void
+    {
+        $this->viewingMessageId = null;
+        $this->showMessageModal = false;
+    }
+
     public function render(): View
     {
         $relays = SmtpRelay::query()
@@ -324,11 +399,53 @@ class SmtpRelayManager extends Component
         $brokenRelay = $relays->first(fn ($r) => $r->isBroken());
         $activeRelay = $relays->first(fn ($r) => $r->is_active && $r->isConnected());
 
+        // Email Log Queries
+        $baseLogQuery = EmailMessage::withoutGlobalScopes()
+            ->where('workspace_id', $this->workspace);
+
+        $sentCount = (clone $baseLogQuery)->where('status', 'sent')->count();
+        $failedCount = (clone $baseLogQuery)->where('status', 'failed')->count();
+        $queuedCount = (clone $baseLogQuery)->where('status', 'queued')->count();
+        $totalLogCount = (clone $baseLogQuery)->count();
+
+        $listQuery = EmailMessage::withoutGlobalScopes()
+            ->where('workspace_id', $this->workspace)
+            ->latest('id');
+
+        if ($this->logFilter === 'sent') {
+            $listQuery->where('status', 'sent');
+        } elseif ($this->logFilter === 'failed') {
+            $listQuery->where('status', 'failed');
+        } elseif ($this->logFilter === 'queued') {
+            $listQuery->where('status', 'queued');
+        }
+
+        $trimmedSearch = trim($this->logSearch);
+        if ($trimmedSearch !== '') {
+            $listQuery->where(function ($q) use ($trimmedSearch): void {
+                $q->where('to_email', 'like', "%{$trimmedSearch}%")
+                    ->orWhere('subject', 'like', "%{$trimmedSearch}%")
+                    ->orWhere('template_key', 'like', "%{$trimmedSearch}%");
+            });
+        }
+
+        $emailLogs = $listQuery->paginate(8);
+
+        $activeViewingMessage = $this->viewingMessageId
+            ? EmailMessage::withoutGlobalScopes()->where('workspace_id', $this->workspace)->find($this->viewingMessageId)
+            : null;
+
         return view('livewire.mail.smtp-relay-manager', [
             'workspaceId' => $this->workspace,
             'relays' => $relays,
             'brokenRelay' => $brokenRelay,
             'activeRelay' => $activeRelay,
+            'emailLogs' => $emailLogs,
+            'sentCount' => $sentCount,
+            'failedCount' => $failedCount,
+            'queuedCount' => $queuedCount,
+            'totalLogCount' => $totalLogCount,
+            'activeViewingMessage' => $activeViewingMessage,
         ]);
     }
 }
