@@ -76,6 +76,27 @@ class StaffManagementService
 
         $this->permissionRegistrar->forgetCachedPermissions();
 
+        // Dispatch admin alert on new staff user creation
+        try {
+            $emailDispatcher = app(\App\Domain\Mail\Services\QueuedEmailDispatcher::class);
+            $adminEmail = $creator->email ?: 'admin@emk.test';
+
+            $emailDispatcher->dispatchTemplate(
+                workspaceId: (string) $workspaceId,
+                templateKey: \App\Domain\Mail\Models\EmailTemplate::MILESTONE_ADMIN_NEW_USER,
+                recipientEmail: $adminEmail,
+                variables: [
+                    'applicant_name' => $staffUser->name . ' (Staff Account: ' . $staffUser->email . ')',
+                    'workspace_name' => 'EMK Center Dhaka',
+                    'amount_bdt' => '0.00',
+                    'action_url' => url('/crm/' . $workspaceId . '/settings/staff'),
+                ],
+                locale: 'en'
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Admin notification dispatch for staff user creation skipped: ' . $e->getMessage());
+        }
+
         return $staffUser;
     }
 

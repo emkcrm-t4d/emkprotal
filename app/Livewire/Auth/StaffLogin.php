@@ -20,6 +20,73 @@ class StaffLogin extends Component
     public string $password = '';
     public bool $remember = false;
 
+    public bool $showForgotPasswordModal = false;
+    public string $forgotEmail = '';
+    public ?string $forgotSuccessMessage = null;
+
+    public function openForgotPasswordModal(): void
+    {
+        $this->forgotEmail = $this->email;
+        $this->forgotSuccessMessage = null;
+        $this->resetErrorBag();
+        $this->showForgotPasswordModal = true;
+    }
+
+    public function closeForgotPasswordModal(): void
+    {
+        $this->showForgotPasswordModal = false;
+        $this->forgotSuccessMessage = null;
+    }
+
+    public function sendPasswordResetLink(): void
+    {
+        $this->validate([
+            'forgotEmail' => ['required', 'email'],
+        ], [
+            'forgotEmail.required' => 'Please enter your registered email address.',
+            'forgotEmail.email' => 'Please enter a valid email address.',
+        ]);
+
+        $cleanEmail = Str::lower(trim($this->forgotEmail));
+
+        $user = User::withoutGlobalScopes()->where('email', $cleanEmail)->first();
+
+        if ($user && $user->is_active) {
+            $plainToken = Str::random(64);
+            \Illuminate\Support\Facades\DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $cleanEmail],
+                [
+                    'token' => \Illuminate\Support\Facades\Hash::make($plainToken),
+                    'created_at' => now(),
+                ]
+            );
+
+            $resetUrl = route('password.reset', [
+                'token' => $plainToken,
+                'email' => $cleanEmail,
+            ]);
+
+            try {
+                $dispatcher = app(\App\Domain\Mail\Services\QueuedEmailDispatcher::class);
+                $dispatcher->dispatchTemplate(
+                    workspaceId: $user->workspace_id ?: 'ws-emk-dhaka',
+                    templateKey: \App\Domain\Mail\Models\EmailTemplate::MILESTONE_PASSWORD_RESET,
+                    recipientEmail: $cleanEmail,
+                    variables: [
+                        'member_name' => $user->name,
+                        'workspace_name' => 'EMK Center Dhaka',
+                        'action_url' => $resetUrl,
+                    ],
+                    locale: 'en'
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Password reset dispatch failed: ' . $e->getMessage());
+            }
+        }
+
+        $this->forgotSuccessMessage = 'If your email is registered, we have dispatched a secure password reset link to your inbox.';
+    }
+
     protected function rules(): array
     {
         return [

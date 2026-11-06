@@ -55,6 +55,9 @@ Route::get('/dashboard', function () {
     return redirect()->route('crm.dashboard', $workspace);
 })->name('dashboard')->middleware('auth:web');
 
+Route::get('/password/reset/{token}', \App\Livewire\Auth\ResetPassword::class)
+    ->name('password.reset');
+
 Route::get('/password/reset-required', function () {
     return response('Password reset required', 200);
 })->name('password.reset-required');

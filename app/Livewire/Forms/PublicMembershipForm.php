@@ -425,6 +425,40 @@ class PublicMembershipForm extends Component
             // Queue automated applicant confirmation email
             Mail::to($lead->email)->queue(new ApplicationConfirmationMail($lead));
 
+            // Dispatch official notification to Workspace Admin per user requirement
+            try {
+                $emailDispatcher = app(\App\Domain\Mail\Services\QueuedEmailDispatcher::class);
+                $workspaceId = $lead->workspace_id ?: 'ws-emk-dhaka';
+                $adminEmail = \App\Models\User::withoutGlobalScopes()
+                    ->where(function ($q) use ($workspaceId) {
+                        $q->where('workspace_id', $workspaceId)->orWhereNull('workspace_id');
+                    })
+                    ->where('is_active', true)
+                    ->value('email') ?? (string) config('mail.from.address', 'admin@emk.test');
+
+                $applicantFullName = trim(
+                    $lead->first_name . ' ' .
+                    ($lead->middle_name ? $lead->middle_name . ' ' : '') .
+                    $lead->last_name
+                );
+
+                $emailDispatcher->dispatchTemplate(
+                    workspaceId: $workspaceId,
+                    templateKey: \App\Domain\Mail\Models\EmailTemplate::MILESTONE_ADMIN_NEW_USER,
+                    recipientEmail: $adminEmail,
+                    variables: [
+                        'applicant_name' => $applicantFullName,
+                        'workspace_name' => 'EMK Center Dhaka',
+                        'amount_bdt' => $lead->bkash_txid ? '500.00' : '0.00',
+                        'action_url' => url('/crm/' . $workspaceId . '/leads'),
+                    ],
+                    locale: 'en',
+                    leadId: $lead->id
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Admin notification dispatch skipped: ' . $e->getMessage());
+            }
+
             $this->submission_uuid = $lead->uuid;
             $this->reference_uuid = $lead->uuid;
             $this->submitted = true;

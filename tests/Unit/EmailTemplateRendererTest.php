@@ -94,11 +94,11 @@ class EmailTemplateRendererTest extends TestCase
         $this->assertStringNotContainsString('{{reason}}', $result['body_html']);
     }
 
-    public function test_canonical_seeder_defines_all_nine_bilingual_milestone_templates(): void
+    public function test_canonical_seeder_defines_all_eleven_bilingual_milestone_templates(): void
     {
         $templates = EmailTemplateSeeder::canonicalTemplates();
 
-        $this->assertCount(9, $templates);
+        $this->assertCount(11, $templates);
 
         $keys = array_column($templates, 'template_key');
         $this->assertSame(EmailTemplate::CANONICAL_MILESTONES, $keys);

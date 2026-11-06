@@ -310,7 +310,7 @@ class SmtpTransportManager
     }
 
     /**
-     * Render a premium HTML body for test verification emails.
+     * Render a premium light-mode HTML body for test verification emails (no dark/black background).
      */
     protected function renderTestEmailHtml(SmtpRelay $relay, string $recipient): string
     {
@@ -319,47 +319,52 @@ class SmtpTransportManager
 
         return <<<HTML
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMTP Gateway Verification</title>
 </head>
-<body style="margin: 0; padding: 24px; background-color: #0b1120; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f1f5f9;">
-    <div style="max-width: 580px; margin: 0 auto; background: #1e293b; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 24px 32px; text-align: left;">
-            <h1 style="margin: 0; font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">EMK Center & American Spaces CRM</h1>
-            <p style="margin: 4px 0 0 0; font-size: 13px; color: #fef3c7; font-weight: 500;">Official Mail Gateway Handshake & Dispatch Test</p>
+<body style="margin: 0; padding: 32px 16px; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1e293b; line-height: 1.5;">
+    <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);">
+        <!-- Top Accent Header -->
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 26px 32px; text-align: left;">
+            <h1 style="margin: 0; font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: -0.3px;">EMK Center & American Spaces CRM</h1>
+            <p style="margin: 4px 0 0 0; font-size: 13px; color: #fef3c7; font-weight: 500;">Official Mail Gateway Handshake &amp; Dispatch Test</p>
         </div>
+        
         <div style="padding: 32px;">
-            <div style="padding: 14px 18px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; margin-bottom: 24px;">
-                <p style="margin: 0; font-size: 14px; font-weight: 700; color: #34d399;">Connection & Authentication Verified Successfully</p>
-                <p style="margin: 4px 0 0 0; font-size: 12px; color: #a7f3d0;">Your SMTP email server configuration is fully operational and authenticated.</p>
+            <!-- Status Pill Banner -->
+            <div style="padding: 14px 18px; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; margin-bottom: 24px;">
+                <p style="margin: 0; font-size: 14px; font-weight: 700; color: #166534;">Connection &amp; Authentication Verified Successfully</p>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #15803d;">Your SMTP email server configuration is fully operational and authenticated.</p>
             </div>
 
+            <!-- Server Diagnostic Specs Table -->
             <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 24px;">
                 <tr>
-                    <td style="padding: 8px 0; color: #94a3b8; width: 140px;">Server Name:</td>
-                    <td style="padding: 8px 0; color: #ffffff; font-weight: 600;">{$relay->name}</td>
+                    <td style="padding: 10px 0; color: #64748b; font-weight: 500; width: 140px; border-bottom: 1px solid #f1f5f9;">Server Name:</td>
+                    <td style="padding: 10px 0; color: #0f172a; font-weight: 700; border-bottom: 1px solid #f1f5f9;">{$relay->name}</td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #94a3b8;">Host & Port:</td>
-                    <td style="padding: 8px 0; color: #ffffff; font-family: monospace;">{$relay->host}:{$relay->port} ({$encryptionUpper})</td>
+                    <td style="padding: 10px 0; color: #64748b; font-weight: 500; border-bottom: 1px solid #f1f5f9;">Host &amp; Port:</td>
+                    <td style="padding: 10px 0; color: #0f172a; font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; border-bottom: 1px solid #f1f5f9;">{$relay->host}:{$relay->port} ({$encryptionUpper})</td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #94a3b8;">Sender Identity:</td>
-                    <td style="padding: 8px 0; color: #ffffff;">{$relay->sender_name} &lt;{$relay->sender_email}&gt;</td>
+                    <td style="padding: 10px 0; color: #64748b; font-weight: 500; border-bottom: 1px solid #f1f5f9;">Sender Identity:</td>
+                    <td style="padding: 10px 0; color: #0f172a; font-weight: 600; border-bottom: 1px solid #f1f5f9;">{$relay->sender_name} &lt;{$relay->sender_email}&gt;</td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #94a3b8;">Recipient:</td>
-                    <td style="padding: 8px 0; color: #ffffff;">{$recipient}</td>
+                    <td style="padding: 10px 0; color: #64748b; font-weight: 500; border-bottom: 1px solid #f1f5f9;">Recipient:</td>
+                    <td style="padding: 10px 0; color: #0f172a; font-weight: 600; border-bottom: 1px solid #f1f5f9;">{$recipient}</td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 0; color: #94a3b8;">Timestamp:</td>
-                    <td style="padding: 8px 0; color: #ffffff;">{$timestamp} BST</td>
+                    <td style="padding: 10px 0; color: #64748b; font-weight: 500; border-bottom: 1px solid #f1f5f9;">Timestamp:</td>
+                    <td style="padding: 10px 0; color: #0f172a; font-weight: 600; border-bottom: 1px solid #f1f5f9;">{$timestamp} BST</td>
                 </tr>
             </table>
 
-            <p style="font-size: 12px; color: #64748b; margin: 0; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+            <p style="font-size: 12px; color: #64748b; margin: 0; border-top: 1px solid #e2e8f0; padding-top: 18px; line-height: 1.5;">
                 Automated diagnostic dispatch from EMK Center Platform Services. No response required.
             </p>
         </div>

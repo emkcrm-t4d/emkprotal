@@ -7,7 +7,7 @@
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
             <span class="inline-flex items-center rounded-full bg-indigo-500/20 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 border border-indigo-400/30 shadow-xs">
-                9 Canonical Milestones
+                {{ count($templates) }} Canonical Milestones
             </span>
             <span class="inline-flex items-center rounded-full bg-emerald-500/20 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 border border-emerald-400/30 shadow-xs">
                 Zero-Eval Safe Renderer (DEC-02)
@@ -194,13 +194,25 @@
                         </button>
                     </div>
                 </div>
-                <div class="p-6 space-y-4">
+                <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
                     <div class="rounded-2xl bg-slate-950/60 p-4 border border-white/10">
                         <span class="text-xs font-bold uppercase tracking-wider text-amber-400 block">Rendered Subject:</span>
                         <div class="text-sm font-semibold text-white mt-1">{{ $previewOutput['subject'] ?? '' }}</div>
                     </div>
-                    <div class="rounded-2xl bg-white/5 p-5 border border-white/10 prose prose-invert prose-sm max-w-none text-slate-200">
-                        {!! $previewOutput['body_html'] ?? '' !!}
+                    <!-- Real-World Light Mode Email Preview Box -->
+                    <div class="rounded-2xl bg-slate-100 p-4 sm:p-6 border border-slate-200 shadow-inner">
+                        <div class="max-w-xl mx-auto bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                            <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-4 text-white">
+                                <h4 class="font-extrabold text-base tracking-tight m-0">EMK Center</h4>
+                                <p class="text-amber-100 text-[11px] font-semibold uppercase tracking-wider m-0">American Spaces Bangladesh</p>
+                            </div>
+                            <div class="p-6 text-slate-800 text-sm leading-relaxed prose prose-sm max-w-none">
+                                {!! $previewOutput['body_html'] ?? '' !!}
+                            </div>
+                            <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 text-slate-500 text-[11px] leading-relaxed">
+                                Official communication from EMK Center &bull; American Spaces Bangladesh
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-slate-950/60 border-t border-white/10 flex justify-end">

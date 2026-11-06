@@ -164,6 +164,26 @@ class EmailTemplateSeeder extends Seeder
                 'body_bn' => "<p>প্রিয় {{member_name}},</p>\n<p><strong>{{workspace_name}}</strong>-এর প্রশাসনিক টিম আপনার মেম্বার আইডি <strong>{{member_id}}</strong>-এর প্রোফাইল বা ইমেইল পরিবর্তন আবেদনটি পর্যালোচনা সম্পন্ন করেছে।</p>\n<p><strong>ফলাফল / মন্তব্য:</strong> {{reason}}</p>\n<p>আপনার হালনাগাদ প্রোফাইল দেখতে মেম্বার পোর্টালে ভিজিট করুন: <a href=\"{{action_url}}\">{{action_url}}</a>।</p>",
                 'allowed_variables' => ['member_name', 'member_id', 'workspace_name', 'reason', 'action_url'],
             ],
+            [
+                'template_key' => EmailTemplate::MILESTONE_PASSWORD_RESET,
+                'name' => 'Password Reset & Account Recovery',
+                'milestone_type' => EmailTemplate::MILESTONE_PASSWORD_RESET,
+                'subject_en' => 'Reset Your {{workspace_name}} Password',
+                'body_en' => "<p>Dear {{member_name}},</p>\n<p>We received a request to reset your password for your <strong>{{workspace_name}}</strong> account.</p>\n<p>Please click the link below to securely set a new password:</p>\n<p><a href=\"{{action_url}}\" style=\"display: inline-block; background-color: #d97706; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;\">Reset Password</a></p>\n<p>Or copy and paste this URL into your browser: <br><a href=\"{{action_url}}\">{{action_url}}</a></p>\n<p>This password reset link will expire in 60 minutes. If you did not make this request, you can safely ignore this email.</p>\n<p>Sincerely,<br>{{workspace_name}} Security & Admissions</p>",
+                'subject_bn' => 'আপনার {{workspace_name}} পাসওয়ার্ড রিসেট করুন',
+                'body_bn' => "<p>প্রিয় {{member_name}},</p>\n<p><strong>{{workspace_name}}</strong> অ্যাকাউন্টের পাসওয়ার্ড রিসেট করার একটি অনুরোধ আমরা পেয়েছি।</p>\n<p>নতুন পাসওয়ার্ড সেট করতে নিচের বাটনে বা লিংকে ক্লিক করুন:</p>\n<p><a href=\"{{action_url}}\" style=\"display: inline-block; background-color: #d97706; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;\">পাসওয়ার্ড রিসেট করুন</a></p>\n<p>অথবা এই লিংকটি ব্রাউজারে পেস্ট করুন: <br><a href=\"{{action_url}}\">{{action_url}}</a></p>\n<p>এই লিংকটি আগামী ৬০ মিনিট সক্রিয় থাকবে। আপনি যদি এই অনুরোধ না করে থাকেন, তবে বার্তাটি এড়িয়ে চলুন।</p>\n<p>শুভেচ্ছান্তে,<br>{{workspace_name}} নিরাপত্তা ও ভর্তি টিম</p>",
+                'allowed_variables' => ['member_name', 'workspace_name', 'action_url'],
+            ],
+            [
+                'template_key' => EmailTemplate::MILESTONE_ADMIN_NEW_USER,
+                'name' => 'Admin Alert: New User & Membership Application',
+                'milestone_type' => EmailTemplate::MILESTONE_ADMIN_NEW_USER,
+                'subject_en' => '[New Application] {{applicant_name}} submitted membership application for {{workspace_name}}',
+                'body_en' => "<p>Dear Administrator,</p>\n<p>A new membership application or user account has been submitted for <strong>{{workspace_name}}</strong>.</p>\n<ul>\n<li><strong>Applicant Name:</strong> {{applicant_name}}</li>\n<li><strong>Payment Reference (bKash):</strong> BDT {{amount_bdt}}</li>\n<li><strong>Submission Status:</strong> Awaiting Document & Payment Review</li>\n</ul>\n<p>Please log in to the Staff & Admin Console to inspect documents, verify transaction credentials, and process the application:</p>\n<p><a href=\"{{action_url}}\" style=\"display: inline-block; background-color: #d97706; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;\">Review New Application</a></p>\n<p>Automated notification from {{workspace_name}} Admissions Engine.</p>",
+                'subject_bn' => '[নতুন আবেদন] {{workspace_name}}-এ {{applicant_name}}-এর সদস্যপদ আবেদন জমা হয়েছে',
+                'body_bn' => "<p>শ্রদ্ধেয় অ্যাডমিনিস্ট্রেটর,</p>\n<p><strong>{{workspace_name}}</strong>-এ একজন নতুন সদস্যের আবেদন জমা হয়েছে।</p>\n<ul>\n<li><strong>আবেদনকারীর নাম:</strong> {{applicant_name}}</li>\n<li><strong>পেমেন্ট রেফারেন্স (বিকাশ):</strong> {{amount_bdt}} টাকা</li>\n<li><strong>অবস্থা:</strong> কাগজপত্র ও পেমেন্ট যাচাইকরণের অপেক্ষায়</li>\n</ul>\n<p>আবেদনটি পর্যালোচনা ও অনুমোদন করতে অনুগ্রহ করে স্টাফ কনসোলে প্রবেশ করুন:</p>\n<p><a href=\"{{action_url}}\" style=\"display: inline-block; background-color: #d97706; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;\">আবেদন পর্যালোচনা করুন</a></p>\n<p>{{workspace_name}} অ্যাডমিশন ইঞ্জিন থেকে স্বয়ংক্রিয় নোটিফিকেশন।</p>",
+                'allowed_variables' => ['applicant_name', 'workspace_name', 'amount_bdt', 'action_url'],
+            ],
         ];
     }
 }

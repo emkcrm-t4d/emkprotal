@@ -120,9 +120,9 @@
                                 <span class="text-xs text-emerald-100/80">Remember this device</span>
                             </label>
 
-                            <a href="mailto:info@emkcenter.org?subject=Password%20Assistance%20Request" class="text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors p-1">
+                            <button type="button" wire:click="openForgotPasswordModal" class="text-xs font-semibold text-amber-300 hover:text-amber-200 transition-colors p-1 cursor-pointer">
                                 Forgot Password?
-                            </a>
+                            </button>
                         </div>
 
                         <!-- Golden LOGIN Action Button (Matching Standard Authenticator Design) -->
@@ -241,4 +241,49 @@
         </div>
 
     </div>
+
+    @if ($showForgotPasswordModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
+            <div class="bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/15 max-w-md w-full overflow-hidden text-white p-6 sm:p-8">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                    <h3 class="text-lg font-bold text-amber-400">Member Password Assistance</h3>
+                    <button type="button" wire:click="closeForgotPasswordModal" class="text-slate-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
+                </div>
+                
+                @if ($forgotSuccessMessage)
+                    <div class="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-200 text-xs mb-4">
+                        {{ $forgotSuccessMessage }}
+                    </div>
+                    <button type="button" wire:click="closeForgotPasswordModal" class="w-full py-2.5 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs cursor-pointer">
+                        Close Window
+                    </button>
+                @else
+                    <p class="text-xs text-slate-300 mb-4">
+                        Enter your registered email address or Member ID (e.g. EMK-2026-00001). We'll dispatch a secure recovery link.
+                    </p>
+                    <form wire:submit="sendPasswordResetLink" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Email or Member ID</label>
+                            <input
+                                type="text"
+                                wire:model="forgotIdentifier"
+                                class="w-full px-4 py-2.5 rounded-full bg-slate-950 border border-white/20 text-white text-xs outline-none focus:border-amber-400"
+                                placeholder="member@emk.test or EMK-2026-00001"
+                                required
+                            >
+                            @error('forgotIdentifier') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="pt-2 flex items-center justify-end gap-2">
+                            <button type="button" wire:click="closeForgotPasswordModal" class="px-4 py-2 text-xs text-slate-300 hover:text-white cursor-pointer">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-md hover:from-amber-300 hover:to-amber-400 cursor-pointer">
+                                Send Recovery Link
+                            </button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
+    @endif
 </div>

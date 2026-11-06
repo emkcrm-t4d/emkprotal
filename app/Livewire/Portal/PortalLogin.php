@@ -21,6 +21,87 @@ class PortalLogin extends Component
     public string $password = '';
     public bool $remember = false;
 
+    public bool $showForgotPasswordModal = false;
+    public string $forgotIdentifier = '';
+    public ?string $forgotSuccessMessage = null;
+
+    public function openForgotPasswordModal(): void
+    {
+        $this->forgotIdentifier = $this->identifier;
+        $this->forgotSuccessMessage = null;
+        $this->resetErrorBag();
+        $this->showForgotPasswordModal = true;
+    }
+
+    public function closeForgotPasswordModal(): void
+    {
+        $this->showForgotPasswordModal = false;
+        $this->forgotSuccessMessage = null;
+    }
+
+    public function sendPasswordResetLink(): void
+    {
+        $this->validate([
+            'forgotIdentifier' => ['required', 'string'],
+        ], [
+            'forgotIdentifier.required' => 'Please enter your registered email address or Member ID.',
+        ]);
+
+        $input = trim($this->forgotIdentifier);
+        $cleanEmail = null;
+        $memberName = 'Member';
+
+        if (str_contains($input, '@')) {
+            $cleanEmail = Str::lower($input);
+            $member = MemberUser::withoutGlobalScopes()->where('email', $cleanEmail)->first();
+            if ($member) {
+                $memberName = $member->name;
+            }
+        } else {
+            $normalizedMemberId = Str::upper($input);
+            $memberProfile = Member::withoutGlobalScopes()->where('member_id', $normalizedMemberId)->first();
+            if ($memberProfile) {
+                $cleanEmail = Str::lower($memberProfile->email);
+                $memberName = $memberProfile->full_name;
+            }
+        }
+
+        if ($cleanEmail) {
+            $plainToken = Str::random(64);
+            \Illuminate\Support\Facades\DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $cleanEmail],
+                [
+                    'token' => \Illuminate\Support\Facades\Hash::make($plainToken),
+                    'created_at' => now(),
+                ]
+            );
+
+            $resetUrl = route('password.reset', [
+                'token' => $plainToken,
+                'email' => $cleanEmail,
+            ]);
+
+            try {
+                $dispatcher = app(\App\Domain\Mail\Services\QueuedEmailDispatcher::class);
+                $dispatcher->dispatchTemplate(
+                    workspaceId: 'ws-emk-dhaka',
+                    templateKey: \App\Domain\Mail\Models\EmailTemplate::MILESTONE_PASSWORD_RESET,
+                    recipientEmail: $cleanEmail,
+                    variables: [
+                        'member_name' => $memberName,
+                        'workspace_name' => 'EMK Center Dhaka',
+                        'action_url' => $resetUrl,
+                    ],
+                    locale: 'en'
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Member password reset dispatch failed: ' . $e->getMessage());
+            }
+        }
+
+        $this->forgotSuccessMessage = 'If an account matches this detail, we have dispatched a secure password reset link to the registered email address.';
+    }
+
     protected function rules(): array
     {
         return [

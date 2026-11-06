@@ -23,6 +23,8 @@ class EmailTemplate extends Model implements TenantEntityInterface
     public const MILESTONE_RENEWAL_WINDOW = 'renewal_window';
     public const MILESTONE_EXPIRY = 'membership_expiry';
     public const MILESTONE_REQUEST_OUTCOME = 'request_outcome';
+    public const MILESTONE_PASSWORD_RESET = 'password_reset';
+    public const MILESTONE_ADMIN_NEW_USER = 'admin_new_user';
 
     public const CANONICAL_MILESTONES = [
         self::MILESTONE_APPLICATION_RECEIPT,
@@ -34,6 +36,8 @@ class EmailTemplate extends Model implements TenantEntityInterface
         self::MILESTONE_RENEWAL_WINDOW,
         self::MILESTONE_EXPIRY,
         self::MILESTONE_REQUEST_OUTCOME,
+        self::MILESTONE_PASSWORD_RESET,
+        self::MILESTONE_ADMIN_NEW_USER,
     ];
 
     protected $table = 'email_templates';

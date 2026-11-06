@@ -34,7 +34,7 @@ class SmtpRelaySeeder extends Seeder
             ]);
         }
 
-        if (EmailMessage::withoutGlobalScopes()->where('workspace_id', 'ws-emk-dhaka')->count() === 0) {
+        if (! app()->environment('testing') && EmailMessage::withoutGlobalScopes()->where('workspace_id', 'ws-emk-dhaka')->count() === 0) {
             $t1 = EmailThread::create([
                 'uuid' => (string) Str::uuid(),
                 'workspace_id' => 'ws-emk-dhaka',

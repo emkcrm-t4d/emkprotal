@@ -48,7 +48,7 @@ class EmailTemplateManagerTest extends TestCase
         return $user;
     }
 
-    public function test_workspace_manager_can_access_email_template_manager_and_view_all_nine_milestones(): void
+    public function test_workspace_manager_can_access_email_template_manager_and_view_all_canonical_milestones(): void
     {
         $manager = $this->createStaffUser('ws-emk-dhaka', 'manager.tpl@emk.test', 'workspace_manager');
 
@@ -63,7 +63,7 @@ class EmailTemplateManagerTest extends TestCase
         }
 
         $this->assertSame(
-            9,
+            11,
             EmailTemplate::withoutGlobalScopes()->where('workspace_id', 'ws-emk-dhaka')->count()
         );
     }
