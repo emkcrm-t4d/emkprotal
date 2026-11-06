@@ -141,7 +141,14 @@
                 </div>
 
                 <!-- Bottom Front Desk Assistance Notice -->
-                <div class="mt-6 pt-4 border-t border-white/10 text-center">
+                <div class="mt-6 pt-4 border-t border-white/10 text-center space-y-2">
+                    <p class="text-xs text-emerald-200/90 font-medium">
+                        New applicant or want to join EMK Center?
+                        <a href="{{ route('public.forms.show', 'membership-application') }}" class="text-amber-300 font-bold hover:text-amber-200 hover:underline ml-1 inline-flex items-center gap-1">
+                            <span>Become a Member / Apply Online</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </p>
                     <p class="text-xs text-emerald-200/70 leading-relaxed">
                         Need help or first time logging in? Contact:
                         <a href="tel:+8809606513103" class="text-amber-300 font-semibold hover:underline">+8809606513103</a>

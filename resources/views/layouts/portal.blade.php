@@ -199,11 +199,19 @@
                             </form>
                         </div>
                     @else
-                        <div class="flex items-center gap-2 bg-emerald-500/15 border-emerald-400/30 text-emerald-300 backdrop-blur-md border px-3 py-1.5 rounded-full text-xs font-medium" role="status" aria-label="Security Status: Secure Member Gateway">
-                            <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Secure Member Gateway</span>
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('public.forms.show', 'membership-application') }}" class="min-h-[44px] inline-flex items-center gap-2 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 transition-all px-4 py-2 rounded-xl shadow-md shadow-amber-500/25 cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                                <span>Become a Member</span>
+                            </a>
+                            <div class="hidden sm:flex items-center gap-2 bg-emerald-500/15 border-emerald-400/30 text-emerald-300 backdrop-blur-md border px-3 py-1.5 rounded-full text-xs font-medium" role="status" aria-label="Security Status: Secure Member Gateway">
+                                <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Secure Gateway</span>
+                            </div>
                         </div>
                     @endif
                 </div>
