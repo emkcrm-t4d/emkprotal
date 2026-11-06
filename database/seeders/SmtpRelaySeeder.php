@@ -32,3 +32,4 @@ class SmtpRelaySeeder extends Seeder
         }
     }
 }
+

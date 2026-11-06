@@ -65,3 +65,4 @@ class SmtpRelay extends Model
         return $this->status === 'connected';
     }
 }
+
