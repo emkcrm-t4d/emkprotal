@@ -5,10 +5,10 @@
     </div>
 
     @if (session('success'))
-        <div class="rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-800" id="flash-success">{{ session('success') }}</div>
+        <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 px-4 py-3 text-sm text-emerald-100 shadow-md backdrop-blur-md" id="flash-success" role="alert">{{ session('success') }}</div>
     @endif
     @if (session('error'))
-        <div class="rounded-lg bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-800" id="flash-error">{{ session('error') }}</div>
+        <div class="rounded-xl bg-rose-500/20 border border-rose-400/40 px-4 py-3 text-sm text-rose-100 shadow-md backdrop-blur-md" id="flash-error" role="alert">{{ session('error') }}</div>
     @endif
 
     <div class="flex flex-wrap gap-2" role="tablist">

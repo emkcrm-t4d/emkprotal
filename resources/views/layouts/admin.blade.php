@@ -225,6 +225,187 @@
             font-weight: 700 !important;
         }
 
+        /* ==========================================================================
+           UNIVERSAL HIGH-CONTRAST NOTIFICATION & ALERT BANNERS
+           ========================================================================== */
+        main [role="alert"],
+        main [id^="banner-"],
+        main [id^="alert-"],
+        main [id^="flash-"] {
+            border-radius: 1rem !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+        }
+
+        /* Success / Pass Banners & Alerts */
+        main [role="alert"].bg-emerald-50,
+        main [role="alert"][class*="bg-emerald-"],
+        main [id^="banner-"][class*="bg-emerald-"],
+        main [id^="banner-"].bg-emerald-50,
+        main [id^="alert-"][class*="bg-emerald-"],
+        main [id^="alert-"].bg-emerald-50,
+        main [id^="flash-"][class*="bg-emerald-"],
+        main [id^="flash-"].bg-emerald-50 {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.18) 100%), rgba(10, 24, 20, 0.85) !important;
+            border: 1px solid rgba(52, 211, 153, 0.45) !important;
+            color: #ecfdf5 !important;
+        }
+        main [role="alert"].bg-emerald-50 h1, main [role="alert"].bg-emerald-50 h2, main [role="alert"].bg-emerald-50 h3, main [role="alert"].bg-emerald-50 h4,
+        main [id^="banner-"][class*="bg-emerald-"] h1, main [id^="banner-"][class*="bg-emerald-"] h2, main [id^="banner-"][class*="bg-emerald-"] h3, main [id^="banner-"][class*="bg-emerald-"] h4,
+        main [id^="alert-"][class*="bg-emerald-"] h1, main [id^="alert-"][class*="bg-emerald-"] h2, main [id^="alert-"][class*="bg-emerald-"] h3, main [id^="alert-"][class*="bg-emerald-"] h4 {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+        }
+        main [role="alert"].bg-emerald-50 p, main [role="alert"].bg-emerald-50 span,
+        main [id^="banner-"][class*="bg-emerald-"] p, main [id^="banner-"][class*="bg-emerald-"] span,
+        main [id^="alert-"][class*="bg-emerald-"] p, main [id^="alert-"][class*="bg-emerald-"] span,
+        main [id^="flash-"][class*="bg-emerald-"] {
+            color: #d1fae5 !important;
+            font-weight: 500 !important;
+        }
+        main [role="alert"].bg-emerald-50 svg,
+        main [id^="banner-"][class*="bg-emerald-"] svg,
+        main [id^="alert-"][class*="bg-emerald-"] svg {
+            color: #34d399 !important;
+        }
+
+        /* Danger / Failure Banners & Alerts */
+        main [role="alert"].bg-rose-50,
+        main [role="alert"][class*="bg-rose-"],
+        main [id^="banner-"][class*="bg-rose-"],
+        main [id^="banner-"].bg-rose-50,
+        main [id^="alert-"][class*="bg-rose-"],
+        main [id^="alert-"].bg-rose-50,
+        main [id^="flash-"][class*="bg-rose-"],
+        main [id^="flash-"].bg-rose-50 {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.28) 0%, rgba(225, 29, 72, 0.18) 100%), rgba(28, 12, 16, 0.85) !important;
+            border: 1px solid rgba(251, 113, 133, 0.45) !important;
+            color: #fff1f2 !important;
+        }
+        main [role="alert"].bg-rose-50 h1, main [role="alert"].bg-rose-50 h2, main [role="alert"].bg-rose-50 h3, main [role="alert"].bg-rose-50 h4,
+        main [id^="banner-"][class*="bg-rose-"] h1, main [id^="banner-"][class*="bg-rose-"] h2, main [id^="banner-"][class*="bg-rose-"] h3, main [id^="banner-"][class*="bg-rose-"] h4,
+        main [id^="alert-"][class*="bg-rose-"] h1, main [id^="alert-"][class*="bg-rose-"] h2, main [id^="alert-"][class*="bg-rose-"] h3, main [id^="alert-"][class*="bg-rose-"] h4 {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+        }
+        main [role="alert"].bg-rose-50 p, main [role="alert"].bg-rose-50 span,
+        main [id^="banner-"][class*="bg-rose-"] p, main [id^="banner-"][class*="bg-rose-"] span,
+        main [id^="alert-"][class*="bg-rose-"] p, main [id^="alert-"][class*="bg-rose-"] span,
+        main [id^="flash-"][class*="bg-rose-"] {
+            color: #ffe4e6 !important;
+            font-weight: 500 !important;
+        }
+        main [role="alert"].bg-rose-50 svg,
+        main [id^="banner-"][class*="bg-rose-"] svg,
+        main [id^="alert-"][class*="bg-rose-"] svg {
+            color: #fb7185 !important;
+        }
+
+        /* Warning Banners & Alerts */
+        main [role="alert"].bg-amber-50,
+        main [role="alert"][class*="bg-amber-"],
+        main [id^="banner-"][class*="bg-amber-"],
+        main [id^="banner-"].bg-amber-50,
+        main [id^="alert-"][class*="bg-amber-"],
+        main [id^="alert-"].bg-amber-50,
+        main [id^="flash-"][class*="bg-amber-"],
+        main [id^="flash-"].bg-amber-50 {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(217, 119, 6, 0.18) 100%), rgba(28, 20, 10, 0.85) !important;
+            border: 1px solid rgba(251, 191, 36, 0.45) !important;
+            color: #fffbeb !important;
+        }
+        main [role="alert"].bg-amber-50 h1, main [role="alert"].bg-amber-50 h2, main [role="alert"].bg-amber-50 h3, main [role="alert"].bg-amber-50 h4,
+        main [id^="banner-"][class*="bg-amber-"] h1, main [id^="banner-"][class*="bg-amber-"] h2, main [id^="banner-"][class*="bg-amber-"] h3, main [id^="banner-"][class*="bg-amber-"] h4,
+        main [id^="alert-"][class*="bg-amber-"] h1, main [id^="alert-"][class*="bg-amber-"] h2, main [id^="alert-"][class*="bg-amber-"] h3, main [id^="alert-"][class*="bg-amber-"] h4 {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+        }
+        main [role="alert"].bg-amber-50 p, main [role="alert"].bg-amber-50 span,
+        main [id^="banner-"][class*="bg-amber-"] p, main [id^="banner-"][class*="bg-amber-"] span,
+        main [id^="alert-"][class*="bg-amber-"] p, main [id^="alert-"][class*="bg-amber-"] span,
+        main [id^="flash-"][class*="bg-amber-"] {
+            color: #fef3c7 !important;
+            font-weight: 500 !important;
+        }
+        main [role="alert"].bg-amber-50 svg,
+        main [id^="banner-"][class*="bg-amber-"] svg,
+        main [id^="alert-"][class*="bg-amber-"] svg {
+            color: #fbbf24 !important;
+        }
+
+        /* High-Contrast Color Token Overrides for Dark Glass (Prevents illegible dark pastel shades) */
+        main .text-emerald-950,
+        main .text-emerald-900 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        main .text-emerald-800 {
+            color: #d1fae5 !important;
+            font-weight: 500 !important;
+        }
+        main .text-emerald-700 {
+            color: #6ee7b7 !important;
+            font-weight: 600 !important;
+        }
+        main .text-emerald-600 {
+            color: #34d399 !important;
+        }
+
+        main .text-rose-950,
+        main .text-rose-900 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        main .text-rose-800 {
+            color: #ffe4e6 !important;
+            font-weight: 500 !important;
+        }
+        main .text-rose-700 {
+            color: #fda4af !important;
+            font-weight: 600 !important;
+        }
+        main .text-rose-600 {
+            color: #fb7185 !important;
+        }
+
+        main .text-amber-950,
+        main .text-amber-900 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        main .text-amber-800 {
+            color: #fef3c7 !important;
+            font-weight: 500 !important;
+        }
+        main .text-amber-700 {
+            color: #fcd34d !important;
+            font-weight: 600 !important;
+        }
+        main .text-amber-600 {
+            color: #fbbf24 !important;
+        }
+
+        main .text-blue-950,
+        main .text-blue-900 {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+        main .text-blue-800 {
+            color: #dbeafe !important;
+            font-weight: 500 !important;
+        }
+        main .text-blue-700 {
+            color: #93c5fd !important;
+            font-weight: 600 !important;
+        }
+        main .text-blue-600 {
+            color: #60a5fa !important;
+        }
+
         /* Prevent Table Headers from Turning Solid White on Hover */
         main table thead th,
         main table thead th[class*="hover:bg-slate-100"] {

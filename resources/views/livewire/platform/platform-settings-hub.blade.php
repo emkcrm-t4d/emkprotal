@@ -41,12 +41,12 @@
 
     <!-- Flash Status Messages -->
     @if (session()->has('status'))
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center justify-between" id="alert-settings-status">
+        <div class="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-100 text-sm flex items-center justify-between shadow-lg backdrop-blur-md" id="alert-settings-status" role="alert">
             <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 text-emerald-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium">{{ session('status') }}</span>
+                <span class="font-medium text-emerald-100">{{ session('status') }}</span>
             </div>
         </div>
     @endif

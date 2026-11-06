@@ -183,25 +183,25 @@
 
     <!-- Flash message status notification -->
     @if (session('status'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="bg-emerald-500/20 border border-emerald-400/40 text-emerald-100 px-4 py-3 rounded-xl text-sm flex items-center gap-3 shadow-lg backdrop-blur-md" role="alert">
+            <svg class="w-5 h-5 text-emerald-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>{{ session('status') }}</span>
+            <span class="font-medium text-emerald-100">{{ session('status') }}</span>
         </div>
     @endif
 
     <!-- Previous Application History Banner per LEAD-07 -->
     @if($hasReapplicationHistory)
-        <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-amber-900 shadow-xs" id="reapplicant-history-banner">
+        <div class="bg-amber-500/20 border border-amber-400/40 rounded-2xl p-4 text-amber-100 shadow-xl backdrop-blur-md" id="reapplicant-history-banner" role="alert">
             <div class="flex items-start gap-3">
-                <div class="p-2 bg-amber-100 rounded-lg shrink-0 mt-0.5">
-                    <svg class="w-5 h-5 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="p-2 bg-amber-400/20 rounded-xl shrink-0 mt-0.5 text-amber-300 border border-amber-400/30">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2">
+                    <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                         <span>Applicant Reapplication Detected (LEAD-07)</span>
                         <span class="px-2 py-0.5 rounded text-xs bg-amber-200 text-amber-800 font-semibold font-mono">
                             {{ count($historicalLeads) }} Previous Application{{ count($historicalLeads) > 1 ? 's' : '' }}

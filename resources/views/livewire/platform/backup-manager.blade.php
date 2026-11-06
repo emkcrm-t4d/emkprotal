@@ -43,56 +43,62 @@
 
     <!-- Flash Status Messages -->
     @if (session()->has('status'))
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center justify-between" id="alert-backup-status">
+        <div class="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-100 text-sm flex items-center justify-between shadow-lg backdrop-blur-md" id="alert-backup-status" role="alert">
             <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 text-emerald-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium">{{ session('status') }}</span>
+                <span class="font-medium text-emerald-100">{{ session('status') }}</span>
             </div>
         </div>
     @endif
 
     @if (session()->has('error'))
-        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center justify-between" id="alert-backup-error">
+        <div class="p-4 rounded-2xl bg-rose-500/20 border border-rose-400/40 text-rose-100 text-sm flex items-center justify-between shadow-lg backdrop-blur-md" id="alert-backup-error" role="alert">
             <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5 text-rose-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                <span class="font-medium">{{ session('error') }}</span>
+                <span class="font-medium text-rose-100">{{ session('error') }}</span>
             </div>
         </div>
     @endif
 
     <!-- Verification Drill Banner -->
     @if ($verificationStatus === 'success')
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-start gap-3 shadow-xs" id="banner-verification-success">
-            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        <div class="p-4 sm:p-5 rounded-2xl bg-emerald-500/20 border border-emerald-400/50 text-emerald-100 text-sm flex items-start gap-3.5 shadow-xl backdrop-blur-xl" id="banner-verification-success" role="alert">
+            <svg class="w-6 h-6 text-emerald-300 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            <div class="flex-1">
-                <h4 class="font-semibold text-emerald-900">Recovery Integrity Drill: PASS</h4>
-                <p class="mt-1 text-emerald-800 text-xs">{{ $verificationMessage }}</p>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2.5">
+                    <h4 class="font-bold text-white text-base tracking-wide">Recovery Integrity Drill: PASS</h4>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-400/30 text-emerald-300 border border-emerald-400/40">Verified</span>
+                </div>
+                <p class="mt-1 text-emerald-200 text-xs sm:text-sm font-medium leading-relaxed">{{ $verificationMessage }}</p>
             </div>
-            <button type="button" wire:click="$set('verificationStatus', null)" class="text-emerald-500 hover:text-emerald-700">
+            <button type="button" wire:click="$set('verificationStatus', null)" class="text-emerald-300 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer">
                 <span class="sr-only">Dismiss</span>
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
     @elseif ($verificationStatus === 'failed')
-        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-sm flex items-start gap-3 shadow-xs" id="banner-verification-failed">
-            <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        <div class="p-4 sm:p-5 rounded-2xl bg-rose-500/20 border border-rose-400/50 text-rose-100 text-sm flex items-start gap-3.5 shadow-xl backdrop-blur-xl" id="banner-verification-failed" role="alert">
+            <svg class="w-6 h-6 text-rose-300 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <div class="flex-1">
-                <h4 class="font-semibold text-rose-900">Recovery Integrity Drill: FAILED</h4>
-                <p class="mt-1 text-rose-800 text-xs">{{ $verificationMessage }}</p>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2.5">
+                    <h4 class="font-bold text-white text-base tracking-wide">Recovery Integrity Drill: FAILED</h4>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-400/30 text-rose-300 border border-rose-400/40">Failed</span>
+                </div>
+                <p class="mt-1 text-rose-200 text-xs sm:text-sm font-medium leading-relaxed">{{ $verificationMessage }}</p>
             </div>
-            <button type="button" wire:click="$set('verificationStatus', null)" class="text-rose-500 hover:text-rose-700">
+            <button type="button" wire:click="$set('verificationStatus', null)" class="text-rose-300 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer">
                 <span class="sr-only">Dismiss</span>
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>

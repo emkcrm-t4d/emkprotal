@@ -23,30 +23,30 @@
 
     <!-- Feedback Alerts -->
     @if ($statusMessage)
-        <div class="rounded-md bg-emerald-50 p-4 border border-emerald-200" role="alert">
-            <div class="flex">
+        <div class="rounded-xl bg-emerald-500/20 p-4 border border-emerald-400/40 shadow-lg backdrop-blur-md" role="alert">
+            <div class="flex items-center">
                 <div class="shrink-0">
-                    <svg class="h-5 w-5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-emerald-300" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-emerald-800">{{ $statusMessage }}</p>
+                    <p class="text-sm font-semibold text-emerald-100">{{ $statusMessage }}</p>
                 </div>
             </div>
         </div>
     @endif
 
     @if ($errorMessage)
-        <div class="rounded-md bg-rose-50 p-4 border border-rose-200" role="alert">
-            <div class="flex">
+        <div class="rounded-xl bg-rose-500/20 p-4 border border-rose-400/40 shadow-lg backdrop-blur-md" role="alert">
+            <div class="flex items-center">
                 <div class="shrink-0">
-                    <svg class="h-5 w-5 text-rose-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-rose-300" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-rose-800">{{ $errorMessage }}</p>
+                    <p class="text-sm font-semibold text-rose-100">{{ $errorMessage }}</p>
                 </div>
             </div>
         </div>
