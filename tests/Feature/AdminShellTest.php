@@ -23,7 +23,8 @@ test('admin shell livewire component renders workspace header and core modules',
         ->assertSee('forms')
         ->assertSee('invoices')
         ->assertSee('dashboard_reports')
-        ->assertSee('platform_services');
+        ->assertSee('platform_services')
+        ->assertSee('Email SMTP Module');
 });
 
 test('admin shell layout renders successfully with slot content', function () {

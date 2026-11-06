@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Address;
@@ -26,6 +27,10 @@ class SmtpTransportManager
      */
     public function getActiveRelaysForWorkspace(?string $workspaceId): Collection
     {
+        if (! Schema::hasTable('smtp_relays')) {
+            return new Collection();
+        }
+
         $relays = SmtpRelay::query()
             ->active()
             ->when(!empty($workspaceId), function ($q) use ($workspaceId) {
@@ -59,6 +64,10 @@ class SmtpTransportManager
      */
     public function hasBrokenConnection(?string $workspaceId): bool
     {
+        if (! Schema::hasTable('smtp_relays')) {
+            return false;
+        }
+
         return SmtpRelay::query()
             ->active()
             ->where('status', 'error')
@@ -76,6 +85,10 @@ class SmtpTransportManager
      */
     public function getLatestBrokenRelay(?string $workspaceId): ?SmtpRelay
     {
+        if (! Schema::hasTable('smtp_relays')) {
+            return null;
+        }
+
         return SmtpRelay::query()
             ->active()
             ->where('status', 'error')
@@ -87,6 +100,33 @@ class SmtpTransportManager
             })
             ->latest('updated_at')
             ->first();
+    }
+
+    /**
+     * Dynamically apply SMTP relay settings to Laravel's default mail transport.
+     */
+    public function applyRelayToDefaultMailConfig(?SmtpRelay $relay): void
+    {
+        if ($relay === null) {
+            return;
+        }
+
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.host' => $relay->host,
+            'mail.mailers.smtp.port' => (int) $relay->port,
+            'mail.mailers.smtp.encryption' => $relay->encryption === 'none' ? null : ($relay->encryption === 'ssl' ? 'ssl' : 'tls'),
+            'mail.mailers.smtp.username' => $relay->username,
+            'mail.mailers.smtp.password' => (string) $relay->password,
+            'mail.from.address' => $relay->sender_email,
+            'mail.from.name' => $relay->sender_name ?: 'EMK CRM Mailer',
+        ]);
+
+        try {
+            app('mail.manager')->purge('smtp');
+        } catch (\Throwable) {
+            // In unit/feature tests with Mail::shouldReceive, mail manager may be mocked
+        }
     }
 
     /**

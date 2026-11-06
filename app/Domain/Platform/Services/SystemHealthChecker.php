@@ -371,6 +371,45 @@ class SystemHealthChecker
     }
 
     /**
+     * Verify SMTP mail gateway relays and broken connection status.
+     *
+     * @return array{status: string, message: string, details: array<string, mixed>}
+     */
+    public function checkSmtpGateway(): array
+    {
+        $brokenRelay = \App\Domain\Mail\Models\SmtpRelay::query()
+            ->active()
+            ->where('status', 'error')
+            ->first();
+
+        if ($brokenRelay !== null) {
+            return [
+                'status' => 'critical',
+                'message' => "SMTP relay [{$brokenRelay->name}] connection is broken: {$brokenRelay->last_error_message}",
+                'details' => [
+                    'relay_id' => $brokenRelay->id,
+                    'name' => $brokenRelay->name,
+                    'host' => $brokenRelay->host,
+                    'port' => $brokenRelay->port,
+                    'error' => $brokenRelay->last_error_message,
+                ],
+            ];
+        }
+
+        $activeRelays = \App\Domain\Mail\Models\SmtpRelay::query()->active()->count();
+
+        return [
+            'status' => 'healthy',
+            'message' => $activeRelays > 0
+                ? "SMTP mail gateways operational ({$activeRelays} active relay(s) configured)."
+                : 'Default system mailer active; no custom SMTP relays configured.',
+            'details' => [
+                'active_relays' => $activeRelays,
+            ],
+        ];
+    }
+
+    /**
      * Aggregate all subsystem checks and evaluate overall environment readiness.
      *
      * @return array{status: string, timestamp: string, environment: string, checks: array<string, array{status: string, message: string, details: array<string, mixed>}>, database: array, redis: array, queues: array, storage: array, scheduler: array, app_key: array}
@@ -384,6 +423,7 @@ class SystemHealthChecker
             'storage' => $this->checkStorage(),
             'scheduler' => $this->checkScheduler(),
             'app_key' => $this->checkAppKey(),
+            'smtp_gateway' => $this->checkSmtpGateway(),
         ];
 
         $statuses = array_map(fn ($c) => $c['status'], $checks);

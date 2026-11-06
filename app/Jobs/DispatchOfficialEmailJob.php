@@ -60,9 +60,10 @@ class DispatchOfficialEmailJob implements ShouldQueue, ShouldBeUnique
     {
         $transportManager = $transportManager ?? app(SmtpTransportManager::class);
         $message = null;
+        $activeRelay = null;
 
         try {
-            DB::transaction(function () use (&$message, $transportManager): void {
+            DB::transaction(function () use (&$message, &$activeRelay, $transportManager): void {
                 $message = EmailMessage::withoutGlobalScopes()
                     ->lockForUpdate()
                     ->find($this->emailMessageId);
@@ -72,10 +73,27 @@ class DispatchOfficialEmailJob implements ShouldQueue, ShouldBeUnique
                     return;
                 }
 
-                $result = $transportManager->dispatchOfficialMessage($message);
+                $activeRelay = $transportManager->getPrimaryRelay($message->workspace_id);
+                if ($activeRelay) {
+                    $transportManager->applyRelayToDefaultMailConfig($activeRelay);
+                }
 
-                if (! ($result['success'] ?? false)) {
-                    throw new \RuntimeException($result['error'] ?? 'Failed to transmit message via configured SMTP relays.');
+                $mailable = new TemplatedLifecycleMail(
+                    subjectLine: (string) $message->subject,
+                    htmlContent: (string) ($message->body_html ?? ''),
+                    textContent: (string) ($message->body_text ?? ''),
+                    messageIdHeader: (string) ($message->message_id_header ?? ''),
+                    inReplyToHeader: $message->in_reply_to_header ? (string) $message->in_reply_to_header : null,
+                );
+
+                Mail::to((string) $message->to_email)->send($mailable);
+
+                if ($activeRelay) {
+                    $activeRelay->update([
+                        'status' => 'connected',
+                        'last_tested_at' => now(),
+                        'last_error_message' => null,
+                    ]);
                 }
 
                 $now = now();
@@ -113,6 +131,14 @@ class DispatchOfficialEmailJob implements ShouldQueue, ShouldBeUnique
             });
         } catch (\Throwable $e) {
             $sanitized = $dispatcher->sanitizeFailureMessage($e->getMessage());
+
+            if ($activeRelay) {
+                $activeRelay->update([
+                    'status' => 'error',
+                    'last_tested_at' => now(),
+                    'last_error_message' => $sanitized,
+                ]);
+            }
 
             $failedMessage = $message ?? EmailMessage::withoutGlobalScopes()->find($this->emailMessageId);
 

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             DefaultMembershipFormSeeder::class,
             EmailTemplateSeeder::class,
             WorkflowRuleSeeder::class,
+            SmtpRelaySeeder::class,
         ]);
 
         if (!app()->environment('testing')) {
