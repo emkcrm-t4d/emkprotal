@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Receipt - {{ $invoice->invoice_number }}</title>
+    <!-- Browser Top Tab Icon (Favicon) - EMK Circular Logo -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/emk-favicon-32.png') }}?v=3">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/emk-circle-logo.png') }}?v=3">
     <!-- Tailwind CSS CDN for standalone print layout -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>

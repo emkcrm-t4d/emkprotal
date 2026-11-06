@@ -7,6 +7,13 @@
 
     <title>{{ $title ?? 'EMK Membership CRM - Admin Console' }}</title>
 
+    <!-- Browser Top Tab Icon (Favicon) - EMK Circular Logo -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/emk-favicon-32.png') }}?v=3">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/emk-favicon-16.png') }}?v=3">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/emk-favicon-64.png') }}?v=3">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/emk-circle-logo.png') }}?v=3">
+
     <!-- Styles & Scripts via Vite -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
