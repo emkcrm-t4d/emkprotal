@@ -1,4 +1,9 @@
-<div class="relative">
+<div 
+    x-data="{ 
+        settingsSubmenuOpen: {{ (request()->is("crm/{$workspace['id']}/settings*") || request()->is("crm/{$workspace['id']}/platform_services*") || request()->is("crm/{$workspace['id']}/audit-logs*") || request()->is("crm/{$workspace['id']}/staff*")) ? 'true' : 'false' }}
+    }" 
+    class="relative"
+>
     <!-- Left-Edge Hover Detection Strip (Triggers Auto-Reveal on Desktop when mouse touches left edge) -->
     <div 
         class="hidden lg:block fixed inset-y-0 left-0 w-3 z-40 cursor-pointer pointer-events-auto"
@@ -175,6 +180,47 @@
                     };
                     $moduleTitle = $displayNames[$module->key] ?? $module->name;
                 @endphp
+                @if ($module->key === 'platform_services')
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between px-3.5 py-3 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all {{ $isActive ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-amber-300 shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent' }}">
+                            <a href="{{ $modulePath }}" class="flex items-center gap-3 min-w-0 flex-1">
+                                <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span class="truncate">{{ $moduleTitle }}</span>
+                                <span class="sr-only">{{ $module->key }}</span>
+                            </a>
+                            <button 
+                                type="button" 
+                                @click.prevent.stop="settingsSubmenuOpen = !settingsSubmenuOpen" 
+                                class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-transform duration-200 cursor-pointer"
+                                :class="settingsSubmenuOpen ? 'rotate-180 text-amber-400' : ''" 
+                                aria-label="Toggle Settings Submenu"
+                            >
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div x-show="settingsSubmenuOpen" x-transition.opacity.duration.200ms class="pl-2 pr-1 py-1 space-y-1 ml-4 border-l-2 border-amber-400/30">
+                            @foreach ($settingsSubmenus as $sub)
+                                <a 
+                                    href="{{ $sub['route'] }}" 
+                                    class="group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                                >
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400' }} transition-colors"></span>
+                                        <span class="truncate">{!! $sub['title'] !!}</span>
+                                    </div>
+                                    @if ($sub['active'])
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
                 <a 
                     href="{{ $modulePath }}" 
                     class="group flex items-center gap-3 px-3.5 py-3 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all {{ $isActive ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-amber-300 shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent' }}"
@@ -196,11 +242,6 @@
                         <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
-                    @elseif ($module->key === 'platform_services')
-                        <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
                     @elseif ($module->key === 'forms')
                         <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -218,6 +259,7 @@
                     <span class="flex-1 truncate">{{ $moduleTitle }}</span>
                     <span class="sr-only">{{ $module->key }}</span>
                 </a>
+                @endif
             @endforeach
         </nav>
 
@@ -312,6 +354,54 @@
                     };
                     $moduleTitle = $displayNames[$module->key] ?? $module->name;
                 @endphp
+                @if ($module->key === 'platform_services')
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all {{ $isActive ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-white shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent' }}">
+                            <a href="{{ $modulePath }}" class="flex items-center gap-3 min-w-0 flex-1">
+                                <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                <span class="truncate">{{ $moduleTitle }}</span>
+                                <span class="sr-only">{{ $module->key }}</span>
+                            </a>
+                            <div class="flex items-center gap-1">
+                                @if ($isActive)
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                                @endif
+                                <button 
+                                    type="button" 
+                                    @click.prevent.stop="settingsSubmenuOpen = !settingsSubmenuOpen" 
+                                    class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-transform duration-200 cursor-pointer"
+                                    :class="settingsSubmenuOpen ? 'rotate-180 text-amber-400' : ''" 
+                                    aria-label="Toggle Settings Submenu"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Submenu Tree for Desktop -->
+                        <div x-show="settingsSubmenuOpen" x-transition.opacity.duration.200ms class="pl-2 pr-1 py-1 space-y-0.5 ml-4 border-l border-amber-400/30">
+                            @foreach ($settingsSubmenus as $sub)
+                                <a 
+                                    href="{{ $sub['route'] }}" 
+                                    class="group flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                                >
+                                    <div class="flex items-center gap-2 min-w-0">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400' }} transition-colors"></span>
+                                        <span class="truncate">{!! $sub['title'] !!}</span>
+                                    </div>
+                                    @if ($sub['active'])
+                                        <span class="w-1 h-1 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
                 <a 
                     href="{{ $modulePath }}" 
                     class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all {{ $isActive ? 'bg-gradient-to-r from-amber-500/20 to-indigo-500/20 border border-amber-400/40 text-white shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent' }}"
@@ -333,11 +423,6 @@
                         @elseif ($module->key === 'dashboard_reports')
                             <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                        @elseif ($module->key === 'platform_services')
-                            <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         @elseif ($module->key === 'forms')
                             <svg class="w-4 h-4 shrink-0 {{ $isActive ? 'text-amber-400' : 'text-slate-400 group-hover:text-amber-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -362,6 +447,7 @@
 
                     <span class="sr-only">{{ $module->key }}</span>
                 </a>
+                @endif
             @endforeach
         </nav>
 

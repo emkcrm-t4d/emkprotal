@@ -110,12 +110,65 @@ class AdminShell extends Component
             return $orderA <=> $orderB;
         });
 
+        // 8 Platform & Administration Submenus under Settings
+        $settingsSubmenus = [
+            [
+                'title' => 'System Parameters',
+                'route' => route('crm.settings.index', $workspaceId),
+                'active' => request()->routeIs('crm.settings.index') || request()->is("crm/{$workspaceId}/settings"),
+                'key' => 'parameters',
+            ],
+            [
+                'title' => 'Membership Terms',
+                'route' => route('crm.terms.index', $workspaceId),
+                'active' => request()->routeIs('crm.terms.index') || request()->is("crm/{$workspaceId}/settings/terms*"),
+                'key' => 'terms',
+            ],
+            [
+                'title' => 'Staff & Delegations',
+                'route' => route('crm.staff.index', $workspaceId),
+                'active' => request()->routeIs('crm.staff.index') || request()->routeIs('crm.staff.delegation') || request()->is("crm/{$workspaceId}/staff*"),
+                'key' => 'staff',
+            ],
+            [
+                'title' => 'Email Templates',
+                'route' => route('crm.email_templates.index', $workspaceId),
+                'active' => request()->routeIs('crm.email_templates.index') || request()->is("crm/{$workspaceId}/settings/email-templates*"),
+                'key' => 'templates',
+            ],
+            [
+                'title' => 'Delivery Monitor',
+                'route' => route('crm.email_delivery.index', $workspaceId),
+                'active' => request()->routeIs('crm.email_delivery.index') || request()->is("crm/{$workspaceId}/settings/email-delivery*"),
+                'key' => 'delivery',
+            ],
+            [
+                'title' => 'Workflow Rules',
+                'route' => route('crm.workflow_rules.index', $workspaceId),
+                'active' => request()->routeIs('crm.workflow_rules.index') || request()->is("crm/{$workspaceId}/settings/workflow-rules*"),
+                'key' => 'workflow',
+            ],
+            [
+                'title' => 'Backups & Health',
+                'route' => route('crm.backups.index', $workspaceId),
+                'active' => request()->routeIs('crm.backups.index') || request()->is("crm/{$workspaceId}/settings/backups*"),
+                'key' => 'backups',
+            ],
+            [
+                'title' => 'Audit Logs',
+                'route' => route('crm.audit_logs.index', $workspaceId),
+                'active' => request()->routeIs('crm.audit_logs.index') || request()->is("crm/{$workspaceId}/audit-logs*"),
+                'key' => 'audit',
+            ],
+        ];
+
         $user = Auth::guard('web')->user();
 
         return view('livewire.admin.admin-shell', [
             'workspace' => $this->workspace,
             'modules' => $modules,
             'displayNames' => $displayNames,
+            'settingsSubmenus' => $settingsSubmenus,
             'user' => $user,
         ]);
     }

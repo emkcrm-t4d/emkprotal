@@ -550,7 +550,7 @@ class EndToEndZohoMigrationAndReconciliationTest extends TestCase
         // =========================================================================
         // SCENARIO 6: Simulated Rollback Delta Export (MIGR-05, T-11-12)
         // =========================================================================
-        $cutoverCutoff = Carbon::parse('2026-11-05 12:00:00');
+        $cutoverCutoff = Carbon::now()->addHour();
 
         // Lead submitted after cutoff with formula injection triggers
         $newPostCutoverLead = Lead::create([
@@ -575,7 +575,7 @@ class EndToEndZohoMigrationAndReconciliationTest extends TestCase
             'institution_study' => 'BUET',
             'highest_certification' => 'undergraduate_degree',
             'area_of_subject' => '+CSE', // Formula injection trigger
-            'submitted_at' => Carbon::parse('2026-11-05 14:30:00'),
+            'submitted_at' => Carbon::now()->addHours(2),
         ]);
 
         $deltaCsv = $this->deltaExportService->exportDeltaSince($cutoverCutoff, $this->workspaceId);
