@@ -55,7 +55,7 @@
     $isLoginPage = request()->routeIs('portal.login');
 @endphp
 <body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
-    <!-- Atmospheric EMK Center Background: 100% Fit, Never Cropped, Device-Pixel Responsive -->
+    <!-- Full-Window Device-Pixel Responsive Background Image: 100% Fit, Zero Side Letterboxing -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#0a0f1d]" aria-hidden="true">
         <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
         <img 
@@ -65,23 +65,21 @@
             aria-hidden="true"
         >
 
-        <!-- Uncropped Fit Layer: Intact 100%, 0% cropped, responsive to device pixels -->
-        <div class="absolute inset-0 flex items-center justify-center">
-            <picture class="w-full h-full flex items-center justify-center">
-                <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
-                <img 
-                    src="{{ asset('images/emk-bg.jpg') }}" 
-                    alt="EMK Center Background" 
-                    class="w-full h-full object-contain object-center opacity-90 brightness-100 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
-                    loading="eager"
-                    fetchpriority="high"
-                >
-            </picture>
-        </div>
+        <!-- Full-Window Fit Layer: 100% full viewport coverage without black side bars -->
+        <picture class="absolute inset-0 w-full h-full">
+            <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
+            <img 
+                src="{{ asset('images/emk-bg.jpg') }}" 
+                alt="EMK Center Background" 
+                class="w-full h-full object-cover object-center opacity-85 brightness-95 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
+                loading="eager"
+                fetchpriority="high"
+            >
+        </picture>
 
-        <!-- Atmospheric Liquid Glass Scrim (Permits warm photography to illuminate page with subtle depth) -->
-        <div class="absolute inset-0 bg-[#0a0f1d]/35"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0f1d]/40 via-transparent to-[#0a0f1d]/75"></div>
+        <!-- Atmospheric Liquid Glass Scrim for optimal contrast and 3D depth -->
+        <div class="absolute inset-0 bg-slate-950/50 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/75"></div>
     </div>
     <!-- Skip to main content link for keyboard & screen reader accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:p-4 focus:bg-indigo-600 focus:text-white focus:z-50 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Skip to main content</a>
