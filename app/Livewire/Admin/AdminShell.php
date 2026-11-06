@@ -110,7 +110,12 @@ class AdminShell extends Component
             return $orderA <=> $orderB;
         });
 
-        // 8 Platform & Administration Submenus under Settings
+        // Check SMTP relay health
+        $smtpManager = app(\App\Domain\Mail\Services\SmtpTransportManager::class);
+        $hasBrokenSmtp = $smtpManager->hasBrokenConnection($workspaceId);
+        $brokenRelay = $hasBrokenSmtp ? $smtpManager->getLatestBrokenRelay($workspaceId) : null;
+
+        // 9 Platform & Administration Submenus under Settings
         $settingsSubmenus = [
             [
                 'title' => 'System Parameters',
@@ -135,6 +140,13 @@ class AdminShell extends Component
                 'route' => route('crm.email_templates.index', $workspaceId),
                 'active' => request()->routeIs('crm.email_templates.index') || request()->is("crm/{$workspaceId}/settings/email-templates*"),
                 'key' => 'templates',
+            ],
+            [
+                'title' => 'Email SMTP Module',
+                'route' => route('crm.smtp.index', $workspaceId),
+                'active' => request()->routeIs('crm.smtp.index') || request()->is("crm/{$workspaceId}/settings/smtp*"),
+                'key' => 'smtp',
+                'has_error' => $hasBrokenSmtp,
             ],
             [
                 'title' => 'Delivery Monitor',
@@ -169,6 +181,8 @@ class AdminShell extends Component
             'modules' => $modules,
             'displayNames' => $displayNames,
             'settingsSubmenus' => $settingsSubmenus,
+            'hasBrokenSmtp' => $hasBrokenSmtp,
+            'brokenRelay' => $brokenRelay,
             'user' => $user,
         ]);
     }

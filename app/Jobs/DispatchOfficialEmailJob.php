@@ -9,6 +9,7 @@ use App\Domain\Mail\Mailables\TemplatedLifecycleMail;
 use App\Domain\Mail\Models\EmailMessage;
 use App\Domain\Mail\Models\EmailThread;
 use App\Domain\Mail\Services\QueuedEmailDispatcher;
+use App\Domain\Mail\Services\SmtpTransportManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -55,12 +56,13 @@ class DispatchOfficialEmailJob implements ShouldQueue, ShouldBeUnique
     /**
      * Execute the job.
      */
-    public function handle(QueuedEmailDispatcher $dispatcher): void
+    public function handle(QueuedEmailDispatcher $dispatcher, ?SmtpTransportManager $transportManager = null): void
     {
+        $transportManager = $transportManager ?? app(SmtpTransportManager::class);
         $message = null;
 
         try {
-            DB::transaction(function () use (&$message): void {
+            DB::transaction(function () use (&$message, $transportManager): void {
                 $message = EmailMessage::withoutGlobalScopes()
                     ->lockForUpdate()
                     ->find($this->emailMessageId);
@@ -70,15 +72,11 @@ class DispatchOfficialEmailJob implements ShouldQueue, ShouldBeUnique
                     return;
                 }
 
-                $mailable = new TemplatedLifecycleMail(
-                    subjectLine: (string) $message->subject,
-                    htmlContent: (string) ($message->body_html ?? ''),
-                    textContent: (string) ($message->body_text ?? ''),
-                    messageIdHeader: (string) ($message->message_id_header ?? ''),
-                    inReplyToHeader: $message->in_reply_to_header ? (string) $message->in_reply_to_header : null,
-                );
+                $result = $transportManager->dispatchOfficialMessage($message);
 
-                Mail::to((string) $message->to_email)->send($mailable);
+                if (! ($result['success'] ?? false)) {
+                    throw new \RuntimeException($result['error'] ?? 'Failed to transmit message via configured SMTP relays.');
+                }
 
                 $now = now();
 

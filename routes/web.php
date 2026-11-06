@@ -191,6 +191,10 @@ Route::prefix('/crm/{workspace}')
             ->name('crm.email_templates.index')
             ->middleware(['can:platform_services.manage_settings']);
 
+        Route::get('/settings/smtp', \App\Livewire\Mail\SmtpRelayManager::class)
+            ->name('crm.smtp.index')
+            ->middleware(['can:platform_services.manage_settings']);
+
         Route::get('/settings/email-delivery', \App\Livewire\Mail\EmailDeliveryMonitor::class)
             ->name('crm.email_delivery.index')
             ->middleware(['can:platform_services.manage_settings']);

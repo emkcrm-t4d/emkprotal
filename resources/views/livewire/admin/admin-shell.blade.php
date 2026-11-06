@@ -51,6 +51,24 @@
 
         <!-- Right Side Top Controls: Mode Toggle, Profile Capsule & Sign Out -->
         <div class="flex items-center gap-2.5 sm:gap-4">
+            <!-- Global SMTP Broken Server Warning Alert Button -->
+            @if ($hasBrokenSmtp ?? false)
+                <a 
+                    href="{{ route('crm.smtp.index', $workspace['id']) }}" 
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-200 border border-rose-500/50 hover:bg-rose-500/30 transition shadow-lg shadow-rose-950/40 cursor-pointer animate-pulse"
+                    title="{{ $brokenRelay ? 'SMTP Relay \'' . $brokenRelay->name . '\' failed: ' . $brokenRelay->last_error_message : 'SMTP Email server connection is broken!' }}"
+                >
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                    </span>
+                    <span class="font-extrabold text-white">Email Server Broken</span>
+                    <svg class="w-3.5 h-3.5 text-rose-300 hidden sm:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </a>
+            @endif
+
             <!-- Auto-Hide vs Pinned Toggle Pill (Standard Desktop/Tablet Switch) -->
             <button 
                 type="button"
@@ -189,6 +207,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 <span class="truncate">{{ $moduleTitle }}</span>
+                                @if ($hasBrokenSmtp ?? false)
+                                    <span class="relative flex h-2 w-2 ml-1" title="Email Server Connection Warning">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                                    </span>
+                                @endif
                                 <span class="sr-only">{{ $module->key }}</span>
                             </a>
                             <button 
@@ -207,15 +231,22 @@
                             @foreach ($settingsSubmenus as $sub)
                                 <a 
                                     href="{{ $sub['route'] }}" 
-                                    class="group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                                    class="group flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }} {{ (!empty($sub['has_error'])) ? 'border-rose-500/40 bg-rose-950/20 text-rose-200 hover:text-rose-100 hover:bg-rose-900/30' : '' }}"
                                 >
                                     <div class="flex items-center gap-2.5 min-w-0">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400' }} transition-colors"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full {{ (!empty($sub['has_error'])) ? 'bg-rose-500 ring-2 ring-rose-500/50 animate-pulse' : ($sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400') }} transition-colors"></span>
                                         <span class="truncate">{!! $sub['title'] !!}</span>
                                     </div>
-                                    @if ($sub['active'])
-                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
-                                    @endif
+                                    <div class="flex items-center gap-1.5 shrink-0">
+                                        @if (!empty($sub['has_error']))
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-rose-500/30 text-rose-200 border border-rose-500/60 shadow-xs animate-pulse">
+                                                <svg class="w-2.5 h-2.5 text-rose-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                                Broken
+                                            </span>
+                                        @elseif ($sub['active'])
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                        @endif
+                                    </div>
                                 </a>
                             @endforeach
                         </div>
@@ -363,6 +394,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 <span class="truncate">{{ $moduleTitle }}</span>
+                                @if ($hasBrokenSmtp ?? false)
+                                    <span class="relative flex h-2 w-2 ml-1" title="Email Server Connection Warning">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                                    </span>
+                                @endif
                                 <span class="sr-only">{{ $module->key }}</span>
                             </a>
                             <div class="flex items-center gap-1">
@@ -383,20 +420,26 @@
                             </div>
                         </div>
 
-                        <!-- Submenu Tree for Desktop -->
+                        <!-- Submenu Tree for Mobile -->
                         <div x-show="settingsSubmenuOpen" x-transition.opacity.duration.200ms class="pl-2 pr-1 py-1 space-y-0.5 ml-4 border-l border-amber-400/30">
                             @foreach ($settingsSubmenus as $sub)
                                 <a 
                                     href="{{ $sub['route'] }}" 
-                                    class="group flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }}"
+                                    class="group flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium transition-all {{ $sub['active'] ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent' }} {{ (!empty($sub['has_error'])) ? 'border-rose-500/40 bg-rose-950/20 text-rose-200 hover:text-rose-100 hover:bg-rose-900/30' : '' }}"
                                 >
                                     <div class="flex items-center gap-2 min-w-0">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400' }} transition-colors"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full {{ (!empty($sub['has_error'])) ? 'bg-rose-500 ring-2 ring-rose-500/50 animate-pulse' : ($sub['active'] ? 'bg-amber-400 ring-2 ring-amber-400/30' : 'bg-slate-600 group-hover:bg-amber-400') }} transition-colors"></span>
                                         <span class="truncate">{!! $sub['title'] !!}</span>
                                     </div>
-                                    @if ($sub['active'])
-                                        <span class="w-1 h-1 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
-                                    @endif
+                                    <div class="flex items-center gap-1 shrink-0">
+                                        @if (!empty($sub['has_error']))
+                                            <span class="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-bold bg-rose-500/30 text-rose-200 border border-rose-500/60 animate-pulse">
+                                                Broken
+                                            </span>
+                                        @elseif ($sub['active'])
+                                            <span class="w-1 h-1 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                                        @endif
+                                    </div>
                                 </a>
                             @endforeach
                         </div>
