@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\AccessControl\Services;
 
+use App\Domain\AccessControl\Events\StaffPermissionDelegated;
+use App\Domain\AccessControl\Events\StaffPermissionRevoked;
 use App\Domain\AccessControl\Exceptions\TenancyBoundaryException;
+use App\Domain\AccessControl\Exceptions\UnauthorizedDelegationException;
+use App\Domain\Mail\Models\EmailTemplate;
+use App\Domain\Mail\Services\QueuedEmailDispatcher;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Spatie\Permission\PermissionRegistrar;
@@ -17,13 +24,14 @@ class StaffManagementService
         protected DelegationPolicyService $delegationPolicy,
         protected ?PermissionRegistrar $permissionRegistrar = null
     ) {
-        $this->permissionRegistrar ??= \Illuminate\Support\Facades\App::make(PermissionRegistrar::class);
+        $this->permissionRegistrar ??= App::make(PermissionRegistrar::class);
     }
 
     /**
      * Create a new delegated staff user within the creator's workspace boundary.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
+     *
      * @throws InvalidArgumentException
      */
     public function createStaffUser(array $data, User $creator): User
@@ -58,7 +66,7 @@ class StaffManagementService
             throw new InvalidArgumentException('A valid workspace ID is required to create a staff member.');
         }
 
-        $password = !empty($data['password'])
+        $password = ! empty($data['password'])
             ? Hash::make((string) $data['password'])
             : Hash::make(Str::random(16));
 
@@ -78,23 +86,23 @@ class StaffManagementService
 
         // Dispatch admin alert on new staff user creation
         try {
-            $emailDispatcher = app(\App\Domain\Mail\Services\QueuedEmailDispatcher::class);
+            $emailDispatcher = app(QueuedEmailDispatcher::class);
             $adminEmail = $creator->email ?: 'admin@emk.test';
 
             $emailDispatcher->dispatchTemplate(
                 workspaceId: (string) $workspaceId,
-                templateKey: \App\Domain\Mail\Models\EmailTemplate::MILESTONE_ADMIN_NEW_USER,
+                templateKey: EmailTemplate::MILESTONE_ADMIN_NEW_USER,
                 recipientEmail: $adminEmail,
                 variables: [
-                    'applicant_name' => $staffUser->name . ' (Staff Account: ' . $staffUser->email . ')',
+                    'applicant_name' => $staffUser->name.' (Staff Account: '.$staffUser->email.')',
                     'workspace_name' => 'EMK Center Dhaka',
                     'amount_bdt' => '0.00',
-                    'action_url' => url('/crm/' . $workspaceId . '/settings/staff'),
+                    'action_url' => config('app.url').'/crm/'.$workspaceId.'/settings/staff',
                 ],
                 locale: 'en'
             );
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Admin notification dispatch for staff user creation skipped: ' . $e->getMessage());
+            Log::warning('Admin notification dispatch for staff user creation skipped: '.$e->getMessage());
         }
 
         return $staffUser;
@@ -103,8 +111,8 @@ class StaffManagementService
     /**
      * Delegate an operational permission to a staff user.
      *
-     * @throws \App\Domain\AccessControl\Exceptions\TenancyBoundaryException
-     * @throws \App\Domain\AccessControl\Exceptions\UnauthorizedDelegationException
+     * @throws TenancyBoundaryException
+     * @throws UnauthorizedDelegationException
      */
     public function delegatePermission(User $manager, User $targetStaff, string $permission): void
     {
@@ -114,7 +122,7 @@ class StaffManagementService
 
         $this->permissionRegistrar->forgetCachedPermissions();
 
-        event(new \App\Domain\AccessControl\Events\StaffPermissionDelegated($manager, $targetStaff, $permission));
+        event(new StaffPermissionDelegated($manager, $targetStaff, $permission));
     }
 
     /**
@@ -133,7 +141,7 @@ class StaffManagementService
             }
         }
 
-        if (!$isGlobalAdmin && ($manager->workspace_id === null || $manager->workspace_id !== $targetStaff->workspace_id)) {
+        if (! $isGlobalAdmin && ($manager->workspace_id === null || $manager->workspace_id !== $targetStaff->workspace_id)) {
             throw new TenancyBoundaryException('Cannot revoke permissions across workspace boundaries.');
         }
 
@@ -141,7 +149,7 @@ class StaffManagementService
 
         $this->permissionRegistrar->forgetCachedPermissions();
 
-        event(new \App\Domain\AccessControl\Events\StaffPermissionRevoked($manager, $targetStaff, $permission));
+        event(new StaffPermissionRevoked($manager, $targetStaff, $permission));
     }
 
     /**
@@ -160,7 +168,7 @@ class StaffManagementService
             }
         }
 
-        if (!$isGlobalAdmin && ($actor->workspace_id === null || $actor->workspace_id !== $targetStaff->workspace_id)) {
+        if (! $isGlobalAdmin && ($actor->workspace_id === null || $actor->workspace_id !== $targetStaff->workspace_id)) {
             throw new TenancyBoundaryException('Cannot deactivate staff across workspace boundaries.');
         }
 
@@ -186,7 +194,7 @@ class StaffManagementService
             }
         }
 
-        if (!$isGlobalAdmin && ($actor->workspace_id === null || $actor->workspace_id !== $targetStaff->workspace_id)) {
+        if (! $isGlobalAdmin && ($actor->workspace_id === null || $actor->workspace_id !== $targetStaff->workspace_id)) {
             throw new TenancyBoundaryException('Cannot activate staff across workspace boundaries.');
         }
 

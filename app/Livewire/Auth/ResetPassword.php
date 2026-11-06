@@ -18,10 +18,15 @@ use Livewire\Component;
 class ResetPassword extends Component
 {
     public string $token = '';
+
     public string $email = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
+
     public bool $isSuccess = false;
+
     public ?string $statusMessage = null;
 
     protected function rules(): array
@@ -51,6 +56,7 @@ class ResetPassword extends Component
 
         if (! $record) {
             $this->addError('email', 'Invalid or expired password reset link. Please request a new one.');
+
             return null;
         }
 
@@ -59,6 +65,7 @@ class ResetPassword extends Component
 
         if (! $tokenValid) {
             $this->addError('email', 'Invalid password reset token.');
+
             return null;
         }
 
@@ -67,6 +74,7 @@ class ResetPassword extends Component
         if ($createdAt->addMinutes(60)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $cleanEmail)->delete();
             $this->addError('email', 'This password reset link has expired. Please request a new one.');
+
             return null;
         }
 

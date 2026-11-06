@@ -18,6 +18,8 @@ arch('enforce domain registry encapsulation')
         'Carbon',
         'Ramsey\Uuid',
         'Symfony\Component\HttpFoundation\StreamedResponse',
+        'Symfony\Component\Mailer',
+        'Symfony\Component\Mime',
         'app',
         'auth',
         'config',
