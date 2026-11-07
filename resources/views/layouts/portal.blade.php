@@ -23,14 +23,14 @@
     @stack('styles')
 
     <style>
-        /* Modern 3D Liquid Frosted Glass Theme for Member Portal */
-        main .bg-white,
-        main [class*="bg-slate-900/60"],
-        main [class*="bg-slate-900/70"],
-        main [class*="bg-slate-900/80"],
-        main [class*="bg-slate-900/85"],
-        main .rounded-3xl,
-        main .rounded-2xl {
+        /* Modern 3D Liquid Frosted Glass Theme for Member Portal (Dark Mode Default) */
+        html:not(.theme-light) main .bg-white,
+        html:not(.theme-light) main [class*="bg-slate-900/60"],
+        html:not(.theme-light) main [class*="bg-slate-900/70"],
+        html:not(.theme-light) main [class*="bg-slate-900/80"],
+        html:not(.theme-light) main [class*="bg-slate-900/85"],
+        html:not(.theme-light) main .rounded-3xl,
+        html:not(.theme-light) main .rounded-2xl {
             background: linear-gradient(180deg, rgba(17, 24, 39, 0.96) 0%, rgba(10, 15, 26, 0.97) 100%) !important;
             backdrop-filter: blur(32px) !important;
             -webkit-backdrop-filter: blur(32px) !important;
@@ -39,25 +39,25 @@
             border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
-        main .text-slate-900 {
+        html:not(.theme-light) main .text-slate-900 {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
-        main .text-slate-800 {
+        html:not(.theme-light) main .text-slate-800 {
             color: #f8fafc !important;
             font-weight: 600 !important;
         }
-        main .text-slate-700 {
+        html:not(.theme-light) main .text-slate-700 {
             color: #e2e8f0 !important;
         }
-        main .text-slate-600 {
+        html:not(.theme-light) main .text-slate-600 {
             color: #cbd5e1 !important;
         }
-        main .text-slate-500 {
+        html:not(.theme-light) main .text-slate-500 {
             color: #94a3b8 !important;
         }
-        main label,
-        div[role="dialog"] label {
+        html:not(.theme-light) main label,
+        html:not(.theme-light) div[role="dialog"] label {
             color: #cbd5e1 !important;
             font-weight: 700 !important;
             letter-spacing: 0.04em !important;
@@ -243,7 +243,355 @@
         main .text-amber-950, main .text-amber-900 { color: #ffffff !important; font-weight: 700 !important; }
         main .text-amber-800 { color: #fef3c7 !important; font-weight: 500 !important; }
         main .text-amber-700 { color: #fcd34d !important; font-weight: 600 !important; }
+
+        /* ==========================================================================
+           STANDARD LIGHT MODE DESIGN SYSTEM FOR MEMBER PORTAL
+           ========================================================================== */
+        html.theme-light {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light body {
+            background-color: #f1f5f9 !important;
+            color: #1e293b !important;
+        }
+        html.theme-light .fixed.inset-0.bg-\[\#040711\] {
+            background-color: #f1f5f9 !important;
+        }
+        html.theme-light picture img {
+            opacity: 0.04 !important;
+            filter: grayscale(1) !important;
+        }
+        html.theme-light .bg-\[\#060a17\]\/85 {
+            background-color: rgba(241, 245, 249, 0.88) !important;
+            backdrop-filter: blur(12px) !important;
+        }
+        html.theme-light .bg-gradient-to-b {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.9) 50%, rgba(226, 232, 240, 0.95) 100%) !important;
+        }
+
+        /* Header in Light Mode */
+        html.theme-light header[role="banner"] {
+            background: rgba(255, 255, 255, 0.94) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05) !important;
+            color: #0f172a !important;
+        }
+        html.theme-light header[role="banner"] h1 {
+            color: #0f172a !important;
+        }
+        html.theme-light header[role="banner"] span.text-emerald-300 {
+            color: #047857 !important;
+        }
+        html.theme-light header[role="banner"] span.text-amber-300 {
+            color: #92400e !important;
+            background-color: #fef3c7 !important;
+            border-color: #fde68a !important;
+        }
+        html.theme-light header[role="banner"] span.text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light header[role="banner"] button.text-slate-300 {
+            color: #334155 !important;
+        }
+        html.theme-light header[role="banner"] button.text-slate-200 {
+            color: #475569 !important;
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+        }
+        html.theme-light header[role="banner"] button.text-slate-200:hover {
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
+            border-color: #fca5a5 !important;
+        }
+        html.theme-light header[role="banner"] button.text-amber-300 {
+            color: #92400e !important;
+            background-color: #fef3c7 !important;
+            border-color: #fde68a !important;
+        }
+
+        /* Cards and Containers in Portal */
+        html.theme-light main .bg-white,
+        html.theme-light main [class*="bg-slate-900"],
+        html.theme-light main [class*="bg-slate-950"],
+        html.theme-light main .rounded-3xl,
+        html.theme-light main .rounded-2xl {
+            background: #ffffff !important;
+            backdrop-filter: blur(16px) !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light .relative.rounded-3xl.bg-slate-900\/60 {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light div.bg-gradient-to-r.from-slate-900\/90 {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light div.bg-gradient-to-r.from-slate-900\/90 h2,
+        html.theme-light div.bg-gradient-to-r.from-slate-900\/90 span.text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light div.bg-gradient-to-r.from-slate-900\/90 p.text-amber-300\/90 {
+            color: #4f46e5 !important;
+        }
+        html.theme-light div.bg-slate-950\/50 {
+            background-color: #f8fafc !important;
+            color: #1e293b !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light div.bg-slate-950\/50 span.text-white,
+        html.theme-light div.bg-slate-950\/50 div.text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light div.bg-slate-950\/50 span.text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light div.bg-slate-900\/60.backdrop-blur-xl {
+            background: #f1f5f9 !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light nav[aria-label="Tabs"] button.bg-gradient-to-r {
+            background: #ffffff !important;
+            color: #4338ca !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+        }
+        html.theme-light nav[aria-label="Tabs"] button.text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light nav[aria-label="Tabs"] button.text-slate-400:hover {
+            color: #0f172a !important;
+            background-color: #ffffff !important;
+        }
+
+        /* Typography & Headings in Light Mode */
+        html.theme-light main h1,
+        html.theme-light main h2,
+        html.theme-light main h3,
+        html.theme-light main h4,
+        html.theme-light main h5,
+        html.theme-light main h6 {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            text-shadow: none !important;
+        }
+        html.theme-light main .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light main .text-slate-900 {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light main .text-slate-800 {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+        html.theme-light main .text-slate-700 {
+            color: #334155 !important;
+        }
+        html.theme-light main .text-slate-600 {
+            color: #475569 !important;
+        }
+        html.theme-light main .text-slate-500 {
+            color: #64748b !important;
+        }
+        html.theme-light main .text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light main .text-slate-300 {
+            color: #475569 !important;
+        }
+        html.theme-light main .text-slate-200 {
+            color: #334155 !important;
+        }
+        html.theme-light main .text-slate-100 {
+            color: #1e293b !important;
+        }
+        html.theme-light main label,
+        html.theme-light div[role="dialog"] label {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        /* Inputs, Dropdowns, Selects, and Textareas in Light Mode */
+        html.theme-light main input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        html.theme-light div[role="dialog"] input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        html.theme-light main select,
+        html.theme-light div[role="dialog"] select,
+        html.theme-light main textarea,
+        html.theme-light div[role="dialog"] textarea {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0.75rem !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+            transition: all 0.2s ease !important;
+        }
+        html.theme-light main input:focus,
+        html.theme-light div[role="dialog"] input:focus,
+        html.theme-light main select:focus,
+        html.theme-light div[role="dialog"] select:focus,
+        html.theme-light main textarea:focus,
+        html.theme-light div[role="dialog"] textarea:focus {
+            background-color: #ffffff !important;
+            border-color: #4f46e5 !important;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+            outline: none !important;
+        }
+        html.theme-light main input::placeholder,
+        html.theme-light div[role="dialog"] input::placeholder,
+        html.theme-light main textarea::placeholder,
+        html.theme-light div[role="dialog"] textarea::placeholder {
+            color: #94a3b8 !important;
+        }
+        html.theme-light main input:disabled,
+        html.theme-light div[role="dialog"] input:disabled {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #64748b !important;
+        }
+        html.theme-light main select option,
+        html.theme-light div[role="dialog"] select option {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        /* Modals & Dialog Windows in Light Mode */
+        html.theme-light div[role="dialog"] .relative.transform.overflow-hidden,
+        html.theme-light main div[role="dialog"] .relative.transform.overflow-hidden {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light div[role="dialog"] .border-b,
+        html.theme-light main div[role="dialog"] .border-b {
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] h1,
+        html.theme-light div[role="dialog"] h2,
+        html.theme-light div[role="dialog"] h3 {
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] .border-t,
+        html.theme-light main div[role="dialog"] .border-t {
+            background: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light div[role="dialog"] button.text-slate-300,
+        html.theme-light div[role="dialog"] button.text-slate-700,
+        html.theme-light div[role="dialog"] button.text-slate-600 {
+            color: #475569 !important;
+            background-color: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        html.theme-light div[role="dialog"] button.text-slate-300:hover,
+        html.theme-light div[role="dialog"] button.text-slate-700:hover {
+            color: #0f172a !important;
+            background-color: #e2e8f0 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-amber-950"] {
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            color: #92400e !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-amber-950"] p.font-bold {
+            color: #78350f !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-rose-950"] {
+            background: #fff1f2 !important;
+            border: 1px solid #fecdd3 !important;
+            color: #9f1239 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-rose-950"] p.font-bold {
+            color: #881337 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-slate-900"],
+        html.theme-light div[role="dialog"] div[class*="bg-slate-950"] {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #334155 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-slate-900"] p.font-bold,
+        html.theme-light div[role="dialog"] div[class*="bg-slate-950"] p.font-bold {
+            color: #0f172a !important;
+        }
+
+        /* Footer in Light Mode */
+        html.theme-light footer {
+            background: rgba(255, 255, 255, 0.94) !important;
+            border-top: 1px solid #e2e8f0 !important;
+            color: #475569 !important;
+        }
+        html.theme-light footer p,
+        html.theme-light footer span {
+            color: #64748b !important;
+        }
+        html.theme-light footer a {
+            color: #4f46e5 !important;
+        }
     </style>
+
+    <script>
+        // Check initial theme state to prevent layout shift (FOUC)
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('emk_theme');
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                    document.documentElement.classList.remove('theme-dark', 'dark');
+                } else {
+                    document.documentElement.classList.add('theme-dark', 'dark');
+                    document.documentElement.classList.remove('theme-light');
+                }
+            } catch (e) {}
+        })();
+
+        document.addEventListener('alpine:init', function() {
+            if (!Alpine.store('theme')) {
+                Alpine.store('theme', {
+                    mode: (function() {
+                        try {
+                            return localStorage.getItem('emk_theme') === 'light' ? 'light' : 'dark';
+                        } catch (e) {
+                            return 'dark';
+                        }
+                    })(),
+
+                    init() {
+                        this.apply();
+                    },
+
+                    toggle() {
+                        this.mode = this.mode === 'light' ? 'dark' : 'light';
+                        try {
+                            localStorage.setItem('emk_theme', this.mode);
+                        } catch (e) {}
+                        this.apply();
+                    },
+
+                    apply() {
+                        if (this.mode === 'light') {
+                            document.documentElement.classList.add('theme-light');
+                            document.documentElement.classList.remove('theme-dark', 'dark');
+                        } else {
+                            document.documentElement.classList.add('theme-dark', 'dark');
+                            document.documentElement.classList.remove('theme-light');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 @php
     $isLoginPage = request()->routeIs('portal.login');
@@ -345,6 +693,33 @@
 
                 <!-- User Session Identity / Action Bar -->
                 <div class="flex items-center gap-4">
+                    <!-- Standard Theme Mode Toggle (Light / Dark Mode Switcher per Image 2) -->
+                    <button 
+                        type="button"
+                        @click="$store.theme ? $store.theme.toggle() : (document.documentElement.classList.toggle('theme-light'), localStorage.setItem('emk_theme', document.documentElement.classList.contains('theme-light') ? 'light' : 'dark'))"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md border transition-all duration-200 cursor-pointer shadow-sm select-none"
+                        :class="($store.theme && $store.theme.mode === 'light') ? 'bg-amber-100 text-amber-950 border-amber-300 hover:bg-amber-200' : 'bg-white/10 text-slate-200 border-white/15 hover:bg-white/20 hover:text-white'"
+                        :title="($store.theme && $store.theme.mode === 'light') ? 'Current: Light Mode (Click for Dark Mode)' : 'Current: Dark Mode (Click for Light Mode)'"
+                        aria-label="Toggle theme mode"
+                    >
+                        <template x-if="$store.theme && $store.theme.mode === 'light'">
+                            <span class="inline-flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="font-bold text-amber-950">Light</span>
+                            </span>
+                        </template>
+                        <template x-if="!($store.theme && $store.theme.mode === 'light')">
+                            <span class="inline-flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                                </svg>
+                                <span class="font-bold text-white">Dark</span>
+                            </span>
+                        </template>
+                    </button>
+
                     @if (Auth::guard('member')->check())
                         @php
                             $currentMemberUser = Auth::guard('member')->user();

@@ -24,17 +24,17 @@
 
     <style>
         /* ==========================================================================
-           MODERN 3D LIQUID FROSTED GLASS DESIGN SYSTEM (Aesthetic Sample Spec)
+           MODERN 3D LIQUID FROSTED GLASS DESIGN SYSTEM (DARK MODE DEFAULT)
            ========================================================================== */
 
         /* Primary Glass Canvas & Container Cards across all CRM views */
-        main .bg-white,
-        main [class*="bg-slate-900/70"],
-        main [class*="bg-slate-900/80"],
-        main [class*="bg-slate-900/85"],
-        main [class*="bg-slate-900/90"],
-        main > div > div.space-y-6 > div.rounded-3xl,
-        main > div > div.space-y-6 > div.rounded-2xl {
+        html:not(.theme-light) main .bg-white,
+        html:not(.theme-light) main [class*="bg-slate-900/70"],
+        html:not(.theme-light) main [class*="bg-slate-900/80"],
+        html:not(.theme-light) main [class*="bg-slate-900/85"],
+        html:not(.theme-light) main [class*="bg-slate-900/90"],
+        html:not(.theme-light) main > div > div.space-y-6 > div.rounded-3xl,
+        html:not(.theme-light) main > div > div.space-y-6 > div.rounded-2xl {
             background: linear-gradient(180deg, rgba(17, 24, 39, 0.96) 0%, rgba(10, 15, 26, 0.97) 100%) !important;
             backdrop-filter: blur(32px) !important;
             -webkit-backdrop-filter: blur(32px) !important;
@@ -45,9 +45,9 @@
         }
 
         /* Metric Pods inside grids (3D Frosted Tiles) */
-        main .grid > div[class*="bg-slate-900"],
-        main .grid > div[class*="bg-white"],
-        main .grid > div.rounded-2xl {
+        html:not(.theme-light) main .grid > div[class*="bg-slate-900"],
+        html:not(.theme-light) main .grid > div[class*="bg-white"],
+        html:not(.theme-light) main .grid > div.rounded-2xl {
             background: linear-gradient(180deg, rgba(22, 31, 49, 0.95) 0%, rgba(13, 19, 32, 0.97) 100%) !important;
             backdrop-filter: blur(24px) !important;
             -webkit-backdrop-filter: blur(24px) !important;
@@ -56,38 +56,38 @@
             border-radius: 1.25rem !important;
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
         }
-        main .grid > div[class*="bg-slate-900"]:hover,
-        main .grid > div[class*="bg-white"]:hover {
+        html:not(.theme-light) main .grid > div[class*="bg-slate-900"]:hover,
+        html:not(.theme-light) main .grid > div[class*="bg-white"]:hover {
             transform: translateY(-2px) !important;
             border-color: rgba(255, 255, 255, 0.3) !important;
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3) !important;
         }
 
         /* High-Contrast Crisp Typography */
-        main h1, main h2, main h3 {
+        html:not(.theme-light) main h1, html:not(.theme-light) main h2, html:not(.theme-light) main h3 {
             color: #ffffff !important;
             font-weight: 800 !important;
             letter-spacing: -0.02em !important;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
         }
-        main .text-slate-900 {
+        html:not(.theme-light) main .text-slate-900 {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
-        main .text-slate-800 {
+        html:not(.theme-light) main .text-slate-800 {
             color: #f8fafc !important;
             font-weight: 600 !important;
         }
-        main .text-slate-700 {
+        html:not(.theme-light) main .text-slate-700 {
             color: #e2e8f0 !important;
         }
-        main .text-slate-600 {
+        html:not(.theme-light) main .text-slate-600 {
             color: #cbd5e1 !important;
         }
-        main .text-slate-500 {
+        html:not(.theme-light) main .text-slate-500 {
             color: #94a3b8 !important;
         }
-        main label {
+        html:not(.theme-light) main label {
             color: #cbd5e1 !important;
             font-weight: 700 !important;
             letter-spacing: 0.05em !important;
@@ -656,10 +656,582 @@
                 padding-left: 16rem !important;
             }
         }
+
+        /* ==========================================================================
+           STANDARD LIGHT MODE DESIGN SYSTEM (AUTO-ADJUSTING CONTRAST & READABILITY)
+           ========================================================================== */
+        html.theme-light {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light body {
+            background-color: #f1f5f9 !important;
+            color: #1e293b !important;
+        }
+        html.theme-light .fixed.inset-0.bg-\[\#040711\] {
+            background-color: #f1f5f9 !important;
+        }
+        html.theme-light picture img {
+            opacity: 0.04 !important;
+            filter: grayscale(1) !important;
+        }
+        html.theme-light .bg-\[\#060a17\]\/85 {
+            background-color: rgba(241, 245, 249, 0.88) !important;
+            backdrop-filter: blur(12px) !important;
+        }
+        html.theme-light .bg-gradient-to-b {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.9) 50%, rgba(226, 232, 240, 0.95) 100%) !important;
+        }
+
+        /* Top Header Navigation Bar in Light Mode */
+        html.theme-light header {
+            background: rgba(255, 255, 255, 0.96) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05) !important;
+            color: #0f172a !important;
+        }
+        html.theme-light header h1,
+        html.theme-light header h2,
+        html.theme-light header span.font-bold,
+        html.theme-light header .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light header .text-slate-300,
+        html.theme-light header .text-slate-400 {
+            color: #475569 !important;
+        }
+        html.theme-light header button.text-slate-300 {
+            color: #334155 !important;
+        }
+        html.theme-light header button.text-slate-300:hover {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light header div.bg-white\/5 {
+            background-color: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light header div.bg-white\/5 span.text-white {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light header button[class*="bg-rose-500"] {
+            background-color: #ffe4e6 !important;
+            border: 1px solid #fecdd3 !important;
+            color: #be123c !important;
+            font-weight: 600 !important;
+        }
+        html.theme-light header button[class*="bg-rose-500"]:hover {
+            background-color: #f43f5e !important;
+            border-color: #f43f5e !important;
+            color: #ffffff !important;
+        }
+
+        /* Sidebar in Light Mode */
+        html.theme-light aside,
+        html.theme-light .lg\:hidden[x-show*="mobileOpen"],
+        html.theme-light div.fixed.inset-y-0.left-0.w-72 {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border-right: 1px solid #e2e8f0 !important;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light aside .bg-slate-950\/60,
+        html.theme-light aside .bg-slate-950\/80,
+        html.theme-light aside .bg-slate-950\/70,
+        html.theme-light aside [class*="bg-slate-950"],
+        html.theme-light .lg\:hidden [class*="bg-slate-950"] {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light aside .border-white\/10,
+        html.theme-light aside .border-white\/15,
+        html.theme-light .lg\:hidden .border-white\/10 {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light aside h1,
+        html.theme-light aside h2,
+        html.theme-light aside span.font-bold,
+        html.theme-light aside p.font-semibold {
+            color: #0f172a !important;
+        }
+        html.theme-light aside nav a,
+        html.theme-light .lg\:hidden nav a {
+            color: #334155 !important;
+        }
+        html.theme-light aside nav a:hover,
+        html.theme-light .lg\:hidden nav a:hover {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light aside nav a[class*="from-amber-500\/20"],
+        html.theme-light .lg\:hidden nav a[class*="from-amber-500\/20"] {
+            background: linear-gradient(to right, #fef3c7, #ede9fe) !important;
+            border-color: #fde68a !important;
+            color: #92400e !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light aside nav svg,
+        html.theme-light .lg\:hidden nav svg {
+            color: #64748b !important;
+        }
+        html.theme-light aside nav a[class*="from-amber-500\/20"] svg,
+        html.theme-light .lg\:hidden nav a[class*="from-amber-500\/20"] svg {
+            color: #d97706 !important;
+        }
+
+        /* Sidebar Bottom Staff User Profile Widget in Light Mode (Box 2) */
+        html.theme-light aside div.border-t,
+        html.theme-light aside div[class*="bg-slate-950"],
+        html.theme-light .lg\:hidden div.border-t,
+        html.theme-light .lg\:hidden div[class*="bg-slate-950"] {
+            background-color: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light aside div.border-t p.text-white,
+        html.theme-light aside div[class*="bg-slate-950"] p.text-white,
+        html.theme-light .lg\:hidden div.border-t p.text-white,
+        html.theme-light .lg\:hidden div[class*="bg-slate-950"] p.text-white,
+        html.theme-light aside div.border-t p.font-semibold,
+        html.theme-light aside div[class*="bg-slate-950"] p.font-semibold {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light aside div.border-t p.text-slate-400,
+        html.theme-light aside div[class*="bg-slate-950"] p.text-slate-400,
+        html.theme-light .lg\:hidden div.border-t p.text-slate-400,
+        html.theme-light .lg\:hidden div[class*="bg-slate-950"] p.text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light aside div.border-t button,
+        html.theme-light aside div[class*="bg-slate-950"] button,
+        html.theme-light .lg\:hidden div.border-t button,
+        html.theme-light .lg\:hidden div[class*="bg-slate-950"] button {
+            background-color: #ffe4e6 !important;
+            border: 1px solid #fecdd3 !important;
+            color: #be123c !important;
+            font-weight: 600 !important;
+        }
+        html.theme-light aside div.border-t button:hover,
+        html.theme-light aside div[class*="bg-slate-950"] button:hover,
+        html.theme-light .lg\:hidden div.border-t button:hover,
+        html.theme-light .lg\:hidden div[class*="bg-slate-950"] button:hover {
+            background-color: #f43f5e !important;
+            border-color: #f43f5e !important;
+            color: #ffffff !important;
+        }
+
+        /* Main Containers, Header Cards, and Grids in Light Mode (Box 1 & Entire Site) */
+        html.theme-light main .bg-white,
+        html.theme-light main [class*="bg-slate-900"],
+        html.theme-light main [class*="bg-slate-950"],
+        html.theme-light main [class*="bg-slate-800"],
+        html.theme-light main > div > div.space-y-6 > div.rounded-3xl,
+        html.theme-light main > div > div.space-y-6 > div.rounded-2xl,
+        html.theme-light main > div > div > div.rounded-3xl,
+        html.theme-light main > div > div > div.rounded-2xl,
+        html.theme-light main .rounded-3xl,
+        html.theme-light main .rounded-2xl {
+            background: #ffffff !important;
+            backdrop-filter: blur(16px) !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03) !important;
+            border-radius: 1.5rem !important;
+            color: #1e293b !important;
+        }
+        html.theme-light main .grid > div[class*="bg-slate-900"],
+        html.theme-light main .grid > div[class*="bg-white"],
+        html.theme-light main .grid > div.rounded-2xl {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light main .grid > div[class*="bg-slate-900"]:hover,
+        html.theme-light main .grid > div[class*="bg-white"]:hover {
+            transform: translateY(-2px) !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        /* Top Page Header Switcher Capsules & Pods in Light Mode */
+        html.theme-light main div[class*="bg-slate-950/60"],
+        html.theme-light main div[class*="bg-slate-950/70"],
+        html.theme-light main div[class*="bg-slate-950/80"],
+        html.theme-light main div[class*="bg-slate-950/90"],
+        html.theme-light main div[class*="bg-slate-950"],
+        html.theme-light main div[class*="bg-slate-900/60"],
+        html.theme-light main div[class*="bg-slate-900/90"] {
+            background-color: #f1f5f9 !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+        /* Header Filter & Action Buttons in Light Mode */
+        html.theme-light main button.text-slate-300,
+        html.theme-light main button[class*="bg-white/10"],
+        html.theme-light main button[class*="bg-white/5"],
+        html.theme-light main a[class*="bg-white/10"],
+        html.theme-light main a[class*="bg-white/5"] {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #334155 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light main button.text-slate-300:hover,
+        html.theme-light main button[class*="bg-white/10"]:hover,
+        html.theme-light main button[class*="bg-white/5"]:hover,
+        html.theme-light main a[class*="bg-white/10"]:hover,
+        html.theme-light main a[class*="bg-white/5"]:hover {
+            background-color: #f8fafc !important;
+            border-color: #94a3b8 !important;
+            color: #0f172a !important;
+        }
+
+        /* Active Switcher & Preset Buttons in Light Mode */
+        html.theme-light main button[class*="from-amber-500"] {
+            background: linear-gradient(to right, #f59e0b, #d97706) !important;
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3) !important;
+        }
+        html.theme-light main button[class*="from-purple-600"] {
+            background: linear-gradient(to right, #9333ea, #4f46e5) !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            box-shadow: 0 2px 6px rgba(147, 51, 234, 0.3) !important;
+        }
+        html.theme-light main button.bg-amber-400 {
+            background-color: #f59e0b !important;
+            color: #0f172a !important;
+            font-weight: 800 !important;
+        }
+
+        /* Typography & Headings in Light Mode */
+        html.theme-light main h1,
+        html.theme-light main h2,
+        html.theme-light main h3,
+        html.theme-light main h4,
+        html.theme-light main h5,
+        html.theme-light main h6,
+        html.theme-light main h1.text-white,
+        html.theme-light main h2.text-white,
+        html.theme-light main h3.text-white {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            text-shadow: none !important;
+        }
+        html.theme-light main .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light main .text-slate-900 {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light main .text-slate-800 {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+        html.theme-light main .text-slate-700 {
+            color: #334155 !important;
+        }
+        html.theme-light main .text-slate-600 {
+            color: #475569 !important;
+        }
+        html.theme-light main .text-slate-500 {
+            color: #64748b !important;
+        }
+        html.theme-light main .text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light main .text-slate-300 {
+            color: #475569 !important;
+        }
+        html.theme-light main .text-slate-200 {
+            color: #334155 !important;
+        }
+        html.theme-light main .text-slate-100 {
+            color: #1e293b !important;
+        }
+        html.theme-light main label,
+        html.theme-light div[role="dialog"] label {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        /* Inputs, Dropdowns, Selects, and Textareas in Light Mode */
+        html.theme-light main input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        html.theme-light div[role="dialog"] input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        html.theme-light main select,
+        html.theme-light div[role="dialog"] select,
+        html.theme-light main textarea,
+        html.theme-light div[role="dialog"] textarea,
+        html.theme-light main input[type="date"],
+        html.theme-light main [class*="border-white/15"] {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0.75rem !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+            transition: all 0.2s ease !important;
+        }
+        html.theme-light main input:focus,
+        html.theme-light div[role="dialog"] input:focus,
+        html.theme-light main select:focus,
+        html.theme-light div[role="dialog"] select:focus,
+        html.theme-light main textarea:focus,
+        html.theme-light div[role="dialog"] textarea:focus {
+            background-color: #ffffff !important;
+            border-color: #4f46e5 !important;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+            outline: none !important;
+        }
+        html.theme-light main input::placeholder,
+        html.theme-light div[role="dialog"] input::placeholder,
+        html.theme-light main textarea::placeholder,
+        html.theme-light div[role="dialog"] textarea::placeholder {
+            color: #94a3b8 !important;
+        }
+        html.theme-light main input:disabled,
+        html.theme-light div[role="dialog"] input:disabled {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #64748b !important;
+        }
+        html.theme-light main select option,
+        html.theme-light div[role="dialog"] select option {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        /* Tables in Light Mode */
+        html.theme-light main table thead tr {
+            background-color: #f8fafc !important;
+        }
+        html.theme-light main table thead th {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            font-weight: 700 !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+        }
+        html.theme-light main table thead th:hover {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light main table tbody tr {
+            background-color: #ffffff !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+        html.theme-light main table tbody tr:hover {
+            background-color: #f8fafc !important;
+        }
+        html.theme-light main table tbody td {
+            color: #1e293b !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+        html.theme-light main table a[class*="bg-indigo-50"],
+        html.theme-light main table a[id^="btn-inspect-"] {
+            background: #4f46e5 !important;
+            color: #ffffff !important;
+            border: 1px solid #4338ca !important;
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25) !important;
+        }
+        html.theme-light main table a[class*="bg-indigo-50"]:hover,
+        html.theme-light main table a[id^="btn-inspect-"]:hover {
+            background: #3730a3 !important;
+            border-color: #3730a3 !important;
+            color: #ffffff !important;
+        }
+
+        /* Subdivisions, Card Header Bars, and Dividers in Light Mode */
+        html.theme-light main div[class*="border-b"][class*="bg-slate-50"],
+        html.theme-light main div.px-5.py-3\.5.bg-slate-50,
+        html.theme-light main div.px-5.py-3\.5.bg-white\/5,
+        html.theme-light main div.px-5.py-3\.5,
+        html.theme-light main div.px-6.py-4.bg-slate-50,
+        html.theme-light main div.px-6.py-4,
+        html.theme-light main [class*="border-b"][class*="border-white"] {
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light main div[class*="border-b"][class*="bg-slate-50"] h1,
+        html.theme-light main div[class*="border-b"][class*="bg-slate-50"] h2,
+        html.theme-light main div[class*="border-b"][class*="bg-slate-50"] h3,
+        html.theme-light main div[class*="border-b"][class*="bg-slate-50"] h4,
+        html.theme-light main div.px-5.py-3\.5 h2,
+        html.theme-light main div.px-6.py-4 h3 {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+            text-shadow: none !important;
+        }
+        html.theme-light main .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+        html.theme-light main .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+        html.theme-light main .divide-white\/5 > :not([hidden]) ~ :not([hidden]),
+        html.theme-light main .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light main .bg-white\/10 {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+        html.theme-light main .bg-white\/5 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #475569 !important;
+        }
+        html.theme-light main .border-white\/10,
+        html.theme-light main .border-white\/15,
+        html.theme-light main .border-white\/5 {
+            border-color: #e2e8f0 !important;
+        }
+        html.theme-light #btn-reset-filters-top {
+            background: #f1f5f9 !important;
+            color: #334155 !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light #btn-reset-filters-top:hover {
+            background: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        /* Badges & Mono IDs in Light Mode */
+        html.theme-light main td span.font-mono,
+        html.theme-light main span.font-mono {
+            background-color: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        html.theme-light main [id="badge-workspace"],
+        html.theme-light main span[class*="font-mono"][class*="bg-amber"] {
+            background-color: #fef3c7 !important;
+            border: 1px solid #fde68a !important;
+            color: #92400e !important;
+        }
+
+        /* Modals & Dialog Windows in Light Mode */
+        html.theme-light div[role="dialog"] .relative.transform.overflow-hidden,
+        html.theme-light main div[role="dialog"] .relative.transform.overflow-hidden {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light div[role="dialog"] .border-b,
+        html.theme-light main div[role="dialog"] .border-b {
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] h1,
+        html.theme-light div[role="dialog"] h2,
+        html.theme-light div[role="dialog"] h3 {
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] .border-t,
+        html.theme-light main div[role="dialog"] .border-t {
+            background: #f8fafc !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+        html.theme-light div[role="dialog"] button.text-slate-300,
+        html.theme-light div[role="dialog"] button.text-slate-700,
+        html.theme-light div[role="dialog"] button.text-slate-600 {
+            color: #475569 !important;
+            background-color: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+        html.theme-light div[role="dialog"] button.text-slate-300:hover,
+        html.theme-light div[role="dialog"] button.text-slate-700:hover {
+            color: #0f172a !important;
+            background-color: #e2e8f0 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-amber-950"] {
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            color: #92400e !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-amber-950"] p.font-bold {
+            color: #78350f !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-rose-950"] {
+            background: #fff1f2 !important;
+            border: 1px solid #fecdd3 !important;
+            color: #9f1239 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-rose-950"] p.font-bold {
+            color: #881337 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-slate-900"],
+        html.theme-light div[role="dialog"] div[class*="bg-slate-950"] {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #334155 !important;
+        }
+        html.theme-light div[role="dialog"] div[class*="bg-slate-900"] p.font-bold,
+        html.theme-light div[role="dialog"] div[class*="bg-slate-950"] p.font-bold {
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] div.bg-white {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] .text-white {
+            color: #0f172a !important;
+        }
+        html.theme-light div[role="dialog"] .text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light div[role="dialog"] .text-slate-300 {
+            color: #475569 !important;
+        }
+
+        /* Alerts & Status Banners in Light Mode */
+        html.theme-light main [role="alert"].bg-emerald-50,
+        html.theme-light main [role="alert"][class*="bg-emerald-"],
+        html.theme-light div[role="dialog"] div[class*="bg-emerald-50"] {
+            background: #ecfdf5 !important;
+            border: 1px solid #a7f3d0 !important;
+            color: #065f46 !important;
+        }
+        html.theme-light main [role="alert"].bg-amber-50,
+        html.theme-light main [role="alert"][class*="bg-amber-"],
+        html.theme-light div[role="dialog"] div[class*="bg-amber-50"] {
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            color: #92400e !important;
+        }
+        html.theme-light main [role="alert"].bg-rose-50,
+        html.theme-light main [role="alert"][class*="bg-rose-"],
+        html.theme-light div[role="dialog"] div[class*="bg-rose-50"] {
+            background: #fff1f2 !important;
+            border: 1px solid #fecdd3 !important;
+            color: #9f1239 !important;
+        }
+
+        /* Metric Values in Light Mode */
+        html.theme-light main [id^="metric-"] {
+            color: #0f172a !important;
+            text-shadow: none !important;
+            font-weight: 800 !important;
+        }
+        html.theme-light main [id="metric-paid"] { color: #059669 !important; }
+        html.theme-light main [id="metric-unpaid"] { color: #d97706 !important; }
+        html.theme-light main [id="metric-voided"],
+        html.theme-light main [id="metric-revoked"] { color: #dc2626 !important; }
+        html.theme-light main [id="metric-reversed"] { color: #7c3aed !important; }
+        html.theme-light main [id="metric-revenue"] { color: #4f46e5 !important; }
     </style>
 
     <script>
-        // Check initial pinned state to prevent layout shift (FOUC)
+        // Check initial pinned state and theme state to prevent layout shift (FOUC)
         (function() {
             try {
                 if (localStorage.getItem('emk_sidebar_pinned') === 'true') {
@@ -667,10 +1239,54 @@
                 } else {
                     document.documentElement.classList.remove('sidebar-pinned');
                 }
+
+                var savedTheme = localStorage.getItem('emk_theme');
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                    document.documentElement.classList.remove('theme-dark', 'dark');
+                } else {
+                    document.documentElement.classList.add('theme-dark', 'dark');
+                    document.documentElement.classList.remove('theme-light');
+                }
             } catch (e) {}
         })();
 
         document.addEventListener('alpine:init', function() {
+            // Global Theme Store
+            if (!Alpine.store('theme')) {
+                Alpine.store('theme', {
+                    mode: (function() {
+                        try {
+                            return localStorage.getItem('emk_theme') === 'light' ? 'light' : 'dark';
+                        } catch (e) {
+                            return 'dark';
+                        }
+                    })(),
+
+                    init() {
+                        this.apply();
+                    },
+
+                    toggle() {
+                        this.mode = this.mode === 'light' ? 'dark' : 'light';
+                        try {
+                            localStorage.setItem('emk_theme', this.mode);
+                        } catch (e) {}
+                        this.apply();
+                    },
+
+                    apply() {
+                        if (this.mode === 'light') {
+                            document.documentElement.classList.add('theme-light');
+                            document.documentElement.classList.remove('theme-dark', 'dark');
+                        } else {
+                            document.documentElement.classList.add('theme-dark', 'dark');
+                            document.documentElement.classList.remove('theme-light');
+                        }
+                    }
+                });
+            }
+
             Alpine.store('sidebar', {
                 pinned: localStorage.getItem('emk_sidebar_pinned') === 'true',
                 open: localStorage.getItem('emk_sidebar_pinned') === 'true',

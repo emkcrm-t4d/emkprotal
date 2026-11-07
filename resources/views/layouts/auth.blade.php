@@ -23,11 +23,11 @@
     @stack('styles')
 
     <style>
-        /* 3D Liquid Frosted Glass Theme for Staff Login */
-        main .bg-white,
-        main [class*="bg-slate-900"],
-        main .rounded-3xl,
-        main .rounded-2xl {
+        /* 3D Liquid Frosted Glass Theme for Staff Login (Dark Mode Default) */
+        html:not(.theme-light) main .bg-white,
+        html:not(.theme-light) main [class*="bg-slate-900"],
+        html:not(.theme-light) main .rounded-3xl,
+        html:not(.theme-light) main .rounded-2xl {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(15, 23, 42, 0.6) 100%), rgba(10, 16, 30, 0.7) !important;
             backdrop-filter: blur(28px) saturate(200%) !important;
             -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
@@ -36,23 +36,23 @@
             border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
-        main .bg-slate-50 {
+        html:not(.theme-light) main .bg-slate-50 {
             background-color: rgba(10, 16, 30, 0.6) !important;
             backdrop-filter: blur(16px) !important;
             border: 1px solid rgba(255, 255, 255, 0.12) !important;
             color: #cbd5e1 !important;
         }
-        main .text-slate-900,
-        main .text-slate-800 {
+        html:not(.theme-light) main .text-slate-900,
+        html:not(.theme-light) main .text-slate-800 {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
-        main .text-slate-700,
-        main .text-slate-600 {
+        html:not(.theme-light) main .text-slate-700,
+        html:not(.theme-light) main .text-slate-600 {
             color: #cbd5e1 !important;
         }
-        main .text-slate-500,
-        main .text-slate-400 {
+        html:not(.theme-light) main .text-slate-500,
+        html:not(.theme-light) main .text-slate-400 {
             color: #94a3b8 !important;
         }
         main .border-slate-200,
@@ -75,7 +75,67 @@
             outline: none !important;
             box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25) !important;
         }
+
+        /* Light Mode for Auth & Login */
+        html.theme-light {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        html.theme-light body {
+            background-color: #f1f5f9 !important;
+            color: #1e293b !important;
+        }
+        html.theme-light .fixed.inset-0.bg-\[\#0a0f1d\] {
+            background-color: #f1f5f9 !important;
+        }
+        html.theme-light main .bg-white,
+        html.theme-light main [class*="bg-slate-900"],
+        html.theme-light main .rounded-3xl,
+        html.theme-light main .rounded-2xl {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08) !important;
+            color: #1e293b !important;
+        }
+        html.theme-light main .text-slate-900,
+        html.theme-light main .text-slate-800 {
+            color: #0f172a !important;
+        }
+        html.theme-light main .text-slate-700,
+        html.theme-light main .text-slate-600 {
+            color: #334155 !important;
+        }
+        html.theme-light main .text-slate-500,
+        html.theme-light main .text-slate-400 {
+            color: #64748b !important;
+        }
+        html.theme-light main input:not([type="checkbox"]):not([type="radio"]) {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        }
+        html.theme-light main input:focus {
+            background-color: #ffffff !important;
+            border-color: #4f46e5 !important;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+        }
     </style>
+
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('emk_theme');
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                    document.documentElement.classList.remove('theme-dark', 'dark');
+                } else {
+                    document.documentElement.classList.add('theme-dark', 'dark');
+                    document.documentElement.classList.remove('theme-light');
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
     <!-- Full-Window Device-Pixel Responsive Background Image: 100% Fit, Zero Side Letterboxing -->
