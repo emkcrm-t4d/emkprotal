@@ -23,7 +23,7 @@
     @stack('styles')
 
     <style>
-        /* 3D Liquid Frosted Glass Theme for Member Portal */
+        /* Modern 3D Liquid Frosted Glass Theme for Member Portal */
         main .bg-white,
         main [class*="bg-slate-900/60"],
         main [class*="bg-slate-900/70"],
@@ -31,11 +31,11 @@
         main [class*="bg-slate-900/85"],
         main .rounded-3xl,
         main .rounded-2xl {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(15, 23, 42, 0.55) 100%), rgba(10, 16, 30, 0.65) !important;
-            backdrop-filter: blur(28px) saturate(200%) !important;
-            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.22) !important;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.96) 0%, rgba(10, 15, 26, 0.97) 100%) !important;
+            backdrop-filter: blur(32px) !important;
+            -webkit-backdrop-filter: blur(32px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
             border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
@@ -55,6 +55,119 @@
         }
         main .text-slate-500 {
             color: #94a3b8 !important;
+        }
+        main label,
+        div[role="dialog"] label {
+            color: #cbd5e1 !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        /* Frosted Glass Inputs, Dropdowns, and Textareas */
+        main input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        div[role="dialog"] input:not([type="checkbox"]):not([type="radio"]):not(:disabled),
+        main select,
+        div[role="dialog"] select,
+        main textarea,
+        div[role="dialog"] textarea {
+            background-color: rgba(10, 16, 30, 0.75) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-radius: 0.85rem !important;
+            color: #ffffff !important;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35) !important;
+            transition: all 0.2s ease !important;
+        }
+        main input:focus,
+        div[role="dialog"] input:focus,
+        main select:focus,
+        div[role="dialog"] select:focus,
+        main textarea:focus,
+        div[role="dialog"] textarea:focus {
+            background-color: rgba(10, 16, 30, 0.95) !important;
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+            outline: none !important;
+        }
+        main input::placeholder,
+        div[role="dialog"] input::placeholder,
+        main textarea::placeholder,
+        div[role="dialog"] textarea::placeholder {
+            color: #64748b !important;
+        }
+        main input:disabled,
+        div[role="dialog"] input:disabled {
+            background-color: rgba(15, 23, 42, 0.65) !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            color: #94a3b8 !important;
+        }
+
+        /* Modal Dialog Panels - Deep Frosted Solid Glass */
+        div[role="dialog"] .relative.transform.overflow-hidden,
+        main div[role="dialog"] .relative.transform.overflow-hidden {
+            background: linear-gradient(180deg, rgba(20, 29, 47, 0.98) 0%, rgba(13, 19, 33, 0.98) 100%) !important;
+            backdrop-filter: blur(32px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 25px 65px -10px rgba(0, 0, 0, 0.85), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25) !important;
+        }
+
+        /* Modal Dialog Footers */
+        div[role="dialog"] .border-t,
+        main div[role="dialog"] .border-t {
+            background: rgba(10, 16, 30, 0.92) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* Modal Cancel & Neutral Action Buttons */
+        div[role="dialog"] button.text-slate-700,
+        div[role="dialog"] button.text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        div[role="dialog"] button.text-slate-700:hover,
+        div[role="dialog"] button.text-slate-600:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* High-Contrast Frosted Containers & Detail Cards (Prevents light backgrounds with white text) */
+        main div[class*="bg-amber-50"],
+        div[role="dialog"] div[class*="bg-amber-50"],
+        main div[class*="bg-amber-100"],
+        div[role="dialog"] div[class*="bg-amber-100"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%), rgba(28, 20, 10, 0.92) !important;
+            border-color: rgba(251, 191, 36, 0.45) !important;
+            color: #fffbeb !important;
+        }
+        main div[class*="bg-amber-50"] p,
+        div[role="dialog"] div[class*="bg-amber-50"] p,
+        main div[class*="bg-amber-100"] p,
+        div[role="dialog"] div[class*="bg-amber-100"] p {
+            color: #fef3c7 !important;
+        }
+        main div[class*="bg-amber-50"] p.font-bold,
+        div[role="dialog"] div[class*="bg-amber-50"] p.font-bold,
+        main div[class*="bg-amber-50"] svg,
+        div[role="dialog"] div[class*="bg-amber-50"] svg {
+            color: #fbbf24 !important;
+        }
+
+        main div[class*="bg-emerald-50"],
+        div[role="dialog"] div[class*="bg-emerald-50"],
+        main div[class*="bg-emerald-100"],
+        div[role="dialog"] div[class*="bg-emerald-100"] {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.12) 100%), rgba(10, 24, 20, 0.92) !important;
+            border-color: rgba(52, 211, 153, 0.45) !important;
+            color: #ecfdf5 !important;
+        }
+        main div[class*="bg-rose-50"],
+        div[role="dialog"] div[class*="bg-rose-50"],
+        main div[class*="bg-rose-100"],
+        div[role="dialog"] div[class*="bg-rose-100"] {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.22) 0%, rgba(225, 29, 72, 0.12) 100%), rgba(28, 12, 16, 0.92) !important;
+            border-color: rgba(251, 113, 133, 0.45) !important;
+            color: #fff1f2 !important;
         }
 
         /* Universal High-Contrast Notification & Alert Banners */
@@ -136,31 +249,23 @@
     $isLoginPage = request()->routeIs('portal.login');
 @endphp
 <body x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
-    <!-- Full-Window Device-Pixel Responsive Background Image: 100% Fit, Zero Side Letterboxing -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#0a0f1d]" aria-hidden="true">
-        <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
-        <img 
-            src="{{ asset('images/emk-bg.jpg') }}" 
-            alt="" 
-            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-60 scale-110 pointer-events-none"
-            aria-hidden="true"
-        >
-
-        <!-- Full-Window Fit Layer: 100% full viewport coverage without black side bars -->
+    <!-- Full-Window Device-Pixel Responsive Background Image: Deep Black Canvas with Subtle Atmospheric Glow -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#040711]" aria-hidden="true">
+        <!-- Deep Atmospheric Glow: Extremely low opacity so photo never clashes with foreground content -->
         <picture class="absolute inset-0 w-full h-full">
             <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
             <img 
                 src="{{ asset('images/emk-bg.jpg') }}" 
                 alt="EMK Center Background" 
-                class="w-full h-full object-cover object-center opacity-85 brightness-95 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
+                class="w-full h-full object-cover object-center opacity-15 brightness-30 contrast-125 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
                 loading="eager"
                 fetchpriority="high"
             >
         </picture>
 
-        <!-- Atmospheric Liquid Glass Scrim for optimal contrast and 3D depth -->
-        <div class="absolute inset-0 bg-slate-950/50 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/75"></div>
+        <!-- Solid Deep Black Scrim: Guarantees 100% legibility and zero visual glare on all pages -->
+        <div class="absolute inset-0 bg-[#060a17]/85 backdrop-blur-md"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#040711]/95 via-[#060a17]/80 to-[#040711]/98"></div>
     </div>
     <!-- Skip to main content link for keyboard & screen reader accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:p-4 focus:bg-indigo-600 focus:text-white focus:z-50 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Skip to main content</a>

@@ -31,7 +31,7 @@
                         Official Membership Application
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                        Membership Form for American Spaces in Bangladesh
+                        {{ !empty($form->title) && $form->title !== 'EMK Center Membership Application Form' ? $form->title : 'Membership Form for American Spaces in Bangladesh' }}
                     </h1>
 
                     <!-- Horizontal Rule per Image 2 -->

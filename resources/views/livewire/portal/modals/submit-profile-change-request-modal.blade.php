@@ -14,11 +14,11 @@
 
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div
-                    class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200"
+                    class="relative transform overflow-hidden rounded-2xl bg-slate-900/95 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-700/80 backdrop-blur-xl"
                     @click.stop
                 >
                     {{-- Header --}}
-                    <div class="px-6 py-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between">
+                    <div class="px-6 py-5 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 text-white flex items-center justify-between border-b border-white/10">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,27 +49,27 @@
                     {{-- Form Body --}}
                     <div class="p-6 space-y-5 max-h-[calc(85vh-160px)] overflow-y-auto">
                         {{-- Policy Banner --}}
-                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-                            <p class="font-semibold text-slate-800 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-700/80 text-xs text-slate-300 space-y-1 shadow-sm">
+                            <p class="font-bold text-white flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Administrative Verification Required
                             </p>
-                            <p>
+                            <p class="text-slate-300">
                                 Direct self-editing of database records is restricted. Proposed modifications are reviewed by workspace managers prior to being applied to your permanent profile.
                             </p>
                         </div>
 
                         {{-- Pending Duplication Guard Warning --}}
                         @if ($hasPendingRequest)
-                            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
-                                <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="p-4 rounded-xl bg-amber-950/40 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-3 shadow-md">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                                 <div>
-                                    <p class="font-bold text-amber-950">Change Request Already Pending</p>
-                                    <p class="mt-0.5">
+                                    <p class="font-bold text-amber-300">Change Request Already Pending</p>
+                                    <p class="mt-0.5 text-amber-100/90">
                                         You already have a profile change request pending review by workspace staff. Additional submissions are restricted until the existing request is processed.
                                     </p>
                                 </div>
@@ -78,13 +78,13 @@
 
                         {{-- Submission Error Banner --}}
                         @if ($submissionError)
-                            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start gap-3">
-                                <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-200 text-xs flex items-start gap-3 shadow-md">
+                                <svg class="w-5 h-5 text-rose-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <div>
-                                    <p class="font-bold text-rose-950">Submission Error</p>
-                                    <p class="mt-0.5">{{ $submissionError }}</p>
+                                    <p class="font-bold text-rose-300">Submission Error</p>
+                                    <p class="mt-0.5 text-rose-100/90">{{ $submissionError }}</p>
                                 </div>
                             </div>
                         @endif
@@ -299,11 +299,11 @@
                     </div>
 
                     {{-- Actions --}}
-                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-3">
+                    <div class="px-6 py-4 bg-slate-900/90 border-t border-slate-700/80 flex items-center justify-end gap-3">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-4 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition"
+                            class="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition cursor-pointer"
                         >
                             Cancel
                         </button>
@@ -313,7 +313,7 @@
                             wire:click="submit"
                             wire:loading.attr="disabled"
                             @disabled($hasPendingRequest)
-                            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-xs transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
                             <span wire:loading.remove wire:target="submit">Submit Change Request</span>
                             <span wire:loading wire:target="submit">Submitting...</span>
