@@ -50,7 +50,8 @@ class PublicMembershipFormRenderTest extends TestCase
         $response->assertSee('TLS Secured Application');
 
         // Form Title & Overview
-        $response->assertSee('EMK Center Membership Application Form');
+        $response->assertSee('Membership Form for American Spaces in Bangladesh');
+        $response->assertSee('Requirements to fill-up the form');
 
         // Footer Contact Guidelines
         $response->assertSee('membership@emk.com.bd');
@@ -148,9 +149,13 @@ class PublicMembershipFormRenderTest extends TestCase
         $response->assertSee('Student ID');
 
         // bKash Payment Instructions per DEC-05
-        $response->assertSee('bKash Merchant Payment');
-        $response->assertSee('01977109012');
+        $response->assertSee('bKash Transaction ID');
+        $response->assertSee('017 7774 2140');
         $response->assertSee('10');
+
+        // Terms and Conditions Rules for the Space
+        $response->assertSee('General Rules for the Space');
+        $response->assertSee('I accept the Terms and Conditions.');
     }
 
     public function test_unpublished_or_non_existent_form_returns_404(): void
@@ -170,5 +175,16 @@ class PublicMembershipFormRenderTest extends TestCase
 
         $draftResponse = $this->get('/apply/draft-hidden-form');
         $draftResponse->assertStatus(404);
+    }
+
+    public function test_consent_form_pdf_is_accessible_and_viewable_in_browser(): void
+    {
+        $response1 = $this->get('/forms/templates/V3-Parents-Consent-Form.pdf');
+        $response1->assertStatus(200);
+        $this->assertEquals('application/pdf', $response1->headers->get('content-type'));
+
+        $response2 = $this->get('/wp-content/uploads/2025/12/V3-Parents-Consent-Form.pdf');
+        $response2->assertStatus(200);
+        $this->assertEquals('application/pdf', $response2->headers->get('content-type'));
     }
 }

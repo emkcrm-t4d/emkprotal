@@ -420,7 +420,7 @@ class DefaultMembershipFormSeeder extends Seeder
             'applicant_instructions' => [
                 'identity_documents' => 'Accepted identity documents: National ID (NID), Passport, Birth Certificate, or Student ID.',
                 'studio_photo_guidelines' => 'Solid plain white background, no eyeglasses, ears visible, regular professional or casual attire, strictly no selfies, min 300x300 pixels, max 4MB.',
-                'payment_instructions' => 'Non-refundable fee via bKash merchant account; input 10-character uppercase bKash Transaction ID.',
+                'payment_instructions' => "Select 'Make Payment' and enter the bKash merchant account number: 017 7774 2140. Provide your name in the reference box. And write the Transaction ID below.",
                 'under_18_consent_guidance' => 'Signed parental/guardian consent form required for applicants under 18; download template link.',
             ],
         ];
@@ -439,8 +439,8 @@ class DefaultMembershipFormSeeder extends Seeder
             ],
             [
                 'uuid' => $uuid,
-                'title' => 'EMK Center Membership Application Form',
-                'description' => 'Official application for annual and multi-year membership at EMK Center (American Center Dhaka and American Spaces Bangladesh).',
+                'title' => 'Membership Form for American Spaces in Bangladesh',
+                'description' => 'Requirements to fill-up the form',
                 'schema' => [
                     'fields' => $schemaFields,
                 ],

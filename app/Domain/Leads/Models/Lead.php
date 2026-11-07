@@ -18,7 +18,7 @@ class Lead extends Model implements TenantEntityInterface
 
     protected $table = 'leads';
 
-    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $guarded = ['id'];
 
     protected static function booted(): void
     {

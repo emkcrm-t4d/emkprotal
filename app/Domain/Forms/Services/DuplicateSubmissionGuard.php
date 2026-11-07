@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Forms\Services;
 
+use App\Domain\Payments\Adapters\ManualBkashPaymentAdapter;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
@@ -20,7 +21,7 @@ class DuplicateSubmissionGuard
      */
     public static function assertUniqueBkashTxid(string $txid): void
     {
-        $normalized = Str::upper(trim($txid));
+        $normalized = ManualBkashPaymentAdapter::extractTxid($txid);
 
         if (!preg_match('/^[A-Z0-9]{10}$/', $normalized)) {
             throw ValidationException::withMessages([

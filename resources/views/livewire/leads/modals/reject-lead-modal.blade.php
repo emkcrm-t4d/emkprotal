@@ -8,7 +8,7 @@
             ></div>
 
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-rose-200">
+                <div class="relative transform overflow-hidden rounded-2xl bg-slate-900/95 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-rose-500/40 backdrop-blur-xl">
                     <!-- Modal Header -->
                     <div class="bg-rose-600 px-6 py-4 flex items-center justify-between text-white">
                         <div class="flex items-center gap-2.5">
@@ -89,49 +89,49 @@
 
                         <!-- Dynamic Applicant-Facing Text Preview -->
                         @if($selectedTaxonomy)
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs">
-                                <h4 class="font-bold text-slate-800 uppercase tracking-wider text-[11px] mb-1">
+                            <div class="bg-slate-900/90 border border-rose-500/40 rounded-xl p-3.5 text-xs shadow-md">
+                                <h4 class="font-bold text-rose-300 uppercase tracking-wider text-[11px] mb-1.5">
                                     Applicant-Facing Email Explanation Preview:
                                 </h4>
-                                <blockquote class="border-l-4 border-rose-500 pl-3 italic text-slate-700 bg-white py-1.5 rounded-r">
+                                <blockquote class="border-l-4 border-rose-500 pl-3 italic text-slate-200 bg-black/40 py-2 rounded-r">
                                     "{{ $selectedTaxonomy['applicant_message'] }}"
                                 </blockquote>
-                                <p class="text-[11px] text-slate-500 mt-2">
-                                    Target Stream Affected: <span class="font-mono font-semibold uppercase text-slate-800">{{ $selectedTaxonomy['stream'] }}</span>
+                                <p class="text-[11px] text-slate-400 mt-2">
+                                    Target Stream Affected: <span class="font-mono font-semibold uppercase text-amber-300">{{ $selectedTaxonomy['stream'] }}</span>
                                 </p>
                             </div>
                         @endif
 
                         <!-- Internal Staff Notes (Confidential) -->
                         <div>
-                            <label class="block text-xs font-bold text-slate-800 mb-1.5">
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5">
                                 Internal Staff / Manager Notes (Confidential - Not Sent to Applicant):
                             </label>
                             <textarea
                                 wire:model="internalNotes"
                                 rows="3"
                                 placeholder="E.g., bKash merchant ledger checked; transaction ID not found in 72-hour batch statement."
-                                class="w-full text-xs rounded-lg border-slate-300 shadow-xs focus:border-rose-500 focus:ring-rose-500"
+                                class="w-full text-xs rounded-lg border-slate-700 bg-slate-950/80 text-white shadow-xs focus:border-rose-500 focus:ring-rose-500"
                             ></textarea>
                             @error('internalNotes')
-                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                                <span class="text-xs text-rose-400 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <!-- Optional Manager Checkbox: Block Email per LEAD-07 -->
-                        <div class="bg-zinc-50 border border-zinc-200 rounded-xl p-3.5">
+                        <div class="bg-slate-900/80 border border-slate-700/80 rounded-xl p-3.5">
                             <label class="flex items-start gap-2.5 cursor-pointer">
                                 <input
                                     type="checkbox"
                                     wire:model="blockEmail"
-                                    class="rounded border-zinc-300 text-rose-600 shadow-xs focus:ring-rose-500 mt-0.5"
+                                    class="rounded border-slate-600 text-rose-600 shadow-xs focus:ring-rose-500 mt-0.5"
                                     id="checkbox-block-email"
                                 />
                                 <div>
-                                    <span class="text-xs font-bold text-zinc-900 block">
+                                    <span class="text-xs font-bold text-white block">
                                         Block this applicant email from future submissions (LEAD-07)
                                     </span>
-                                    <span class="text-[11px] text-zinc-500 block mt-0.5">
+                                    <span class="text-[11px] text-slate-400 block mt-0.5">
                                         Flags this email (<strong>{{ $lead->email }}</strong>) as fraudulent or abusive. All future submissions using this email address will be rejected immediately at the public submission perimeter.
                                     </span>
                                 </div>
@@ -140,18 +140,18 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-end gap-2.5">
+                    <div class="bg-slate-900/90 px-6 py-4 border-t border-slate-700/80 flex items-center justify-end gap-3">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             wire:click="confirmRejection"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold shadow-md transition-colors"
                             id="btn-confirm-rejection"
                         >
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

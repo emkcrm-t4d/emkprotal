@@ -35,11 +35,11 @@
         main [class*="bg-slate-900/90"],
         main > div > div.space-y-6 > div.rounded-3xl,
         main > div > div.space-y-6 > div.rounded-2xl {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(15, 23, 42, 0.55) 100%), rgba(10, 16, 30, 0.65) !important;
-            backdrop-filter: blur(28px) saturate(200%) !important;
-            -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.22) !important;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.96) 0%, rgba(10, 15, 26, 0.97) 100%) !important;
+            backdrop-filter: blur(32px) !important;
+            -webkit-backdrop-filter: blur(32px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
             border-radius: 1.5rem !important;
             color: #f8fafc !important;
         }
@@ -48,11 +48,11 @@
         main .grid > div[class*="bg-slate-900"],
         main .grid > div[class*="bg-white"],
         main .grid > div.rounded-2xl {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%), rgba(12, 18, 34, 0.6) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25) !important;
+            background: linear-gradient(180deg, rgba(22, 31, 49, 0.95) 0%, rgba(13, 19, 32, 0.97) 100%) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.18) !important;
             border-radius: 1.25rem !important;
             transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
         }
@@ -60,7 +60,7 @@
         main .grid > div[class*="bg-white"]:hover {
             transform: translateY(-2px) !important;
             border-color: rgba(255, 255, 255, 0.3) !important;
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3) !important;
         }
 
         /* High-Contrast Crisp Typography */
@@ -190,15 +190,63 @@
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
         }
 
-        /* Glass Badges & Tags (Overriding Tailwind light-mode slate-100/200 on dark glass) */
+        /* Glass Badges & Tags (Overriding Tailwind light-mode slate-50/100/200 on dark glass) */
+        main .bg-slate-50:not(a),
+        main span.bg-slate-50,
+        main div.bg-slate-50,
         main span.bg-slate-100,
         main span.bg-slate-200,
-        main [class*="bg-slate-100"]:not(a):not(input):not(select):not(textarea),
-        main [class*="bg-slate-200"]:not(a):not(input):not(select):not(textarea) {
-            background-color: rgba(15, 23, 42, 0.75) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        main [class*="bg-slate-50"]:not(a):not(input):not(select):not(textarea):not(table):not(thead):not(tbody):not(tr),
+        main [class*="bg-slate-100"]:not(a):not(input):not(select):not(textarea):not(table):not(thead):not(tbody):not(tr),
+        main [class*="bg-slate-200"]:not(a):not(input):not(select):not(textarea):not(table):not(thead):not(tbody):not(tr) {
+            background-color: rgba(13, 19, 34, 0.94) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
             color: #f8fafc !important;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        /* Card Section Header Bars across all CRM views */
+        main div[class*="border-b"][class*="bg-slate-50"],
+        main div.px-5.py-3\.5.bg-slate-50,
+        main div.px-6.py-4.bg-slate-50 {
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+        main div[class*="border-b"][class*="bg-slate-50"] h1,
+        main div[class*="border-b"][class*="bg-slate-50"] h2,
+        main div[class*="border-b"][class*="bg-slate-50"] h3,
+        main div[class*="border-b"][class*="bg-slate-50"] h4,
+        main div.px-5.py-3\.5.bg-slate-50 h2,
+        main div.px-6.py-4.bg-slate-50 h3 {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        /* Attachment Cards & Media Tiles */
+        main div[id^="summary-attachment-card-"],
+        main div[id^="attachment-card-"] {
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            color: #f8fafc !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+        }
+        main div[id^="summary-attachment-card-"] p,
+        main div[id^="attachment-card-"] p {
+            color: #ffffff !important;
+        }
+        main div[id^="summary-attachment-card-"] p.text-slate-500,
+        main div[id^="attachment-card-"] p.text-slate-500,
+        main div[id^="attachment-card-"] div.text-slate-500 {
+            color: #94a3b8 !important;
+        }
+
+        /* Data list divider lines */
+        main .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+        main .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+            border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
         /* Member ID & Identifier Mono Badges: High Contrast 3D Dark Glass Pods */
@@ -338,6 +386,65 @@
         }
 
         /* High-Contrast Color Token Overrides for Dark Glass (Prevents illegible dark pastel shades) */
+        main div[class*="bg-emerald-50"],
+        main div[class*="bg-emerald-100"] {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.12) 100%), rgba(10, 24, 20, 0.88) !important;
+            border-color: rgba(52, 211, 153, 0.45) !important;
+            color: #ecfdf5 !important;
+        }
+        main div[class*="bg-amber-50"],
+        main div[class*="bg-amber-100"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%), rgba(28, 20, 10, 0.88) !important;
+            border-color: rgba(251, 191, 36, 0.45) !important;
+            color: #fffbeb !important;
+        }
+        main div[class*="bg-rose-50"],
+        main div[class*="bg-rose-100"] {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.22) 0%, rgba(225, 29, 72, 0.12) 100%), rgba(28, 12, 16, 0.88) !important;
+            border-color: rgba(251, 113, 133, 0.45) !important;
+            color: #fff1f2 !important;
+        }
+        main div[class*="bg-blue-50"],
+        main div[class*="bg-blue-100"] {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(37, 99, 235, 0.12) 100%), rgba(15, 23, 42, 0.88) !important;
+            border-color: rgba(96, 165, 250, 0.45) !important;
+            color: #eff6ff !important;
+        }
+        main div[class*="bg-purple-50"],
+        main div[class*="bg-purple-100"] {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.22) 0%, rgba(147, 51, 234, 0.12) 100%), rgba(24, 16, 38, 0.88) !important;
+            border-color: rgba(192, 132, 252, 0.45) !important;
+            color: #faf5ff !important;
+        }
+
+        /* Modal Dialog Panels - Deep Frosted Glass with Zero Bleed-Through */
+        div[role="dialog"] .relative.transform.overflow-hidden,
+        main div[role="dialog"] .relative.transform.overflow-hidden {
+            background: linear-gradient(180deg, rgba(20, 29, 47, 0.98) 0%, rgba(13, 19, 33, 0.98) 100%) !important;
+            backdrop-filter: blur(32px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 25px 65px -10px rgba(0, 0, 0, 0.85), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25) !important;
+        }
+
+        /* Modal Dialog Footers */
+        div[role="dialog"] .border-t,
+        main div[role="dialog"] .border-t {
+            background: rgba(10, 16, 30, 0.9) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* Modal Cancel & Neutral Action Buttons */
+        div[role="dialog"] button.text-slate-700,
+        div[role="dialog"] button.text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        div[role="dialog"] button.text-slate-700:hover,
+        div[role="dialog"] button.text-slate-600:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
         main .text-emerald-950,
         main .text-emerald-900 {
             color: #ffffff !important;
@@ -641,31 +748,23 @@
     </script>
 </head>
 <body class="min-h-full font-sans antialiased text-slate-100 flex flex-col justify-between relative overflow-x-hidden selection:bg-amber-400 selection:text-slate-950">
-    <!-- Full-Window Device-Pixel Responsive Background Image: 100% Fit, Zero Side Letterboxing -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#0a0f1d]" aria-hidden="true">
-        <!-- Ambient Atmospheric Underlay: Fills any screen aspect ratio with warm lighting -->
-        <img 
-            src="{{ asset('images/emk-bg.jpg') }}" 
-            alt="" 
-            class="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-60 scale-110 pointer-events-none"
-            aria-hidden="true"
-        >
-
-        <!-- Full-Window Fit Layer: 100% full viewport coverage without black side bars -->
+    <!-- Full-Window Device-Pixel Responsive Background Image: Deep Black Canvas with Subtle Atmospheric Glow -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-[#040711]" aria-hidden="true">
+        <!-- Deep Atmospheric Glow: Extremely low opacity so photo never clashes with foreground content -->
         <picture class="absolute inset-0 w-full h-full">
             <source srcset="{{ asset('images/emk-bg.webp') }}" type="image/webp">
             <img 
                 src="{{ asset('images/emk-bg.jpg') }}" 
                 alt="EMK Center Background" 
-                class="w-full h-full object-cover object-center opacity-85 brightness-95 contrast-105 filter blur-[0.5px] pointer-events-none select-none transition-opacity duration-500"
+                class="w-full h-full object-cover object-center opacity-15 brightness-30 contrast-125 filter blur-[1px] pointer-events-none select-none transition-opacity duration-500"
                 loading="eager"
                 fetchpriority="high"
             >
         </picture>
 
-        <!-- Atmospheric Liquid Glass Scrim for optimal contrast and 3D depth -->
-        <div class="absolute inset-0 bg-slate-950/50 backdrop-blur-[1px]"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/75"></div>
+        <!-- Solid Deep Black Scrim: Guarantees 100% legibility and zero visual glare on all pages -->
+        <div class="absolute inset-0 bg-[#060a17]/85 backdrop-blur-md"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#040711]/95 via-[#060a17]/80 to-[#040711]/98"></div>
     </div>
 
     <!-- Notification & Toast Slot Container -->

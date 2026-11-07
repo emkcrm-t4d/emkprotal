@@ -357,8 +357,12 @@ class FormValidationCompiler
         $name = $field['name'] ?? null;
         $casing = $field['casing'] ?? 'none';
 
-        // 4. bKash TxID special auto-uppercase normalization per DEC-05
-        if ($name === 'bkash_txid' || $casing === 'uppercase') {
+        // 4. bKash TxID special auto-uppercase normalization and TrxID prefix stripping per DEC-05
+        if ($name === 'bkash_txid') {
+            return \App\Domain\Payments\Adapters\ManualBkashPaymentAdapter::extractTxid($clean);
+        }
+
+        if ($casing === 'uppercase') {
             $clean = strtoupper((string) preg_replace('/[^A-Za-z0-9]/', '', $clean));
             return $clean;
         }

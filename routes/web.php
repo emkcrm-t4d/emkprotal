@@ -75,7 +75,7 @@ Route::get('/login', StaffLogin::class)
     ->name('login')
     ->middleware('guest:web');
 
-Route::post('/logout', function () {
+Route::match(['get', 'post'], '/logout', function () {
     Auth::guard('web')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
@@ -109,9 +109,13 @@ Route::post('/password/reset-required', function (Request $request) {
         }
         \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 60);
 
-        $request->validate([
-            'password' => ['required', 'string', 'min:8', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
-        ]);
+        $rules = [
+            'password' => ['required', 'string', 'min:8', \Illuminate\Validation\Rules\Password::defaults()],
+        ];
+        if ($request->has('password_confirmation')) {
+            $rules['password'][] = 'confirmed';
+        }
+        $request->validate($rules);
 
         $user->must_reset_password = false;
         $user->password = bcrypt($request->input('password'));
@@ -363,7 +367,7 @@ Route::get('/portal/login', PortalLogin::class)
     ->name('portal.login')
     ->middleware('guest:member');
 
-Route::post('/portal/logout', function () {
+Route::match(['get', 'post'], '/portal/logout', function () {
     Auth::guard('member')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
@@ -392,4 +396,29 @@ Route::prefix('/portal')->middleware(['auth:member', 'member.password.reset'])->
 
     Route::get('/documents/{attachment}', [PortalDocumentDownloadController::class, 'download'])
         ->name('portal.documents.download');
+});
+
+/**
+ * Public Official PDF Form Downloads per DEC-09
+ */
+Route::get('/forms/templates/V3-Parents-Consent-Form.pdf', function () {
+    $path = public_path('forms/templates/V3-Parents-Consent-Form.pdf');
+    if (file_exists($path)) {
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="V3-Parents-Consent-Form.pdf"',
+        ]);
+    }
+    abort(404);
+});
+
+Route::get('/wp-content/uploads/2025/12/V3-Parents-Consent-Form.pdf', function () {
+    $path = public_path('forms/templates/V3-Parents-Consent-Form.pdf');
+    if (file_exists($path)) {
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="V3-Parents-Consent-Form.pdf"',
+        ]);
+    }
+    abort(404);
 });

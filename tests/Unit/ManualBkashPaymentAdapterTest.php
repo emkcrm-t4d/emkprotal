@@ -327,4 +327,32 @@ class ManualBkashPaymentAdapterTest extends TestCase
         $this->assertEquals('Payment confirmed in merchant statement', $payload['payment_verification_notes']);
         $this->assertNull($payload['rejection_reason_code']);
     }
+
+    public function test_extract_txid_handles_prefixes_and_full_sms(): void
+    {
+        // 1. Plain 10-character code
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('blk7x9q12m'));
+        $this->assertEquals('TXIDDUP001', ManualBkashPaymentAdapter::extractTxid('TXIDDUP001'));
+        $this->assertEquals('TXIDDUP001', ManualBkashPaymentAdapter::extractTxid('TrxID TXIDDUP001'));
+
+        // 2. Prefixes
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('TrxID BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('TrxID: BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('TRX ID: BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('TxID BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('Transaction ID: BLK7X9Q12M'));
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid('trxid:blk7x9q12m'));
+
+        // 3. Full bKash SMS snippets
+        $sms1 = 'You have received Tk 500.00 from 01712345678. Ref . Fee Tk 0.00. Balance Tk 500.00. TrxID BLK7X9Q12M at 07/11/2026 11:30';
+        $this->assertEquals('BLK7X9Q12M', ManualBkashPaymentAdapter::extractTxid($sms1));
+
+        $sms2 = 'Payment of Tk 1,000.00 to EMK Center successful. TrxID 9K8X7L2M1P at 06/11/2026 14:22';
+        $this->assertEquals('9K8X7L2M1P', ManualBkashPaymentAdapter::extractTxid($sms2));
+
+        // 4. Empty string
+        $this->assertEquals('', ManualBkashPaymentAdapter::extractTxid(''));
+        $this->assertEquals('', ManualBkashPaymentAdapter::extractTxid('   '));
+    }
 }

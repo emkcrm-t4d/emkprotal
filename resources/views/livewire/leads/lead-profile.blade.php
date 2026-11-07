@@ -1,10 +1,10 @@
 <div class="space-y-6">
     <!-- Breadcrumbs & Profile Header -->
-    <div class="pb-4 border-b border-slate-200">
-        <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-            <a href="{{ route('crm.leads', ['workspace' => $workspace]) }}" class="hover:text-indigo-600 transition-colors">Leads</a>
-            <span>/</span>
-            <span class="text-slate-900 font-semibold">{{ $lead->full_name }}</span>
+    <div class="pb-4 border-b border-white/10">
+        <nav class="flex items-center gap-2 text-xs text-slate-400 mb-2">
+            <a href="{{ route('crm.leads', ['workspace' => $workspace]) }}" class="hover:text-amber-400 transition-colors">Leads</a>
+            <span class="text-slate-600">/</span>
+            <span class="text-white font-semibold">{{ $lead->full_name }}</span>
         </nav>
 
         <div class="sm:flex sm:items-center sm:justify-between">
@@ -42,12 +42,6 @@
                         </span>
                     @endif
                 </div>
-
-                <p class="mt-1.5 text-xs text-slate-500">
-                    Lead UUID: <span class="font-mono text-slate-700">{{ $lead->uuid }}</span>
-                    &bull; Submitted: <span class="text-slate-700">{{ $lead->submitted_at ? $lead->submitted_at->format('M d, Y H:i:s') : $lead->created_at->format('M d, Y H:i:s') }}</span>
-                    &bull; Workspace: <span class="font-mono text-slate-700">{{ $lead->workspace_id ?? 'Central Staging Pool' }}</span>
-                </p>
             </div>
 
             <div class="mt-4 sm:mt-0 flex items-center gap-2">
@@ -90,37 +84,52 @@
                     <button
                         type="button"
                         disabled
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-xs"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-500 border border-white/10 cursor-not-allowed shadow-xs"
                         title="Conversion requires Workspace Manager authority."
                         id="btn-convert-lead-disabled-auth"
                     >
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <span>Convert to Member</span>
                     </button>
-                @elseif(!$conversionAllowed)
-                    <button
-                        type="button"
-                        disabled
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed shadow-xs"
-                        title="All 3 verifications (Payment, Document, Photo) and Manager Approval must be verified to convert."
-                        id="btn-convert-lead-disabled-invariant"
-                    >
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                        <span>Convert to Member</span>
-                    </button>
-                @else
+                @elseif($conversionAllowed)
                     <button
                         type="button"
                         wire:click="openConversionModal"
-                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-colors"
                         id="btn-convert-lead"
                     >
                         <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Convert to Member</span>
+                    </button>
+                @else
+                    @if($this->canApproveLead)
+                        <button
+                            type="button"
+                            wire:click="approveLead"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all animate-pulse"
+                            id="btn-header-approve-lead"
+                            title="Payment, Document, and Photo streams are verified. Click to approve lead for induction!"
+                        >
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Approve for Induction</span>
+                        </button>
+                    @endif
+
+                    <button
+                        type="button"
+                        disabled
+                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-500 border border-white/10 cursor-not-allowed shadow-xs"
+                        title="All 3 verifications (Payment, Document, Photo) and Manager Approval must be verified to convert."
+                        id="btn-convert-lead-disabled-invariant"
+                    >
+                        <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <span>Convert to Member</span>
                     </button>
@@ -170,9 +179,9 @@
 
                 <a
                     href="{{ route('crm.leads', ['workspace' => $workspace]) }}"
-                    class="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-xs"
+                    class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-xs font-semibold text-white transition-colors shadow-sm"
                 >
-                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-3.5 h-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                     <span>Back to Directory</span>
@@ -191,6 +200,39 @@
         </div>
     @endif
 
+    <!-- All 3 Streams Verified — Manager Approval Alert Banner -->
+    @if($this->canApproveLead)
+        <div class="bg-gradient-to-r from-emerald-950/70 via-slate-900/80 to-emerald-950/70 border border-emerald-500/40 rounded-2xl p-4 sm:p-5 text-white shadow-xl backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" role="alert" id="banner-ready-for-approval">
+            <div class="flex items-start sm:items-center gap-3.5">
+                <div class="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30 shrink-0 mt-0.5 sm:mt-0">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-sm sm:text-base font-bold text-white flex flex-wrap items-center gap-2">
+                        <span>All 3 Streams Verified (Payment, Documents, Photo)</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/30 uppercase tracking-wide">Next Step: Induction Approval</span>
+                    </h3>
+                    <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                        To convert this applicant into an active member, click <strong>Approve Lead for Induction</strong> below. This updates the status from <em>Under Review</em> to <em>Approved</em> and unlocks the <strong>Convert to Member</strong> button.
+                    </p>
+                </div>
+            </div>
+            <button
+                type="button"
+                wire:click="approveLead"
+                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer"
+                id="btn-banner-approve-lead"
+            >
+                <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Approve Lead for Induction</span>
+            </button>
+        </div>
+    @endif
+
     <!-- Previous Application History Banner per LEAD-07 -->
     @if($hasReapplicationHistory)
         <div class="bg-amber-500/20 border border-amber-400/40 rounded-2xl p-4 text-amber-100 shadow-xl backdrop-blur-md" id="reapplicant-history-banner" role="alert">
@@ -203,12 +245,12 @@
                 <div class="flex-1">
                     <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
                         <span>Applicant Reapplication Detected (LEAD-07)</span>
-                        <span class="px-2 py-0.5 rounded text-xs bg-amber-200 text-amber-800 font-semibold font-mono">
+                        <span class="px-2 py-0.5 rounded text-xs bg-amber-400/20 text-amber-300 border border-amber-400/30 font-semibold font-mono">
                             {{ count($historicalLeads) }} Previous Application{{ count($historicalLeads) > 1 ? 's' : '' }}
                         </span>
                     </h3>
-                    <p class="text-xs text-amber-800 mt-1">
-                        This applicant has prior submission history under email <strong>{{ $lead->email }}</strong>. Review previous rejection causes and staff notes below before proceeding with review.
+                    <p class="text-xs text-amber-200 mt-1">
+                        This applicant has prior submission history under email <strong class="text-white">{{ $lead->email }}</strong>. Review previous rejection causes and staff notes below before proceeding with review.
                     </p>
 
                     @php
@@ -225,15 +267,15 @@
                     @endphp
 
                     @if($priorRejected)
-                        <div class="mt-2 text-xs font-semibold text-amber-900 bg-amber-200/70 p-2.5 rounded-lg border border-amber-300">
+                        <div class="mt-2 text-xs font-semibold text-amber-200 bg-amber-950/60 p-2.5 rounded-lg border border-amber-500/40">
                             Applicant Reapplication Detected: Previous application on {{ \Carbon\Carbon::parse($priorRejected['submitted_at'] ?? $priorRejected['created_at'])->format('Y-m-d') }} was Rejected (Reason: {{ $rejectionReason ?? 'Standard Rejection' }}).
                         </div>
                     @endif
 
                     <!-- Historical applications listing -->
                     <div class="mt-3 overflow-x-auto">
-                        <table class="min-w-full text-xs text-left divide-y divide-amber-200 bg-amber-100/60 rounded-lg overflow-hidden">
-                            <thead class="bg-amber-200/70 text-amber-900 font-semibold uppercase tracking-wider text-[11px]">
+                        <table class="min-w-full text-xs text-left divide-y divide-slate-700 bg-slate-900/80 rounded-lg overflow-hidden border border-white/10">
+                            <thead class="bg-slate-800/80 text-slate-200 font-semibold uppercase tracking-wider text-[11px]">
                                 <tr>
                                     <th class="px-3 py-2">Submitted</th>
                                     <th class="px-3 py-2">Prior Status</th>
@@ -242,7 +284,7 @@
                                     <th class="px-3 py-2">Action / Link</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-amber-200">
+                            <tbody class="divide-y divide-slate-800 text-slate-300">
                                 @foreach($historicalLeads as $hist)
                                     <tr>
                                         <td class="px-3 py-2 font-mono whitespace-nowrap">
@@ -278,33 +320,33 @@
         </div>
     @endif
 
-    <!-- Profile Tab Navigation -->
-    <div class="border-b border-slate-200">
-        <nav class="flex space-x-6 text-sm font-medium" aria-label="Tabs">
+    <!-- Profile Tab Navigation (3D Frosted Capsule Bar) -->
+    <div class="p-1.5 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg flex flex-wrap gap-2">
+        <nav class="flex flex-wrap gap-2" aria-label="Tabs">
             <button
                 type="button"
                 wire:click="setTab('details')"
-                class="pb-3 border-b-2 transition-colors {{ $activeTab === 'details' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'details' ? 'bg-white text-slate-950 shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
                 Applicant Details (31 Fields)
             </button>
             <button
                 type="button"
                 wire:click="setTab('attachments')"
-                class="pb-3 border-b-2 transition-colors flex items-center gap-1.5 {{ $activeTab === 'attachments' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 {{ $activeTab === 'attachments' ? 'bg-white text-slate-950 shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
                 <span>Attachments & Photos</span>
-                <span class="px-1.5 py-0.5 rounded-full text-xs font-mono {{ $lead->attachments->count() > 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-500' }}">
+                <span class="px-1.5 py-0.5 rounded-full text-xs font-mono {{ $lead->attachments->count() > 0 ? 'bg-indigo-400/20 text-indigo-300 border border-indigo-400/30' : 'bg-slate-800 text-slate-400' }}">
                     {{ $lead->attachments->count() }}
                 </span>
             </button>
             <button
                 type="button"
                 wire:click="setTab('streams')"
-                class="pb-3 border-b-2 transition-colors flex items-center gap-1.5 {{ $activeTab === 'streams' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 {{ $activeTab === 'streams' ? 'bg-white text-slate-950 shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
                 <span>Verification Streams</span>
-                <span class="px-1.5 py-0.2 rounded text-[10px] uppercase font-bold bg-slate-100 text-slate-700">
+                <span class="px-1.5 py-0.2 rounded text-[10px] uppercase font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
                     Tri-State
                 </span>
             </button>
@@ -312,14 +354,14 @@
                 type="button"
                 wire:click="setTab('emails')"
                 id="tab-btn-emails"
-                class="pb-3 border-b-2 transition-colors {{ $activeTab === 'emails' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'emails' ? 'bg-white text-slate-950 shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
                 Official Emails
             </button>
             <button
                 type="button"
                 wire:click="setTab('timeline')"
-                class="pb-3 border-b-2 transition-colors {{ $activeTab === 'timeline' ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}"
+                class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $activeTab === 'timeline' ? 'bg-white text-slate-950 shadow-md' : 'text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
             >
                 Audit & Verification Timeline
             </button>
@@ -491,46 +533,46 @@
             <!-- 31 Fields Specification Inspector Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Group 1: Identity & Demographics (Fields 1-6, 31) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">1. Identity & Demographics</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">1. Identity & Demographics</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 1-6, 31</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">First Name (Field 1):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->first_name }}</span>
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">First Name (Field 1):</span>
+                            <span class="font-semibold text-white">{{ $lead->first_name }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Middle Name (Field 2):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->middle_name ?? '—' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Middle Name (Field 2):</span>
+                            <span class="font-semibold text-white">{{ $lead->middle_name ?? '—' }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Last Name (Field 3):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->last_name }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Last Name (Field 3):</span>
+                            <span class="font-semibold text-white">{{ $lead->last_name }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">American Space Target (Field 4):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->target_space_code }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">American Space Target (Field 4):</span>
+                            <span class="font-semibold text-white">{{ $lead->target_space_code }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Sex (Field 5):</span>
-                            <span class="font-medium text-slate-900 uppercase text-xs">{{ strtoupper($lead->sex) }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Sex (Field 5):</span>
+                            <span class="font-semibold text-white uppercase text-xs">{{ strtoupper($lead->sex) }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Date of Birth (Field 6):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->date_of_birth ? $lead->date_of_birth->format('Y-m-d') : 'N/A' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Date of Birth (Field 6):</span>
+                            <span class="font-semibold text-white">{{ $lead->date_of_birth ? $lead->date_of_birth->format('Y-m-d') : 'N/A' }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Age at Submission:</span>
-                            <span class="font-semibold {{ $lead->age_at_submission < 18 ? 'text-amber-700' : 'text-slate-900' }}">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Age at Submission:</span>
+                            <span class="font-semibold {{ $lead->age_at_submission < 18 ? 'text-amber-400' : 'text-white' }}">
                                 {{ $lead->age_at_submission }} years
                             </span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Terms & Conditions Agreed (Field 31):</span>
-                            <span class="inline-flex items-center gap-1 font-semibold text-emerald-700">
-                                <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Terms & Conditions Agreed (Field 31):</span>
+                            <span class="inline-flex items-center gap-1 font-semibold text-emerald-400">
+                                <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                 </svg>
                                 Agreed (Yes)
@@ -540,173 +582,173 @@
                 </div>
 
                 <!-- Group 2: Contact Details (Fields 14-16, 27) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">2. Contact Information</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">2. Contact Information</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 14-16, 27</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Contact Number (Field 14):</span>
-                            <span class="font-mono font-medium text-slate-900">{{ $lead->contact_number }}</span>
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Contact Number (Field 14):</span>
+                            <span class="font-mono font-semibold text-white">{{ $lead->contact_number }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Email Address (Field 15):</span>
-                            <span class="font-mono font-medium text-slate-900">{{ $lead->email }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Email Address (Field 15):</span>
+                            <span class="font-mono font-semibold text-white">{{ $lead->email }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Website / Portfolio (Field 16):</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Website / Portfolio (Field 16):</span>
                             @if($lead->website)
-                                <a href="{{ $lead->website }}" target="_blank" class="font-medium text-indigo-600 hover:underline">
+                                <a href="{{ $lead->website }}" target="_blank" class="font-semibold text-amber-400 hover:underline">
                                     {{ $lead->website }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-500">—</span>
                             @endif
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Work Phone (Field 27):</span>
-                            <span class="font-mono text-slate-900">{{ $lead->work_phone ?? '—' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Work Phone (Field 27):</span>
+                            <span class="font-mono font-semibold text-white">{{ $lead->work_phone ?? '—' }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Group 3: Residential Address (Fields 8-13) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">3. Residential Address</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">3. Residential Address</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 8-13</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">House No. (Field 8):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->address_house_no }}</span>
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">House No. (Field 8):</span>
+                            <span class="font-semibold text-white">{{ $lead->address_house_no }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Road No. (Field 9):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->address_road_no ?? '—' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Road No. (Field 9):</span>
+                            <span class="font-semibold text-white">{{ $lead->address_road_no ?? '—' }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Area / Neighborhood (Field 10):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->address_area }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Area / Neighborhood (Field 10):</span>
+                            <span class="font-semibold text-white">{{ $lead->address_area }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Postal / ZIP Code (Field 11):</span>
-                            <span class="font-mono font-medium text-slate-900">{{ $lead->address_zip_code }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Postal / ZIP Code (Field 11):</span>
+                            <span class="font-mono font-semibold text-white">{{ $lead->address_zip_code }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Administrative Division (Field 12):</span>
-                            <span class="font-medium text-slate-900 capitalize">{{ $lead->address_division }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Administrative Division (Field 12):</span>
+                            <span class="font-semibold text-white capitalize">{{ $lead->address_division }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Administrative District (Field 13):</span>
-                            <span class="font-medium text-slate-900 capitalize">{{ $lead->address_district }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Administrative District (Field 13):</span>
+                            <span class="font-semibold text-white capitalize">{{ $lead->address_district }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Group 4: Education & Profession (Fields 17-20, 25-26) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">4. Education & Profession</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">4. Education & Profession</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 17-20, 25-26</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Primary Occupation (Field 17):</span>
-                            <span class="font-medium text-slate-900 capitalize">
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Primary Occupation (Field 17):</span>
+                            <span class="font-semibold text-white capitalize">
                                 {{ str_replace('_', ' ', $lead->occupation) }}
                                 @if($lead->occupation_other)
                                     ({{ $lead->occupation_other }})
                                 @endif
                             </span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Place of Study (Field 18):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->institution_study }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Place of Study (Field 18):</span>
+                            <span class="font-semibold text-white">{{ $lead->institution_study }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Highest Certification (Field 19):</span>
-                            <span class="font-medium text-slate-900 uppercase">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Highest Certification (Field 19):</span>
+                            <span class="font-semibold text-white uppercase">
                                 {{ strtoupper(str_replace('_', ' ', $lead->highest_certification)) }}
                                 @if($lead->highest_certification_other)
                                     ({{ $lead->highest_certification_other }})
                                 @endif
                             </span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Area of Subject / Major (Field 20):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->area_of_subject }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Area of Subject / Major (Field 20):</span>
+                            <span class="font-semibold text-white">{{ $lead->area_of_subject }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Current Employer (Field 25):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->employer_name ?? '—' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Current Employer (Field 25):</span>
+                            <span class="font-semibold text-white">{{ $lead->employer_name ?? '—' }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Job Title / Designation (Field 26):</span>
-                            <span class="font-medium text-slate-900">{{ $lead->job_title ?? '—' }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Job Title / Designation (Field 26):</span>
+                            <span class="font-semibold text-white">{{ $lead->job_title ?? '—' }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Group 5: U.S. Experience & Alumni (Fields 21-24) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">5. U.S. Experience & Alumni</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">5. U.S. Experience & Alumni</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 21-24</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">U.S. Work / Study Experience (Field 21):</span>
-                            <span class="font-semibold {{ $lead->has_us_experience ? 'text-indigo-700' : 'text-slate-700' }}">
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">U.S. Work / Study Experience (Field 21):</span>
+                            <span class="font-semibold {{ $lead->has_us_experience ? 'text-amber-400' : 'text-slate-300' }}">
                                 {{ $lead->has_us_experience ? 'Yes' : 'No' }}
                             </span>
                         </div>
                         @if($lead->has_us_experience)
-                            <div class="py-2.5 flex justify-between">
-                                <span class="text-slate-500">U.S. Location (Field 22):</span>
-                                <span class="font-medium text-slate-900">{{ $lead->us_experience_location ?? '—' }}</span>
+                            <div class="py-2.5 flex justify-between items-center">
+                                <span class="text-slate-400 font-medium">U.S. Location (Field 22):</span>
+                                <span class="font-semibold text-white">{{ $lead->us_experience_location ?? '—' }}</span>
                             </div>
                         @endif
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">American Institution Alumni (Field 23):</span>
-                            <span class="font-semibold {{ $lead->is_american_alumni ? 'text-indigo-700' : 'text-slate-700' }}">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">American Institution Alumni (Field 23):</span>
+                            <span class="font-semibold {{ $lead->is_american_alumni ? 'text-amber-400' : 'text-slate-300' }}">
                                 {{ $lead->is_american_alumni ? 'Yes' : 'No' }}
                             </span>
                         </div>
                         @if($lead->is_american_alumni)
-                            <div class="py-2.5 flex justify-between">
-                                <span class="text-slate-500">Institution Name (Field 24):</span>
-                                <span class="font-medium text-slate-900">{{ $lead->american_institution_name ?? '—' }}</span>
+                            <div class="py-2.5 flex justify-between items-center">
+                                <span class="text-slate-400 font-medium">Institution Name (Field 24):</span>
+                                <span class="font-semibold text-white">{{ $lead->american_institution_name ?? '—' }}</span>
                             </div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Group 6: Minor Youth Protection & bKash Payment (Fields 7, 30) -->
-                <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                        <h2 class="text-sm font-bold text-slate-900">6. Payment & Minor Consent Compliance</h2>
+                <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                    <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white tracking-wide">6. Payment & Minor Consent Compliance</h2>
                         <span class="text-xs font-mono text-slate-400">Fields 7, 30</span>
                     </div>
-                    <div class="p-5 divide-y divide-slate-100 text-sm">
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">bKash Transaction ID (Field 30):</span>
-                            <span class="font-mono font-bold text-pink-700 text-base">{{ $lead->bkash_txid }}</span>
+                    <div class="p-5 divide-y divide-white/5 text-sm">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">bKash Transaction ID (Field 30):</span>
+                            <span class="font-mono font-bold text-pink-400 text-base">{{ $lead->bkash_txid }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Payment Status:</span>
-                            <span class="font-semibold uppercase text-xs">{{ $lead->payment_verification_status }}</span>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Payment Status:</span>
+                            <span class="font-semibold uppercase text-xs text-white">{{ $lead->payment_verification_status }}</span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Minor Applicant (< 18 yrs):</span>
-                            <span class="font-semibold {{ $lead->age_at_submission < 18 ? 'text-amber-700' : 'text-slate-700' }}">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Minor Applicant (< 18 yrs):</span>
+                            <span class="font-semibold {{ $lead->age_at_submission < 18 ? 'text-amber-400' : 'text-slate-300' }}">
                                 {{ $lead->age_at_submission < 18 ? 'Yes (Mandatory Consent Required)' : 'No (Adult)' }}
                             </span>
                         </div>
-                        <div class="py-2.5 flex justify-between">
-                            <span class="text-slate-500">Parental Consent Uploaded (Field 7):</span>
-                            <span class="font-semibold {{ $lead->has_parental_consent ? 'text-emerald-700' : ($lead->age_at_submission < 18 ? 'text-rose-700' : 'text-slate-500') }}">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="text-slate-400 font-medium">Parental Consent Uploaded (Field 7):</span>
+                            <span class="font-semibold {{ $lead->has_parental_consent ? 'text-emerald-400' : ($lead->age_at_submission < 18 ? 'text-rose-400' : 'text-slate-500') }}">
                                 {{ $lead->has_parental_consent ? 'Yes (Verified Attached)' : ($lead->age_at_submission < 18 ? 'Missing / Incomplete' : 'Not Required') }}
                             </span>
                         </div>
@@ -715,11 +757,11 @@
             </div>
 
             <!-- Attached Documents & Media Summary (Fields 7, 28, 29) -->
-            <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden">
-                <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden text-white">
+                <div class="px-5 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
                     <div>
-                        <h2 class="text-sm font-bold text-slate-900">7. Attached Documents & Verification Media</h2>
-                        <p class="text-xs text-slate-500">Secure private attachments with encrypted streaming (Fields 7, 28, 29)</p>
+                        <h2 class="text-sm font-bold text-white tracking-wide">7. Attached Documents & Verification Media</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Secure private attachments with encrypted streaming (Fields 7, 28, 29)</p>
                     </div>
                     <span class="text-xs font-mono text-slate-400">{{ $lead->attachments->count() }} Attached File(s)</span>
                 </div>
@@ -735,35 +777,35 @@
                                 };
 
                                 $typeBadge = match($attachment->document_type) {
-                                    'identity_document' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                                    'studio_photo' => 'bg-purple-50 text-purple-700 border-purple-200',
-                                    'parental_consent' => 'bg-amber-50 text-amber-700 border-amber-200',
-                                    default => 'bg-slate-50 text-slate-700 border-slate-200',
+                                    'identity_document' => 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+                                    'studio_photo' => 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+                                    'parental_consent' => 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                                    default => 'bg-slate-800 text-slate-300 border-white/10',
                                 };
                             @endphp
-                            <div class="bg-slate-50 rounded-lg border border-slate-200 p-4 flex flex-col justify-between" id="summary-attachment-card-{{ $attachment->id }}">
+                            <div class="bg-slate-800/80 backdrop-blur-md rounded-xl border border-white/15 p-4 flex flex-col justify-between shadow-lg" id="summary-attachment-card-{{ $attachment->id }}">
                                 <div>
-                                    <div class="flex items-center justify-between mb-1.5">
+                                    <div class="flex items-center justify-between mb-2">
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border {{ $typeBadge }}">
                                             {{ $typeLabel }}
                                         </span>
                                         @if($attachment->youth_protection)
-                                            <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-100 text-amber-800">
+                                            <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                                 Youth
                                             </span>
                                         @endif
                                     </div>
-                                    <p class="text-xs font-semibold text-slate-900 truncate" title="{{ $attachment->original_filename }}">
+                                    <p class="text-xs font-semibold text-white truncate" title="{{ $attachment->original_filename }}">
                                         {{ $attachment->original_filename }}
                                     </p>
-                                    <p class="text-[11px] text-slate-500 mt-1">
+                                    <p class="text-[11px] text-slate-400 mt-1">
                                         {{ number_format($attachment->size_bytes / 1024, 1) }} KB &bull; {{ $attachment->mime_type }}
                                     </p>
                                 </div>
-                                <div class="mt-3">
+                                <div class="mt-3 pt-2.5 border-t border-white/10">
                                     <a
                                         href="{{ route('documents.download', ['workspace' => $workspace, 'attachment' => $attachment->id]) }}"
-                                        class="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-900 underline"
+                                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors"
                                         target="_blank"
                                         id="summary-download-attachment-{{ $attachment->id }}"
                                     >
@@ -775,7 +817,7 @@
                                 </div>
                             </div>
                         @empty
-                            <p class="text-xs text-slate-500 col-span-3">No attachments uploaded with this lead.</p>
+                            <p class="text-xs text-slate-400 col-span-3">No attachments uploaded with this lead.</p>
                         @endforelse
                     </div>
                 </div>
@@ -786,9 +828,9 @@
     <!-- Tab 2: Secure Attachments & Photos (Fields 7, 28, 29) -->
     @if($activeTab === 'attachments')
         <div class="space-y-6">
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-900">
-                <p class="font-semibold">Private Storage Encryption & Access Control (DEC-09 / ARCH-06)</p>
-                <p class="mt-0.5 text-blue-800">
+            <div class="bg-blue-500/20 border border-blue-400/30 rounded-2xl p-4 text-xs text-blue-100 shadow-xl backdrop-blur-md">
+                <p class="font-bold text-white">Private Storage Encryption & Access Control (DEC-09 / ARCH-06)</p>
+                <p class="mt-1 text-blue-200">
                     All identity documents and photographs are AES-256 encrypted at rest on private disks. Physical filenames use UUID v4. Downloading streams files through the <code>documents.download</code> controller enforcing tenancy and youth consent permissions.
                 </p>
             </div>
@@ -804,40 +846,40 @@
                         };
 
                         $typeBadge = match($attachment->document_type) {
-                            'identity_document' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                            'studio_photo' => 'bg-purple-50 text-purple-700 border-purple-200',
-                            'parental_consent' => 'bg-amber-50 text-amber-700 border-amber-200',
-                            default => 'bg-slate-50 text-slate-700 border-slate-200',
+                            'identity_document' => 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+                            'studio_photo' => 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+                            'parental_consent' => 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                            default => 'bg-slate-800 text-slate-300 border-white/10',
                         };
                     @endphp
-                    <div class="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden flex flex-col justify-between" id="attachment-card-{{ $attachment->id }}">
+                    <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between text-white" id="attachment-card-{{ $attachment->id }}">
                         <div class="p-4">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold border {{ $typeBadge }}">
                                     {{ $typeLabel }}
                                 </span>
                                 @if($attachment->youth_protection)
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                         Youth Protection
                                     </span>
                                 @endif
                             </div>
 
-                            <p class="text-sm font-semibold text-slate-900 truncate" title="{{ $attachment->original_filename }}">
+                            <p class="text-sm font-semibold text-white truncate" title="{{ $attachment->original_filename }}">
                                 {{ $attachment->original_filename }}
                             </p>
 
-                            <div class="mt-2 space-y-1 text-xs text-slate-500">
-                                <p>Size: <span class="font-mono text-slate-700">{{ number_format($attachment->size_bytes / 1024, 1) }} KB</span></p>
-                                <p>MIME: <span class="font-mono text-slate-700">{{ $attachment->mime_type }}</span></p>
-                                <p class="truncate" title="{{ $attachment->file_hash }}">SHA-256: <span class="font-mono text-slate-600 text-[10px]">{{ substr($attachment->file_hash, 0, 16) }}...</span></p>
+                            <div class="mt-2 space-y-1 text-xs text-slate-400">
+                                <p>Size: <span class="font-mono text-slate-200">{{ number_format($attachment->size_bytes / 1024, 1) }} KB</span></p>
+                                <p>MIME: <span class="font-mono text-slate-200">{{ $attachment->mime_type }}</span></p>
+                                <p class="truncate" title="{{ $attachment->file_hash }}">SHA-256: <span class="font-mono text-slate-400 text-[10px]">{{ substr($attachment->file_hash, 0, 16) }}...</span></p>
                             </div>
                         </div>
 
-                        <div class="p-3 bg-slate-50 border-t border-slate-200">
+                        <div class="p-3 bg-white/5 border-t border-white/10">
                             <a
                                 href="{{ route('documents.download', ['workspace' => $workspace, 'attachment' => $attachment->id]) }}"
-                                class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                                class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-md transition-colors"
                                 target="_blank"
                                 id="download-attachment-{{ $attachment->id }}"
                             >
@@ -849,7 +891,7 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-3 bg-white p-8 rounded-xl border border-slate-200 text-center text-slate-500">
+                    <div class="col-span-3 bg-slate-900/60 backdrop-blur-xl border border-white/10 p-8 rounded-2xl text-center text-slate-400">
                         <p class="text-sm font-medium">No files attached to this lead.</p>
                     </div>
                 @endforelse
@@ -871,8 +913,8 @@
 
     <!-- Tab 5: Audit & Verification Timeline -->
     @if($activeTab === 'timeline')
-        <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-4">
-            <h2 class="text-sm font-bold text-slate-900 pb-3 border-b border-slate-200">Application Lifecycle Timeline</h2>
+        <div class="bg-slate-900/70 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-xl p-6 space-y-4 text-white">
+            <h2 class="text-sm font-bold text-white tracking-wide pb-3 border-b border-white/10">Application Lifecycle Timeline</h2>
 
             <div class="flow-root">
                 <ul class="-mb-8">

@@ -8,7 +8,7 @@
             ></div>
 
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                <div class="relative transform overflow-hidden rounded-2xl bg-slate-900/95 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-700/80 backdrop-blur-xl">
                     <!-- Modal Header -->
                     <div class="bg-amber-500 px-6 py-4 flex items-center justify-between text-white">
                         <div class="flex items-center gap-2.5">
@@ -94,9 +94,9 @@
 
                         <!-- Live Selected Items Summary Preview -->
                         @if(count($selectedItems) > 0)
-                            <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 text-xs text-amber-900">
-                                <p class="font-bold mb-1">Email Preview ({{ count($selectedItems) }} item{{ count($selectedItems) > 1 ? 's' : '' }} selected):</p>
-                                <ul class="list-disc list-inside space-y-0.5 text-amber-800 text-[11px]">
+                            <div class="bg-amber-950/40 border border-amber-500/40 rounded-xl p-3.5 text-xs text-amber-200 shadow-md">
+                                <p class="font-bold text-amber-300 mb-1">Email Preview ({{ count($selectedItems) }} item{{ count($selectedItems) > 1 ? 's' : '' }} selected):</p>
+                                <ul class="list-disc list-inside space-y-0.5 text-amber-100 text-[11px]">
                                     @foreach($selectedItems as $item)
                                         <li>{{ $item }}</li>
                                     @endforeach
@@ -106,18 +106,18 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-end gap-2.5">
+                    <div class="bg-slate-900/90 px-6 py-4 border-t border-slate-700/80 flex items-center justify-end gap-3">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             wire:click="dispatchMissingItemsNotification"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold shadow-md transition-colors"
                             id="btn-dispatch-missing-items"
                         >
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -188,7 +188,7 @@ class LeadIngestionService
                     'workspace_id' => $workspaceId,
                     'target_space_code' => $targetSpaceCode,
                     'status' => 'submitted',
-                    'bkash_txid' => Str::upper(trim((string) $validatedData['bkash_txid'])),
+                    'bkash_txid' => \App\Domain\Payments\Adapters\ManualBkashPaymentAdapter::extractTxid((string) $validatedData['bkash_txid']),
                     'first_name' => (string) $validatedData['first_name'],
                     'middle_name' => !empty($validatedData['middle_name']) ? (string) $validatedData['middle_name'] : null,
                     'last_name' => (string) $validatedData['last_name'],

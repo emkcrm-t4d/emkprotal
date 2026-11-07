@@ -8,7 +8,7 @@
             ></div>
 
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200">
+                <div class="relative transform overflow-hidden rounded-2xl bg-slate-900/95 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-700/80 backdrop-blur-xl">
                     <!-- Modal Header (Emerald Theme) -->
                     <div class="bg-emerald-600 px-6 py-4 flex items-center justify-between text-white">
                         <div class="flex items-center gap-2.5">
@@ -151,41 +151,43 @@
 
                             <!-- Selected Term Dynamic Detail Card -->
                             @if($selectedTerm)
-                                <div class="mt-3 bg-emerald-50/70 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
+                                <div class="mt-3 bg-slate-900/90 border border-emerald-500/40 rounded-xl p-4 text-xs shadow-lg">
                                     <div class="flex items-center justify-between">
-                                        <div>
-                                            <span class="font-bold text-emerald-950">{{ $selectedTerm->name }}</span>
-                                            <span class="text-[11px] text-emerald-800 ml-2">({{ $selectedTerm->code }})</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-white text-sm tracking-wide">{{ $selectedTerm->name }}</span>
+                                            <span class="text-[11px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-md font-semibold">({{ $selectedTerm->code }})</span>
                                         </div>
                                         <div class="text-right">
-                                            <span class="font-mono font-bold text-sm text-emerald-900">BDT {{ number_format($selectedTerm->fee_bdt, 2) }}</span>
+                                            <span class="font-mono font-bold text-sm text-emerald-300 bg-slate-950 border border-emerald-500/50 px-3 py-1 rounded-lg shadow-inner">
+                                                BDT {{ number_format($selectedTerm->fee_bdt, 2) }}
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="mt-2 pt-2 border-t border-emerald-200/60 flex items-center justify-between text-[11px] text-emerald-800">
-                                        <span>Duration: <strong>{{ $selectedTerm->duration_months }} Months</strong></span>
-                                        <span>Valid From: <strong>{{ now()->format('Y-m-d') }}</strong> to <strong>{{ now()->addMonths((int)$selectedTerm->duration_months)->format('Y-m-d') }}</strong></span>
+                                    <div class="mt-3 pt-2.5 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-300">
+                                        <span>Duration: <strong class="text-white font-semibold">{{ $selectedTerm->duration_months }} Months</strong></span>
+                                        <span>Valid From: <strong class="text-white font-mono font-medium">{{ now()->format('Y-m-d') }}</strong> to <strong class="text-white font-mono font-medium">{{ now()->addMonths((int)$selectedTerm->duration_months)->format('Y-m-d') }}</strong></span>
                                     </div>
                                 </div>
                             @endif
                         </div>
 
                         <!-- Warning Text -->
-                        <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
-                            <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="bg-amber-950/40 border border-amber-500/40 rounded-xl p-3.5 text-xs text-amber-200 flex items-start gap-2.5 shadow-md">
+                            <svg class="w-4 h-4 text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
-                            <p class="leading-relaxed">
-                                <strong>Warning:</strong> This action will atomically provision Member ID, generate a paid invoice, queue physical badge printing, and provision portal credentials.
+                            <p class="leading-relaxed text-amber-100">
+                                <strong class="text-amber-300">Warning:</strong> This action will atomically provision Member ID, generate a paid invoice, queue physical badge printing, and provision portal credentials.
                             </p>
                         </div>
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-end gap-2.5">
+                    <div class="bg-slate-900/90 px-6 py-4 border-t border-slate-700/80 flex items-center justify-end gap-3">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-colors"
+                            class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                         >
                             Cancel
                         </button>
@@ -193,7 +195,7 @@
                             type="button"
                             wire:click="executeConversion"
                             wire:loading.attr="disabled"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors disabled:opacity-50"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold shadow-md transition-all disabled:opacity-50"
                             id="btn-confirm-conversion"
                         >
                             <svg wire:loading wire:target="executeConversion" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">

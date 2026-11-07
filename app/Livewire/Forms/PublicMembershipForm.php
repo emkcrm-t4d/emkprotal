@@ -10,6 +10,7 @@ use App\Domain\Forms\Models\FormSubmission;
 use App\Domain\Forms\Services\DuplicateSubmissionGuard;
 use App\Domain\Forms\Services\FormSchemaEngine;
 use App\Domain\Forms\Services\LeadIngestionService;
+use App\Domain\Payments\Adapters\ManualBkashPaymentAdapter;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
@@ -227,6 +228,16 @@ class PublicMembershipForm extends Component
         $this->validateOnly('date_of_birth');
     }
 
+    public function updatedBkashTxid($value): void
+    {
+        $this->bkash_txid = ManualBkashPaymentAdapter::extractTxid((string) $value);
+        if (strlen($this->bkash_txid) === 10) {
+            $this->validateOnly('bkash_txid');
+        } elseif (strlen($this->bkash_txid) === 0) {
+            $this->resetErrorBag('bkash_txid');
+        }
+    }
+
     public function updateDistrictsForDivision(): void
     {
         $schemaEngine = app(FormSchemaEngine::class);
@@ -371,6 +382,8 @@ class PublicMembershipForm extends Component
     public function submit(): void
     {
         $this->errorMessage = null;
+
+        $this->bkash_txid = ManualBkashPaymentAdapter::extractTxid($this->bkash_txid);
 
         $this->validate();
 

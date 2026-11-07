@@ -349,4 +349,41 @@ class LeadProfileTest extends TestCase
         $this->assertEquals($originalTxid, $freshLead->bkash_txid);
         $this->assertEquals('+8801799887766', $freshLead->contact_number);
     }
+
+    public function test_manager_can_approve_lead_for_induction_when_all_streams_verified(): void
+    {
+        // Set all 3 streams to verified
+        $this->fullLead->update([
+            'payment_verification_status' => 'verified',
+            'document_verification_status' => 'verified',
+            'photo_verification_status' => 'verified',
+            'status' => 'under_review',
+        ]);
+
+        $manager = User::create([
+            'workspace_id' => 'ws-emk-dhaka',
+            'name' => 'Manager User',
+            'email' => 'mgr.lead@emk.test',
+            'password' => bcrypt('secret123'),
+            'guard' => 'web',
+            'is_active' => true,
+        ]);
+        $manager->assignRole('workspace_manager');
+        $manager->givePermissionTo(['leads.view', 'leads.approve', 'leads.convert']);
+
+        $component = Livewire::actingAs($manager, 'web')
+            ->test(LeadProfile::class, [
+                'workspace' => 'ws-emk-dhaka',
+                'lead' => $this->fullLead,
+            ]);
+
+        $this->assertTrue($component->get('canApproveLead'));
+        $this->assertFalse($component->get('isConversionAllowed'));
+
+        $component->call('approveLead');
+        $component->assertHasNoErrors();
+
+        $this->assertEquals('approved', $this->fullLead->fresh()->status);
+        $this->assertTrue($component->get('isConversionAllowed'));
+    }
 }

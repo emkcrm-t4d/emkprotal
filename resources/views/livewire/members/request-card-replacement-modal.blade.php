@@ -33,8 +33,42 @@
 
                         @if ($requiresFee)
                             <div>
-                                <label class="block text-xs font-medium text-slate-700" for="bkashTxId">bKash Transaction ID</label>
-                                <input id="bkashTxId" type="text" wire:model="bkashTxId" maxlength="10" class="mt-1 block w-full rounded-lg border-slate-300 text-sm font-mono uppercase" />
+                                <label class="block text-xs font-medium text-slate-700 mb-1" for="bkashTxId">bKash Transaction ID (TrxID)</label>
+                                <div class="flex rounded-lg shadow-xs border border-slate-300 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 overflow-hidden bg-white">
+                                    <span class="inline-flex items-center px-3 bg-pink-50 border-r border-slate-200 text-pink-900 font-mono font-bold text-xs select-none">
+                                        TrxID
+                                    </span>
+                                    <input 
+                                        id="bkashTxId" 
+                                        type="text" 
+                                        wire:model="bkashTxId" 
+                                        x-on:input="
+                                            let v = $el.value;
+                                            let m = v.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})/i);
+                                            if (m && m[1]) {
+                                                v = m[1].toUpperCase();
+                                            } else {
+                                                v = v.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '');
+                                                v = v.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                            }
+                                            $el.value = v;
+                                        "
+                                        x-on:paste="
+                                            let text = ($event.clipboardData || window.clipboardData)?.getData('text') || '';
+                                            if (text) {
+                                                $event.preventDefault();
+                                                let m = text.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})/i);
+                                                let v = m && m[1] ? m[1].toUpperCase() : text.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                                $el.value = v;
+                                                $wire.set('bkashTxId', v);
+                                            }
+                                        "
+                                        maxlength="100" 
+                                        class="block w-full border-0 text-sm font-mono uppercase focus:ring-0 px-3 py-2 bg-transparent" 
+                                        placeholder="e.g. BLK7X9Q12M"
+                                    />
+                                </div>
+                                <p class="text-[11px] text-slate-500 mt-1">TrxID is shown by default. TrxID prefix is automatically cleaned if pasted.</p>
                                 @error('bkashTxId') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
                             </div>
                         @endif

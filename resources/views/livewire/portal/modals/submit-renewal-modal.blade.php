@@ -147,42 +147,75 @@
                             </div>
 
                             {{-- Step 2: Payment Instructions --}}
-                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-                                <div class="flex items-center gap-2 font-bold text-slate-900">
-                                    <div class="w-5 h-5 rounded-full bg-pink-600 text-white flex items-center justify-center text-[10px] font-bold">
-                                        ৳
+                            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+                                <div class="flex items-center justify-between gap-3">
+                                    <div class="flex items-center gap-2 font-bold text-slate-900">
+                                        <div class="w-7 h-7 rounded-full bg-white p-0.5 ring-2 ring-[#E2136E] shadow-xs flex items-center justify-center shrink-0 overflow-hidden" aria-hidden="true">
+                                            <img src="{{ asset('images/bkash-logo.png') }}" alt="bKash" class="w-full h-full object-cover rounded-full">
+                                        </div>
+                                        <span>2. bKash Merchant Payment Instructions</span>
                                     </div>
-                                    <span>2. bKash Merchant Payment Instructions</span>
+                                    <div class="shrink-0 flex flex-col items-center bg-white p-1.5 rounded-lg border border-slate-200 shadow-2xs">
+                                        <img src="{{ asset('images/bkash-qr.png') }}" alt="bKash QR" class="w-14 h-14 object-contain">
+                                        <span class="text-[9px] font-bold text-pink-700 tracking-tight uppercase">Scan QR</span>
+                                    </div>
                                 </div>
                                 <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px] leading-relaxed">
-                                    <li>Open your bKash app and select <strong>Make Payment</strong>.</li>
-                                    <li>Enter Merchant bKash Number: <strong class="font-mono text-slate-900">01700000000</strong>.</li>
+                                    <li>Open your bKash app and select <strong>Make Payment</strong> (or scan the QR code).</li>
+                                    <li>Enter Merchant bKash Number: <strong class="font-mono text-slate-900">017 7774 2140</strong>.</li>
                                     <li>Enter Amount: <strong class="font-mono text-slate-900">৳{{ number_format((float) ($selectedTerm?->fee_bdt ?? 0), 2) }}</strong>.</li>
                                     <li>Use Reference: <strong class="font-mono text-indigo-600">{{ $member->member_id }}</strong>.</li>
                                     <li>Complete payment and copy the <strong>10-character Transaction ID (TxID)</strong>.</li>
                                 </ol>
                             </div>
 
-                            {{-- Step 3: Transaction ID Input --}}
+                            {{-- Step 3: Transaction ID Input (TrxID) --}}
                             <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                    3. bKash Transaction ID (10 Characters) <span class="text-rose-500">*</span>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center justify-between">
+                                    <span>3. bKash Transaction ID (TrxID) <span class="text-rose-500">*</span></span>
+                                    <span class="text-[11px] font-normal text-slate-400 lowercase">auto-extracts from SMS</span>
                                 </label>
-                                <div class="relative">
-                                    <input
-                                        type="text"
-                                        wire:model.live.debounce.300ms="bkash_txid"
-                                        maxlength="10"
-                                        class="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
-                                        placeholder="e.g. BL9X4K2P9Q"
-                                        @disabled(! $isRenewalOpen || $hasPendingRequest)
-                                    >
-                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-xs text-slate-400 font-mono">
-                                        {{ strlen($bkash_txid) }}/10
+                                <div class="flex rounded-xl shadow-xs border border-slate-300 focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20 overflow-hidden bg-white transition-all">
+                                    <span class="inline-flex items-center px-3 bg-pink-50 border-r border-slate-200 text-pink-900 font-mono font-bold text-xs tracking-wider select-none shrink-0" title="bKash Transaction ID Prefix">
+                                        TrxID
+                                    </span>
+                                    <div class="relative flex-1">
+                                        <input
+                                            type="text"
+                                            wire:model.live.debounce.300ms="bkash_txid"
+                                            x-on:input="
+                                                let v = $el.value;
+                                                let m = v.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})/i);
+                                                if (m && m[1]) {
+                                                    v = m[1].toUpperCase();
+                                                } else {
+                                                    v = v.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '');
+                                                    v = v.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                                }
+                                                $el.value = v;
+                                            "
+                                            x-on:paste="
+                                                let text = ($event.clipboardData || window.clipboardData)?.getData('text') || '';
+                                                if (text) {
+                                                    $event.preventDefault();
+                                                    let m = text.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})/i);
+                                                    let v = m && m[1] ? m[1].toUpperCase() : text.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                                    $el.value = v;
+                                                    $wire.set('bkash_txid', v);
+                                                }
+                                            "
+                                            maxlength="100"
+                                            class="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider border-0 focus:ring-0 bg-transparent text-slate-900"
+                                            placeholder="e.g. BL9X4K2P9Q"
+                                            @disabled(! $isRenewalOpen || $hasPendingRequest)
+                                        >
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-xs text-slate-400 font-mono">
+                                            {{ strlen($bkash_txid) }}/10
+                                        </div>
                                     </div>
                                 </div>
-                                <span class="text-[11px] text-slate-400 mt-1 block">
-                                    Exact 10-character alphanumeric transaction ID from your bKash confirmation SMS.
+                                <span class="text-[11px] text-slate-500 mt-1 block">
+                                    TrxID is shown by default. If you paste full SMS or type with "TrxID", the ID is automatically extracted.
                                 </span>
                                 @error('bkash_txid') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>

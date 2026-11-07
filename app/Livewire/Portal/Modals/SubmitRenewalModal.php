@@ -114,12 +114,16 @@ class SubmitRenewalModal extends Component
     }
 
     /**
-     * Transform bKash TxID to uppercase on input and validate.
+     * Transform and extract clean bKash TrxID on input and validate.
      */
     public function updatedBkashTxid(string $value): void
     {
-        $this->bkash_txid = strtoupper(trim($value));
-        $this->validateOnly('bkash_txid');
+        $this->bkash_txid = \App\Domain\Payments\Adapters\ManualBkashPaymentAdapter::extractTxid($value);
+        if (strlen($this->bkash_txid) === 10) {
+            $this->validateOnly('bkash_txid');
+        } elseif (strlen($this->bkash_txid) === 0) {
+            $this->resetErrorBag('bkash_txid');
+        }
     }
 
     /**

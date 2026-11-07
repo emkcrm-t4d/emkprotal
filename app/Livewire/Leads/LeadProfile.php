@@ -239,6 +239,46 @@ class LeadProfile extends Component
     }
 
     /**
+     * Computed property: Checks whether current user can formally approve lead for induction.
+     */
+    #[Computed]
+    public function getCanApproveLeadProperty(): bool
+    {
+        $user = Auth::user();
+        if (!$user) return false;
+
+        $hasRoleOrPerm = $user->can('leads.approve')
+            || (method_exists($user, 'hasRole') && $user->hasRole(['superadmin', 'global_admin', 'workspace_manager']));
+
+        return $hasRoleOrPerm
+            && $this->lead->status !== 'approved'
+            && $this->lead->status !== 'converted'
+            && app(\App\Domain\Leads\Services\VerificationService::class)->canApproveLead($this->lead);
+    }
+
+    /**
+     * Formally approve lead for induction (Managerial authority required).
+     */
+    public function approveLead(\App\Domain\Leads\Services\VerificationService $service): void
+    {
+        $user = Auth::user();
+        if (!$user) {
+            App::abort(401, 'Unauthenticated');
+        }
+
+        try {
+            $service->approveLead($this->lead, $user);
+            $this->refreshLead();
+            $this->dispatch('lead-updated');
+            session()->flash('status', 'Lead successfully approved for induction! You can now click "Convert to Member".');
+        } catch (\App\Domain\Leads\Exceptions\UnauthorizedVerificationException $e) {
+            App::abort(403, $e->getMessage());
+        } catch (\App\Domain\Leads\Exceptions\UnmetConversionInvariantException $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    /**
      * Open lead-to-member conversion modal (Workspace Manager authority only).
      */
     public function openConversionModal(): void

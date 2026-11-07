@@ -75,9 +75,16 @@ class RequestCardReplacementModal extends Component
         $this->resetValidation();
     }
 
+    public function updatedBkashTxId(string $value): void
+    {
+        $this->bkashTxId = \App\Domain\Payments\Adapters\ManualBkashPaymentAdapter::extractTxid($value);
+    }
+
     public function submit(IdCardLifecycleService $service): void
     {
         $this->authorizeAccess();
+
+        $this->bkashTxId = \App\Domain\Payments\Adapters\ManualBkashPaymentAdapter::extractTxid($this->bkashTxId);
 
         $this->validate([
             'replacementReason' => ['required', 'in:' . implode(',', IdCardLifecycleService::REPLACEMENT_REASONS)],

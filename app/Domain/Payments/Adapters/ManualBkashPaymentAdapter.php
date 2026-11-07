@@ -19,6 +19,36 @@ class ManualBkashPaymentAdapter implements PaymentAdapterInterface
 {
     public const TXID_REGEX = '/^[A-Z0-9]{10}$/';
 
+    /**
+     * Clean and extract a 10-character uppercase bKash Transaction ID from any raw input or SMS snippet.
+     * Automatically strips "TrxID", "TRX ID", "TxID" prefixes and whitespace.
+     */
+    public static function extractTxid(string $raw): string
+    {
+        $text = trim($raw);
+
+        if ($text === '') {
+            return '';
+        }
+
+        // 1. If the raw string is already exactly 10 alphanumeric characters (e.g. 'TXIDDUP001', 'BLK7X9Q12M'),
+        // it is already a direct transaction ID. Do not strip any substring.
+        if (preg_match('/^[A-Za-z0-9]{10}$/', $text)) {
+            return strtoupper($text);
+        }
+
+        // 2. If text contains TrxID / TRX ID pattern followed by exactly 10 alphanumeric characters (e.g., in bKash SMS or copy-paste)
+        if (preg_match('/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})(?![A-Za-z0-9])/i', $text, $matches)) {
+            return strtoupper($matches[1]);
+        }
+
+        // 3. Strip any leading TrxID / TRX ID prefix
+        $stripped = (string) preg_replace('/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i', '', $text);
+
+        // 4. Remove all non-alphanumeric characters and convert to uppercase
+        return strtoupper((string) preg_replace('/[^A-Za-z0-9]/', '', $stripped));
+    }
+
     public function __construct(
         protected array $config = []
     ) {}
@@ -52,7 +82,7 @@ class ManualBkashPaymentAdapter implements PaymentAdapterInterface
      */
     public function findDuplicate(string $txid, ?int $excludeLeadId = null): ?array
     {
-        $normalized = Str::upper(trim($txid));
+        $normalized = self::extractTxid($txid);
 
         if (empty($normalized)) {
             return null;
@@ -101,7 +131,7 @@ class ManualBkashPaymentAdapter implements PaymentAdapterInterface
      */
     public function verifyPayment(PaymentVerificationRequest $request): PaymentVerificationResult
     {
-        $txid = Str::upper(trim($request->paymentReference));
+        $txid = self::extractTxid((string) $request->paymentReference);
 
         // 1. Regex assertion (exact 10 uppercase alphanumeric characters)
         if (!preg_match(self::TXID_REGEX, $txid)) {

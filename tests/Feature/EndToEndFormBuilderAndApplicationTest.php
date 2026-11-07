@@ -144,7 +144,7 @@ class EndToEndFormBuilderAndApplicationTest extends TestCase
         // 1. GET /apply/membership-application renders cleanly with 200 OK
         $response = $this->get('/apply/membership-application');
         $response->assertStatus(200);
-        $response->assertSee('EMK Center Membership Application Form');
+        $response->assertSee('Membership Form for American Spaces in Bangladesh');
 
         // 2. Division-to-district cascade restricts available districts
         $component = Livewire::test(PublicMembershipForm::class);

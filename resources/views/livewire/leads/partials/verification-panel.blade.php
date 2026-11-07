@@ -16,31 +16,31 @@
     <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <div class="flex items-center gap-2">
-                <h2 class="text-base font-bold text-slate-900">Tri-State Review Streams</h2>
-                <span class="px-2 py-0.5 rounded text-xs font-bold uppercase {{ $lead->status === 'approved' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-700' }}">
+                <h2 class="text-base font-bold text-white tracking-wide">Tri-State Review Streams</h2>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-extrabold uppercase {{ $lead->status === 'approved' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-xs' : 'bg-slate-800 text-slate-300 border border-slate-700' }}">
                     Lead: {{ $lead->status }}
                 </span>
             </div>
-            <p class="text-xs text-slate-500 mt-1">
+            <p class="text-xs text-slate-400 mt-1">
                 Admissions staff evaluate Payment, Documents, and Photo independently. All 3 must be verified for Manager approval (DEC-03).
             </p>
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
             <!-- Tri-State Stream Mini Indicators -->
-            <div class="flex items-center gap-2 text-xs font-semibold px-3 py-2 bg-slate-50 rounded-lg border border-slate-200">
-                <span class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-500' : ($lead->payment_verification_status === 'rejected' ? 'bg-rose-500' : 'bg-amber-400') }}"></span>
+            <div class="flex items-center gap-2.5 text-xs font-semibold px-3.5 py-2 bg-slate-900/90 rounded-xl border border-white/10 shadow-inner">
+                <span class="flex items-center gap-1.5 text-slate-200">
+                    <span class="w-2 h-2 rounded-full {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : ($lead->payment_verification_status === 'rejected' ? 'bg-rose-400' : 'bg-amber-400') }}"></span>
                     <span>Pay: {{ strtoupper($lead->payment_verification_status) }}</span>
                 </span>
-                <span class="text-slate-300">|</span>
-                <span class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-500' : ($lead->document_verification_status === 'missing_items' ? 'bg-amber-500' : 'bg-slate-300') }}"></span>
+                <span class="text-slate-600">|</span>
+                <span class="flex items-center gap-1.5 text-slate-200">
+                    <span class="w-2 h-2 rounded-full {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : ($lead->document_verification_status === 'missing_items' ? 'bg-amber-400' : 'bg-slate-400') }}"></span>
                     <span>Doc: {{ strtoupper($lead->document_verification_status) }}</span>
                 </span>
-                <span class="text-slate-300">|</span>
-                <span class="flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-500' : ($lead->photo_verification_status === 'reupload_requested' ? 'bg-amber-500' : 'bg-slate-300') }}"></span>
+                <span class="text-slate-600">|</span>
+                <span class="flex items-center gap-1.5 text-slate-200">
+                    <span class="w-2 h-2 rounded-full {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]' : ($lead->photo_verification_status === 'reupload_requested' ? 'bg-amber-400' : 'bg-slate-400') }}"></span>
                     <span>Photo: {{ strtoupper($lead->photo_verification_status) }}</span>
                 </span>
             </div>
@@ -75,17 +75,17 @@
         </div>
     </div>
 
-    <!-- Tabbed Navigation for the 3 Streams -->
-    <div class="border-b border-slate-200">
-        <nav class="flex space-x-6 text-sm font-medium" aria-label="Streams">
+    <!-- Tabbed Navigation for the 3 Streams (High-Contrast Frosted Capsule Bar) -->
+    <div class="p-1.5 bg-slate-900/90 border border-white/15 rounded-2xl shadow-lg flex flex-wrap gap-2">
+        <nav class="flex flex-wrap gap-2 w-full" aria-label="Streams">
             <button
                 type="button"
                 wire:click="setActiveTab('payment')"
-                class="pb-3 border-b-2 transition-colors flex items-center gap-2 {{ $activeTab === 'payment' ? 'border-pink-600 text-pink-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700' }}"
+                class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 {{ $activeTab === 'payment' ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-lg ring-1 ring-white/30' : 'bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
                 id="tab-btn-payment"
             >
                 <span>1. Payment (bKash)</span>
-                <span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600' }}">
+                <span class="px-2 py-0.5 rounded-md text-[10px] uppercase font-extrabold tracking-wider {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50' : ($lead->payment_verification_status === 'rejected' ? 'bg-rose-500/30 text-rose-300 border border-rose-400/50' : 'bg-amber-500/30 text-amber-300 border border-amber-400/50') }}">
                     {{ $lead->payment_verification_status }}
                 </span>
             </button>
@@ -93,11 +93,11 @@
             <button
                 type="button"
                 wire:click="setActiveTab('document')"
-                class="pb-3 border-b-2 transition-colors flex items-center gap-2 {{ $activeTab === 'document' ? 'border-indigo-600 text-indigo-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700' }}"
+                class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 {{ $activeTab === 'document' ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg ring-1 ring-white/30' : 'bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
                 id="tab-btn-document"
             >
                 <span>2. Documents & Consent</span>
-                <span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : ($lead->document_verification_status === 'missing_items' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600') }}">
+                <span class="px-2 py-0.5 rounded-md text-[10px] uppercase font-extrabold tracking-wider {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50' : ($lead->document_verification_status === 'missing_items' ? 'bg-amber-500/30 text-amber-300 border border-amber-400/50' : 'bg-slate-700/60 text-slate-300 border border-slate-600/50') }}">
                     {{ $lead->document_verification_status }}
                 </span>
             </button>
@@ -105,11 +105,11 @@
             <button
                 type="button"
                 wire:click="setActiveTab('photo')"
-                class="pb-3 border-b-2 transition-colors flex items-center gap-2 {{ $activeTab === 'photo' ? 'border-purple-600 text-purple-700 font-bold' : 'border-transparent text-slate-500 hover:text-slate-700' }}"
+                class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 {{ $activeTab === 'photo' ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-lg ring-1 ring-white/30' : 'bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 border border-white/10' }}"
                 id="tab-btn-photo"
             >
                 <span>3. Studio Photo</span>
-                <span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : ($lead->photo_verification_status === 'reupload_requested' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600') }}">
+                <span class="px-2 py-0.5 rounded-md text-[10px] uppercase font-extrabold tracking-wider {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50' : ($lead->photo_verification_status === 'reupload_requested' ? 'bg-amber-500/30 text-amber-300 border border-amber-400/50' : 'bg-slate-700/60 text-slate-300 border border-slate-600/50') }}">
                     {{ $lead->photo_verification_status }}
                 </span>
             </button>
@@ -119,14 +119,14 @@
     <!-- STREAM A: PAYMENT (bKash Reconciliation) -->
     @if($activeTab === 'payment')
         <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-6" id="panel-stream-payment">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Stream A: bKash Transaction Reconciliation (DEC-05)</h3>
-                    <p class="text-xs text-slate-500">
+                    <h3 class="text-sm font-bold text-white tracking-wide">Stream A: bKash Transaction Reconciliation (DEC-05)</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">
                         Workspace Manager confirms fee receipt against official bKash Merchant statement. No second reviewer needed.
                     </p>
                 </div>
-                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-pink-100 text-pink-800' }}">
+                <span class="text-xs font-mono font-bold px-3 py-1 rounded-full {{ $lead->payment_verification_status === 'verified' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-xs' : 'bg-pink-500/25 text-pink-300 border border-pink-400/40' }}">
                     Status: {{ strtoupper($lead->payment_verification_status) }}
                 </span>
             </div>
@@ -264,14 +264,14 @@
     <!-- STREAM B: DOCUMENTS & MINOR CONSENT -->
     @if($activeTab === 'document')
         <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-6" id="panel-stream-document">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Stream B: Identity Document & Minor Consent (DEC-09)</h3>
-                    <p class="text-xs text-slate-500">
+                    <h3 class="text-sm font-bold text-white tracking-wide">Stream B: Identity Document & Minor Consent (DEC-09)</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">
                         Admissions staff evaluate National ID / Passport scan and assert parental consent for minors under 18 years.
                     </p>
                 </div>
-                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-100 text-indigo-800' }}">
+                <span class="text-xs font-mono font-bold px-3 py-1 rounded-full {{ $lead->document_verification_status === 'verified' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-xs' : 'bg-indigo-500/25 text-indigo-300 border border-indigo-400/40' }}">
                     Status: {{ strtoupper($lead->document_verification_status) }}
                 </span>
             </div>
@@ -460,14 +460,14 @@
     <!-- STREAM C: PHOTO REVIEW (5-Point Studio Checklist) -->
     @if($activeTab === 'photo')
         <div class="bg-white rounded-xl shadow-xs border border-slate-200 p-6 space-y-6" id="panel-stream-photo">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Stream C: Studio Passport Photo 5-Point Checklist</h3>
-                    <p class="text-xs text-slate-500">
+                    <h3 class="text-sm font-bold text-white tracking-wide">Stream C: Studio Passport Photo 5-Point Checklist</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">
                         Staff verify photo suitability for physical PVC plastic membership card badge printing.
                     </p>
                 </div>
-                <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-full {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800' }}">
+                <span class="text-xs font-mono font-bold px-3 py-1 rounded-full {{ $lead->photo_verification_status === 'verified' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 shadow-xs' : 'bg-purple-500/25 text-purple-300 border border-purple-400/40' }}">
                     Status: {{ strtoupper($lead->photo_verification_status) }}
                 </span>
             </div>

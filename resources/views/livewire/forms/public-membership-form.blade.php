@@ -24,18 +24,54 @@
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div class="h-3 bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-500"></div>
         <div class="p-6 sm:p-8">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
+            <div class="border-b border-slate-200 pb-6 mb-6">
                 <div>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-3">
                         <svg class="w-3.5 h-3.5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
                         Official Membership Application
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                        {{ $form->title ?? 'EMK Center Membership Application Form' }}
+                        Membership Form for American Spaces in Bangladesh
                     </h1>
-                    <p class="text-slate-600 mt-2 text-sm sm:text-base leading-relaxed max-w-3xl">
-                        {{ $form->description ?? 'Welcome to American Spaces Bangladesh. Please complete all 7 sections below to register for membership at EMK Center or an American Corner.' }}
-                    </p>
+
+                    <!-- Horizontal Rule per Image 2 -->
+                    <div class="w-full border-t border-slate-200 my-6"></div>
+
+                    <!-- Requirements to fill-up the form -->
+                    <div class="space-y-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        <h2 class="font-bold text-slate-900 text-sm sm:text-base">Requirements to fill-up the form</h2>
+
+                        <div>
+                            <strong class="text-slate-900 font-bold block mb-1">Documents:</strong>
+                            <p class="text-slate-600">National ID or Valid Passport or Birth Certificate with SSC/equivalent mark sheet/registration form</p>
+                        </div>
+
+                        <div>
+                            <strong class="text-slate-900 font-bold block mb-1">Photo requirements:</strong>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600 ml-1">
+                                <li>Recent color studio print passport-size photo with a white background</li>
+                                <li>Eyeglasses are not allowed, and ears must be visible</li>
+                                <li>Photos must be taken in regular clothes. Uniforms and selfies are not allowed.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <strong class="text-slate-900 font-bold block mb-1">Membership fee:</strong>
+                            <p class="text-slate-600">The membership fee must be paid by bKash. Write the Transaction ID in the below bKash Transaction ID field.</p>
+                            <p class="text-rose-600 font-bold mt-1">** The membership fee is non-refundable.</p>
+                        </div>
+
+                        <div>
+                            <strong class="text-slate-900 font-bold block mb-1">Consent Form:</strong>
+                            <p class="text-slate-600">
+                                A consent form with a parent or guardian's signature is mandatory for individuals under the age of 18.
+                                <a href="{{ asset('forms/templates/V3-Parents-Consent-Form.pdf') }}" target="_blank" rel="noopener noreferrer" class="text-amber-600 hover:text-amber-700 font-bold underline decoration-amber-500/60 hover:decoration-amber-700 ml-1 inline-flex items-center gap-1">
+                                    <span>Download the form</span>
+                                    <svg class="w-3.5 h-3.5 inline text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -970,67 +1006,172 @@
                 </div>
 
                 <!-- bKash Instructions Card -->
-                <div role="region" aria-label="bKash payment instructions" aria-live="polite" class="bg-pink-50/70 border border-pink-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-md bg-pink-600 text-white font-bold flex items-center justify-center text-xs" aria-hidden="true">৳</span>
-                            <h3 class="text-xs font-bold text-pink-900 uppercase tracking-wider">bKash Merchant Payment</h3>
+                <div role="region" aria-label="bKash payment instructions" aria-live="polite" class="bg-pink-50/70 border border-pink-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+                    <div class="space-y-1.5 flex-1">
+                        <div class="flex items-center gap-2.5">
+                            <!-- bKash Logo with Outside Circle per User Request -->
+                            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white p-0.5 ring-2 ring-[#E2136E] shadow-xs flex items-center justify-center shrink-0 overflow-hidden" aria-hidden="true">
+                                <img src="{{ asset('images/bkash-logo.png') }}" alt="bKash Logo" class="w-full h-full object-cover rounded-full">
+                            </div>
+                            <h3 class="text-xs font-bold text-pink-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <span>bKash Transaction ID</span>
+                                <span class="text-rose-600 normal-case font-semibold text-[11px] bg-rose-100/90 px-2 py-0.5 rounded-md border border-rose-200">*Required</span>
+                            </h3>
                         </div>
-                        <p class="text-xs text-pink-800 leading-relaxed">
-                            Please make payment of the non-refundable membership fee to bKash Merchant Account <strong class="font-mono text-pink-950">01977109012</strong>.
-                            Enter the 10-character alphanumeric Transaction ID (TxID) below.
+                        <p class="text-xs text-pink-900 leading-relaxed pt-0.5 max-w-xl">
+                            Select 'Make Payment' and enter the bKash merchant account number: <strong class="font-mono text-pink-950 font-bold tracking-wide">017 7774 2140</strong>. Provide your name in the reference box. And write the Transaction ID below.
                         </p>
                     </div>
-                    <div class="text-xs bg-white text-pink-900 font-mono px-3 py-1.5 rounded-lg border border-pink-200 shrink-0 font-bold">
-                        Format: 10 Alphanumeric Chars
+
+                    <!-- bKash Merchant Payment QR Code per User Mark -->
+                    <div class="shrink-0 flex flex-col items-center gap-1 bg-white p-2 rounded-xl border border-pink-200 shadow-xs">
+                        <img src="{{ asset('images/bkash-qr.png') }}" alt="bKash Merchant Payment QR Code" class="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-lg">
+                        <span class="text-[10px] font-bold text-pink-700 tracking-wider uppercase flex items-center gap-1">
+                            <svg class="w-3 h-3 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                            </svg>
+                            <span>Scan to Pay</span>
+                        </span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
-                    <!-- Field 30: bKash Transaction ID -->
+                    <!-- Field 30: bKash Transaction ID (TrxID) -->
                     <div>
-                        <label for="bkash_txid" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                            Field 30: bKash Transaction ID <span class="text-rose-500">*</span>
+                        <label for="bkash_txid" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                            <span>Field 30: bKash Transaction ID <span class="text-rose-500">*Required</span></span>
+                            <span class="text-[11px] font-normal text-slate-400 lowercase">auto-extracts from SMS</span>
                         </label>
-                        <div class="relative">
-                            <input
-                                type="text"
-                                id="bkash_txid"
-                                name="bkash_txid"
-                                wire:model.live.debounce.300ms="bkash_txid"
-                                x-on:input="$el.value = $el.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10)"
-                                placeholder="e.g. BLK7X9Q12M"
-                                maxlength="10"
-                                aria-required="true"
-                                @error('bkash_txid') aria-invalid="true" aria-describedby="bkash_txid-error" @enderror
-                                class="w-full rounded-xl border-slate-300 font-mono uppercase tracking-widest text-base shadow-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 px-3.5 py-2.5 @error('bkash_txid') border-rose-400 bg-rose-50/30 @enderror"
-                            >
-                            <span class="absolute right-3 top-3 text-xs font-mono text-slate-500" aria-hidden="true">
-                                {{ strlen($bkash_txid) }}/10
+                        
+                        {{-- Input Group: ByDefault show TrxID Prefix with Auto-Cleaning --}}
+                        <div class="flex rounded-xl shadow-xs border border-slate-300 focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-500/20 overflow-hidden bg-white transition-all @error('bkash_txid') border-rose-400 bg-rose-50/30 @enderror">
+                            <span class="inline-flex items-center px-3.5 bg-gradient-to-r from-pink-50 to-pink-100/90 border-r border-slate-200 text-pink-900 font-mono font-bold text-sm tracking-wider select-none shrink-0" title="bKash Transaction ID Prefix (TrxID)">
+                                TrxID
                             </span>
+                            <div class="relative flex-1">
+                                <input
+                                    type="text"
+                                    id="bkash_txid"
+                                    name="bkash_txid"
+                                    wire:model.live.debounce.300ms="bkash_txid"
+                                    x-on:input="
+                                        let v = $el.value;
+                                        let m = v.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})(?![A-Za-z0-9])/i);
+                                        if (m && m[1]) {
+                                            v = m[1].toUpperCase();
+                                        } else {
+                                            v = v.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '');
+                                            v = v.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                        }
+                                        $el.value = v;
+                                    "
+                                    x-on:paste="
+                                        let text = ($event.clipboardData || window.clipboardData)?.getData('text') || '';
+                                        if (text) {
+                                            $event.preventDefault();
+                                            let m = text.match(/(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*([A-Za-z0-9]{10})(?![A-Za-z0-9])/i);
+                                            let v = m && m[1] ? m[1].toUpperCase() : text.replace(/^(?:trx\s*id|tx\s*id|transaction\s*id|txn\s*id)[\s:\-#=]*/i, '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+                                            $el.value = v;
+                                            $wire.set('bkash_txid', v);
+                                        }
+                                    "
+                                    placeholder="e.g. BLK7X9Q12M"
+                                    maxlength="100"
+                                    aria-required="true"
+                                    @error('bkash_txid') aria-invalid="true" aria-describedby="bkash_txid-error" @enderror
+                                    class="w-full border-0 font-mono uppercase tracking-widest text-base focus:ring-0 px-3.5 py-2.5 bg-transparent text-slate-900 placeholder:text-slate-400 placeholder:normal-case placeholder:tracking-normal placeholder:font-sans placeholder:text-sm"
+                                >
+                                <span class="absolute right-3 top-3 text-xs font-mono text-slate-400 font-semibold pointer-events-none" aria-hidden="true">
+                                    {{ strlen($bkash_txid) }}/10
+                                </span>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-500 mt-1">Exactly 10 uppercase characters (0-9, A-Z). Auto-capitalized.</p>
-                        @error('bkash_txid') <span id="bkash_txid-error" class="text-xs text-rose-600 block mt-1" role="alert">{{ $message }}</span> @enderror
+
+                        <p class="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-pink-500 shrink-0"></span>
+                            <span>TrxID is shown by default. If you paste full SMS or type with "TrxID", the ID is automatically extracted and cleaned.</span>
+                        </p>
+                        @error('bkash_txid') <span id="bkash_txid-error" class="text-xs text-rose-600 block mt-1 font-medium" role="alert">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Field 31: Terms & Conditions Agreement -->
-                    <div class="pt-2">
-                        <label for="terms_agreed" class="flex items-start gap-3 cursor-pointer min-h-[44px]">
-                            <input
-                                type="checkbox"
-                                id="terms_agreed"
-                                name="terms_agreed"
-                                wire:model="terms_agreed"
-                                aria-required="true"
-                                @error('terms_agreed') aria-invalid="true" aria-describedby="terms_agreed-error" @enderror
-                                class="rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 h-5 w-5 mt-0.5"
-                            >
-                            <span class="text-xs text-slate-700 leading-relaxed">
-                                <strong class="text-slate-900 block font-semibold">Field 31: Terms and Conditions Agreement *</strong>
-                                I hereby confirm that all information provided in this application is accurate and complete. I agree to abide by the rules and regulations of the EMK Center and American Spaces Bangladesh.
-                            </span>
+                    <!-- Field 31: Terms & Conditions Agreement with Scrollable Rules Box -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                            <span>Field 31: Terms and Conditions <span class="text-rose-500">*Required</span></span>
+                            <span class="text-[11px] font-normal text-slate-400 lowercase">scroll to review rules</span>
                         </label>
-                        @error('terms_agreed') <span id="terms_agreed-error" class="text-xs text-rose-600 block mt-1" role="alert">{{ $message }}</span> @enderror
+
+                        <!-- Scrollable Terms Container per EMK Space Regulations -->
+                        <div class="h-48 overflow-y-auto rounded-xl border border-slate-300 bg-slate-50/90 p-4 text-xs text-slate-700 space-y-3 leading-relaxed shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-500/20" tabindex="0" role="region" aria-label="Terms and Conditions - General Rules for the Space">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-xs tracking-wide uppercase">General Rules for the Space</h4>
+                                <p class="text-slate-600 mt-1">To ensure a safe and welcoming environment, all members are required to adhere to the following regulations:</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Respectful Conduct:</h5>
+                                <p class="text-slate-600">Refrain from using offensive language or engaging in inappropriate behavior.</p>
+                                <p class="text-slate-600">Any member found being verbally or physically abusive towards others or disregarding established rules may face suspension or cancellation of membership rights by the EMK Center.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Alcohol and Smoking:</h5>
+                                <p class="text-slate-600">Alcohol and smoking are strictly prohibited on the premises of the EMK Center.</p>
+                                <p class="text-slate-600">Food and beverages are only permitted in the Ted Cafe Area.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Ethical Behavior:</h5>
+                                <p class="text-slate-600">Users must abstain from any behavior that is immoral, unethical, or illegal.</p>
+                                <p class="text-slate-600">The MakerLab and its surroundings are utilized by a diverse community, thus courteous, professional, and responsible behavior is expected at all times.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Policy Violations:</h5>
+                                <p class="text-slate-600">Violation of MakerLab policies may result in a ban from our American Space.</p>
+                                <p class="text-slate-600">The safety and security of personal belongings remain the responsibility of the individual; EMK Center cannot be held liable for any lost items.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Prohibited Activities:</h5>
+                                <p class="text-slate-600">Smoking, consumption of illegal substances, and any elements banned by the Bangladesh Government are forbidden at the EMK Center.</p>
+                                <p class="text-slate-600">EMK Center staff and guests must be treated with respect.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Respect for Public and Working Space:</h5>
+                                <p class="text-slate-600">The EMK Center serves as both a public and working space; disruptive noise levels or disrespectful behavior will not be tolerated.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 space-y-1">
+                                <h5 class="font-bold text-slate-900 text-xs">Booking Policies:</h5>
+                                <p class="text-slate-600">The EMK Center reserves the right to cancel or modify any booking with prior notice.</p>
+                                <p class="text-slate-600">By using the facilities at the EMK Center, members agree to abide by these regulations for the benefit of all community members and visitors.</p>
+                            </div>
+
+                            <div class="border-t border-slate-200 pt-2 text-slate-800 font-medium">
+                                <p>If a member engages in misconduct or violates EMK Center’s policies or rules, the Center reserves the right to revoke their membership.</p>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox Acceptance per DEC-05 -->
+                        <div class="mt-2.5">
+                            <label for="terms_agreed" class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input
+                                    type="checkbox"
+                                    id="terms_agreed"
+                                    name="terms_agreed"
+                                    wire:model="terms_agreed"
+                                    aria-required="true"
+                                    @error('terms_agreed') aria-invalid="true" aria-describedby="terms_agreed-error" @enderror
+                                    class="rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 h-4.5 w-4.5"
+                                >
+                                <span class="text-xs font-semibold text-slate-900">
+                                    I accept the Terms and Conditions.
+                                </span>
+                            </label>
+                            @error('terms_agreed') <span id="terms_agreed-error" class="text-xs text-rose-600 block mt-1 font-medium" role="alert">{{ $message }}</span> @enderror
+                        </div>
                     </div>
                 </div>
 

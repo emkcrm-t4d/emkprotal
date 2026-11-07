@@ -38,7 +38,7 @@ class DefaultMembershipFormSeederTest extends TestCase
         $this->assertNotNull($form, 'Default membership application form must be seeded.');
         $this->assertSame('membership-application', $form->slug);
         $this->assertSame('ws-emk-dhaka', $form->workspace_id);
-        $this->assertSame('EMK Center Membership Application Form', $form->title);
+        $this->assertSame('Membership Form for American Spaces in Bangladesh', $form->title);
         $this->assertSame('1.0-31f', $form->version);
         $this->assertTrue($form->is_published);
         $this->assertTrue($form->is_default);
